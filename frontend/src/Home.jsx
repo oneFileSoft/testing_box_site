@@ -5,7 +5,7 @@ import './App.css';
 
 export default function Home() {
   useEffect(() => {
-    document.title = "Arbatrade.us"; // Set the title here
+    document.title = "testing area 51"; // Set the title here
   }, []);
 
   useInactivityRedirect(60000, '/');
