@@ -4,7 +4,7 @@ const cors = require('cors');
 const nodemailer = require('nodemailer'); 
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;;
 
 const corsOptions = {
     origin: '*', // Allow all origins (for testing, replace in production)
