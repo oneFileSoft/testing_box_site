@@ -16,12 +16,15 @@ const AboutUs = () => {
       <div className="about-box">
         <h2>Jenkins controller</h2>
         <p>
-          Jenkins, listen for the push of the release branch of Web-repo, and run following actions:
-           * pull WEB && Test repositories to the resided hosting.
-           * run regression test from Test repo, on Web repo.
-           * send back to Developer regression report.
-           * if build success - new version been deployed to Web hosting by Jenkins
+          Jenkins monitors the release branch of the Web repository. Upon detecting a push event, it performs the following actions:
         </p>
+        <ul>
+          <li>Pulls both the Web and Test repositories onto the Jenkins agent host.</li>
+          <li>Launches the Web application locally on the Jenkins environment.</li>
+          <li>Executes regression tests from the Test repository against the deployed Web application.</li>
+          <li>Sends the regression test report back to the developer.</li>
+          <li>If all tests pass, Jenkins deploys the new version to the production web hosting environment.</li>
+        </ul>
       </div>
 
       {/* Why Choose Us Section */}

@@ -180,10 +180,9 @@ return (
                     <tr style={{ height: "10%" }} collspan="2">
                          <td>
                           <select name="email" value={formData.email} onChange={handleChange} onBlur={handleBlur} className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ width: "100%" }}>
-                            <option value="contact@arbatrade.us">General box: contact us</option>
-                            <option value="management@arbatrade.us"> Company Management </option>
-                            <option value="val.korytny@arbatrade.us"> Technical Support </option>
-                            <option value="vitzislav.plakhin@arbatrade.us"> Return & Shipping </option>
+                            <option value="jenkins_agent@testingbox.pw">General box: contact us</option>
+                            <option value="jenkins_agent@testingbox.pw"> Company Management </option>
+                            <option value="jenkins_agent@testingbox.pw"> Technical Support </option>
                           </select>
                          </td>
                     </tr>     
