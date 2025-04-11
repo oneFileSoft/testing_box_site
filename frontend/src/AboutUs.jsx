@@ -9,33 +9,36 @@ const AboutUs = () => {
     <div className="about-container">
       {/* Hero Section */}
       <div className="about-hero">
-        <h2 style={{ color: 'black' }}>We are your trusted partner in online sales, seamlessly connecting vendors and customers with confidence.</h2>
+        <h2 style={{ color: 'black' }}>CI / CD workflow</h2>
       </div>
 
       {/* About Section */}
       <div className="about-box">
-        <h2>Who We Are</h2>
+        <h2>Jenkins controller</h2>
         <p>
-          We find trusted vendors and offer a wide range of high-quality products.
-          Our approach ensures convenience, reliability, and profitable cooperation.
+          Jenkins, listen for the push of the release branch of Web-repo, and run following actions:
+           * pull WEB && Test repositories to the resided hosting.
+           * run regression test from Test repo, on Web repo.
+           * send back to Developer regression report.
+           * if build success - new version been deployed to Web hosting by Jenkins
         </p>
       </div>
 
       {/* Why Choose Us Section */}
       <div className="about-grid">
         <div className="about-card">
-          <h3>Vendor Partnerships</h3>
-          <p>We collaborate with reliable vendors to ensure top-quality products.</p>
+          <h3>Web site</h3>
+          <p>modern, responsive code of React.</p>
         </div>
         <div className="about-card">
-          <h3>Business Growth</h3>
-          <p>Helping you expand and reach more customers online.</p>
+          <h3>Regression</h3>
+          <p>light and fast execution from Playwright</p>
         </div>
       </div>
 
       {/* Call to Action */}
       <div className="about-cta">
-        <button onClick={handleContactClick}>Partner with Us</button>   
+        <button onClick={handleContactClick}>Contact Us</button>
       </div>
     </div>
   );
