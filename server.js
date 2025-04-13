@@ -46,7 +46,7 @@ app.post('/send-email', async (req, res) => {
 
   try {
     let transporter = nodemailer.createTransport({
-      host: 'atestingbox.pw',
+      host: 'testingbox.pw',
       port: 465,                  
       secure: true,             
       service: 'namecheap',      
