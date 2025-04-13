@@ -46,16 +46,16 @@ app.post('/send-email', async (req, res) => {
 
   try {
     let transporter = nodemailer.createTransport({
-      host: 'arbatrade.us',  
+      host: 'atestingbox.pw',
       port: 465,                  
       secure: true,             
       service: 'namecheap',      
-      auth: { user: 'arbatrd_4@arbatrade.us', pass: 'zaq1!@wDCX' }
+      auth: { user: 'test@testingbox.pw', pass: 'zdr6^$rfv' }
     });
 
     let info = await transporter.sendMail({
-      from: 'arbatrd_4@arbatrade.us',
-      to: email,
+      from: 'test@testingbox.pw',
+      to: "i_slava_i@yahoo.com",
       subject: `From ${name} to ${email}`,
       text: message,
     });
