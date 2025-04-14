@@ -55,7 +55,7 @@ app.post('/send-email', async (req, res) => {
 
     let info = await transporter.sendMail({
       from: 'test@testingbox.pw',
-      to: "i_slava_i@yahoo.com",
+      to: email,
       subject: `From ${name} to ${email}`,
       text: message,
     });
