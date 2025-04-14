@@ -110,7 +110,7 @@ const handleBlur = (e) => {
                 lastName: "",
                 yourWebsite: "",
                 yourEmail: "",
-                email: "contact@arbatrade.us",
+                email: email,
                 message: ""
               });
             } else {
