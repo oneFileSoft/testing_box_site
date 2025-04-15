@@ -36,7 +36,7 @@ router.get('/getExpenses', async (req, res) => {
         return res.status(500).json({ success: false, message: "Error fetching expenses", error: error.message });
     }
 });
-
+module.exports = router;
 //router.get('/getExpenses', async (req, res) => {
 //    const { userId } = req.query;
 //
@@ -71,4 +71,4 @@ router.get('/getExpenses', async (req, res) => {
 //    }
 //});
 //
-module.exports = router;
+//module.exports = router;
