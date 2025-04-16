@@ -19,7 +19,7 @@ router.get('/getBuildRecords', async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            records
+            builds: records
         });
 
     } catch (error) {

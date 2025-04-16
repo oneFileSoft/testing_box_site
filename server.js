@@ -40,7 +40,7 @@ const insertBuildReport = require('./routes/insertBuildReport');
 app.use('/api', insertBuildReport);
 
 const getBuildRecords = require('./routes/getBuildRecords');
-app.use('/', getBuildRecords);
+app.use('/api', getBuildRecords);
 
 
 

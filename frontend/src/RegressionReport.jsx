@@ -1,6 +1,9 @@
-// frontend/src/pages/RegressionReport.jsx
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import { showToastSuccess, showToastError } from "./utils/toastUtils";
+import "./App.css";
+
 
 export default function RegressionReport() {
   const [date, setDate] = useState(() => {
@@ -34,7 +37,7 @@ export default function RegressionReport() {
   }, [date]);
 
   return (
-    <div className="p-6 w-full h-full bg-white">
+    <div className="user-container">
       {/* Header row */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Regression Report</h2>
