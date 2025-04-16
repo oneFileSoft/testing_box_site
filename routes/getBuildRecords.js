@@ -13,7 +13,7 @@ router.get('/getBuildRecords', async (req, res) => {
     }
 
     try {
-        const query = "SELECT * FROM builds WHERE DATE(created) = ?";
+        const query = "SELECT * FROM bulds WHERE DATE(created) = ?";
         const [records] = await pool.query(query, [date]);
         console.log(`✅ Builds query returned ${records.length} records`);
 
