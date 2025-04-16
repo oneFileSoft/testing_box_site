@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const nodemailer = require('nodemailer'); 
+const nodemailer = require('nodemailer');
 
 const app = express();
 const port = process.env.PORT || 3000;;
@@ -37,7 +37,7 @@ const transactions = require('./routes/transactions');
 app.use('/', transactions);
 
 const insertBuildReport = require('./routes/insertBuildReport');
-app.use('/', insertBuildReport);
+app.use('/api', insertBuildReport);
 
 const getBuildRecords = require('./routes/getBuildRecords');
 app.use('/', getBuildRecords);
@@ -46,7 +46,7 @@ app.use('/', getBuildRecords);
 
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
-  
+
   if (!name || !email || !message) {
     return res.status(400).json({ success: false, message: 'All fields are required' });
   }
@@ -54,9 +54,9 @@ app.post('/send-email', async (req, res) => {
   try {
     let transporter = nodemailer.createTransport({
       host: 'testingbox.pw',
-      port: 465,                  
-      secure: true,             
-      service: 'namecheap',      
+      port: 465,
+      secure: true,
+      service: 'namecheap',
       auth: { user: 'test@testingbox.pw', pass: 'zdr6^$rfv' }
     });
 
@@ -74,7 +74,7 @@ app.post('/send-email', async (req, res) => {
       console.log("Email not sent: " + info.response);
       return res.status(500).json({ success: false, message: 'Error sending email. ' + info.response});
     }
-    
+
   } catch (error) {
     console.error("Error sending email: ", error);
     return res.status(500).json({ success: false, message: 'Error sending email. ' + error });
