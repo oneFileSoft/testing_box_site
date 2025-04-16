@@ -25,6 +25,7 @@ import Contact from "./Contact";
 import AboutUs from "./AboutUs";
 import User from "./User";
 import UserDetails from "./UserDetails"
+import RegressionReport from "./RegressionReport"
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="about_us" element={<AboutUs />} />
         <Route path="user" element={<User />} />
         <Route path="user_details" element={<UserDetails />} />
+        <Route path="regression-report" element={<RegressionReport />} />
       </Route>
     </Routes>
   );

@@ -39,6 +39,10 @@ app.use('/', transactions);
 const insertBuild = require('./routes/insertBuildReport');
 app.use('/', insertBuild);
 
+const getBuildRecords = require('./routes/getBuildRecords');
+app.use('/', getBuildRecords);
+
+
 
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;

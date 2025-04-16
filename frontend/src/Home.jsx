@@ -18,7 +18,7 @@ export default function Home() {
   const handleHomeClick = () => navigate('/');
   const handleContactClick = () => navigate('/contact');
   const handleJenkinsClick = () => navigate('/about_us');
-  const handleRegrClick = () => navigate('/');
+  const handleRegrClick = () => navigate('/regression-report');
   const handleDbClick = () => { sessionStorage.clear(); navigate('/user'); }
 
   return (
