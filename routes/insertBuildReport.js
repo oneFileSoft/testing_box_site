@@ -16,7 +16,7 @@ router.post('/insertBuildReport', async (req, res) => {
 
   try {
     const insertQuery = `
-      INSERT INTO builds (junit_rep, build_rep)
+      INSERT INTO bulds (junit_rep, build_rep)
       VALUES (?, ?)
     `;
 
