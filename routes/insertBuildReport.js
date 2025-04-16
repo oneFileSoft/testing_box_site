@@ -7,7 +7,7 @@ router.post('/insertBuildReport', async (req, res) => {
 
   // Basic validation
   if (!junit_rep || !build_rep) {
-    console.log("Validation failed: Missing fields");
+    console.log("Validation failed: one of the reports");
     return res.status(400).json({
       success: false,
       message: "Both junit_rep and build_rep are required"

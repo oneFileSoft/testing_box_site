@@ -36,8 +36,8 @@ app.use('/', getAllUsers);
 const transactions = require('./routes/transactions');
 app.use('/', transactions);
 
-const insertBuild = require('./routes/insertBuildReport');
-app.use('/', insertBuild);
+const insertBuildReport = require('./routes/insertBuildReport');
+app.use('/', insertBuildReport);
 
 const getBuildRecords = require('./routes/getBuildRecords');
 app.use('/', getBuildRecords);
