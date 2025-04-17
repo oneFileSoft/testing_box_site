@@ -3,36 +3,36 @@ const pool = require('../config/db');
 const router = express.Router();
 
 router.post('/insertBuildReport', async (req, res) => {
-  const { junit_rep, build_rep } = req.body;
+  const { buildNumber, htmlContent, consoleLog } = req.body;
 
   // Basic validation
-  if (!junit_rep || !build_rep) {
-    console.log("Validation failed: one of the reports");
+  if (!buildNumber || !htmlContent || !consoleLog) {
+    console.log("Validation failed: one of the required data is EMPTY!");
     return res.status(400).json({
       success: false,
-      message: "Both junit_rep and build_rep are required"
+      message: "Both buildNumber, htmlContent and consoleLog are required"
     });
   }
 
   try {
     const insertQuery = `
-      INSERT INTO bulds (junit_rep, build_rep)
-      VALUES (?, ?)
+      INSERT INTO bulds (buildNumber, htmlContent, consoleLog)
+      VALUES (?, ?, ?)
     `;
 
-    const values = [junit_rep, build_rep];
+    const values = [buildNumber, htmlContent, consoleLog];
     const [result] = await pool.query(insertQuery, values);
 
     if (result.affectedRows === 1) {
       return res.status(200).json({
         success: true,
-        message: "Build report inserted successfully!"
+        message: "Build# " + buildNumber + " report inserted successfully!"
       });
     } else {
       console.error("Unexpected insert result:", result);
       return res.status(500).json({
         success: false,
-        message: "Build report not inserted due to an unexpected issue."
+        message: "Build report " + buildNumber + " not inserted due to an unexpected issue."
       });
     }
 
