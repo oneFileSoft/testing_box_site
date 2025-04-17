@@ -15,10 +15,7 @@ router.post('/insertBuildReport', async (req, res) => {
   }
 
   try {
-    const insertQuery = `
-      INSERT INTO bulds (buildNumb, htmlRep, consoleRep)
-      VALUES (?, ?, ?)
-    `;
+    const insertQuery = `INSERT INTO bulds (buildNumb, htmlRep, consolRep) VALUES (?, ?, ?)`;
 
     const values = [buildNumber, htmlContent, consoleLog];
     const [result] = await pool.query(insertQuery, values);
