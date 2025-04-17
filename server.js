@@ -13,7 +13,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(bodyParser.json({ limit: '5mb' }));
+//app.use(bodyParser.json({ limit: '5mb' }));
 
 
 const loginRoute = require('./routes/login');
