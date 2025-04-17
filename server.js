@@ -93,6 +93,9 @@ app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 
+app.get('/api/version-check', (req, res) => {
+  res.json({ version: "1.2.3", time: new Date().toISOString() });
+});
 // Start the server
 app.listen(port, () => {
     console.log(`Server running at ...:${port} enjoy! /`);
