@@ -3,6 +3,7 @@ const pool = require('../config/db');
 const router = express.Router();
 
 router.post('/insertBuildReport', async (req, res) => {
+  console.log(">>> Loaded insertBuildReport.js @", new Date().toISOString());
   const { buildNumber, htmlContent, consoleLog } = req.body;
 
   // Basic validation
@@ -15,7 +16,7 @@ router.post('/insertBuildReport', async (req, res) => {
            err += ", htmlContent"
         }
         if (!consoleLog) {
-           err = ", consoleLog"
+           err += ", consoleLog"
         }
     console.log("Validation failed: " + err + " is/are EMPTY!");
     return res.status(400).json({
