@@ -20,7 +20,7 @@ router.post('/insertBuildReport', async (req, res) => {
     console.log("Validation failed: " + err + " is/are EMPTY!");
     return res.status(400).json({
       success: false,
-      message: "Both buildNumber, htmlContent and consoleLog are required"
+      message: "Validation failed: " + err + " is/are EMPTY!"
     });
   }
 
