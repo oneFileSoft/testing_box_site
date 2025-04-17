@@ -7,7 +7,17 @@ router.post('/insertBuildReport', async (req, res) => {
 
   // Basic validation
   if (!buildNumber || !htmlContent || !consoleLog) {
-    console.log("Validation failed: one of the required data is EMPTY!");
+    let err = "";
+        if (!buildNumber) {
+           err = "buildNumber"
+        }
+        if (!htmlContent) {
+           err += ", htmlContent"
+        }
+        if (!consoleLog) {
+           err = ", consoleLog"
+        }
+    console.log("Validation failed: " + err + " is/are EMPTY!");
     return res.status(400).json({
       success: false,
       message: "Both buildNumber, htmlContent and consoleLog are required"
