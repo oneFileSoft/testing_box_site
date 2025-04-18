@@ -97,7 +97,10 @@ app.get('/api/version-check', (req, res) => {
   res.json({ version: "1.2.3", time: new Date().toISOString() });
 });
 // Start the server
-app.listen(port, () => {
-    console.log(`Server running at ...:${port} enjoy! /`);
+// Start the server
+const host = '0.0.0.0';
+app.listen(port, host, () => {
+  console.log(`Server running at http://${host}:${port}`);
 });
+
 
