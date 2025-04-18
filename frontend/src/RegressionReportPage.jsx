@@ -32,14 +32,14 @@ export default function RegressionReportPage() {
     fetchRecords();
   }, [date]);
 
-  const decodeAndDecompress = (encoded) => {
+  const decodeAndDecompress = (bufferObj) => {
     try {
-      const compressed = Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
+      const compressed = Uint8Array.from(bufferObj.data);
       const decompressed = pako.ungzip(compressed, { to: 'string' });
       return decompressed;
     } catch (e) {
-      console.error('Error decoding/decompressing:', e);
-      return 'Failed to decode content';
+      console.error('Error decompressing binary buffer:', e);
+      return '❌ Failed to decompress content';
     }
   };
 
