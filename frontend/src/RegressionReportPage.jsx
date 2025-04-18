@@ -18,12 +18,14 @@ export default function RegressionReportPage() {
       const response = await axios.get(`/api/getRegrRecords?date=${date}`);
       console.log("✅ Records response:", response.data);
       if (response.data.success) {
-        setRecords(response.data.records);
+        setRecords(response.data.builds || []);
       } else {
         console.error("⚠️ Failed to fetch records:", response.data.message);
+        setRecords([]);
       }
     } catch (err) {
       console.error("🔥 Error fetching records:", err);
+      setRecords([]);
     } finally {
       setLoading(false);
     }
@@ -35,9 +37,9 @@ export default function RegressionReportPage() {
 
   const decodeAndDecompress = (bufferObj) => {
     try {
+      if (!bufferObj?.data) return '❌ No data';
       const compressed = Uint8Array.from(bufferObj.data);
-      const decompressed = pako.ungzip(compressed, { to: 'string' });
-      return decompressed;
+      return pako.ungzip(compressed, { to: 'string' });
     } catch (e) {
       console.error('Error decompressing binary buffer:', e);
       return '❌ Failed to decompress content';
@@ -82,7 +84,12 @@ export default function RegressionReportPage() {
                 <span className={`font-medium ${record.status ? 'text-green-600' : 'text-red-600'}`}>
                   {record.status ? '✅' : '❌'} {record.buildId}
                 </span>
-                <span className="text-blue-600 cursor-pointer underline" onClick={() => openModal(record)}>View Details</span>
+                <span
+                  className="text-blue-600 cursor-pointer underline"
+                  onClick={() => openModal(record)}
+                >
+                  View Details
+                </span>
                 <span className="text-sm text-gray-500 col-span-2">
                   {record.created ? format(new Date(record.created), 'yyyy-MM-dd HH:mm:ss') : ''}
                 </span>
