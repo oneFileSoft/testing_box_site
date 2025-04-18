@@ -18,8 +18,8 @@ export default function Home() {
   const handleHomeClick = () => navigate('/');
   const handleContactClick = () => navigate('/contact');
   const handleJenkinsClick = () => navigate('/about_us');
-  const handleRegrClick = () => navigate('/regression-report');
   const handleDbClick = () => { sessionStorage.clear(); navigate('/user'); }
+  const handleRegrClick = () => navigate('/regression-report');
 
   return (
     <div className="home-container">
@@ -34,7 +34,7 @@ export default function Home() {
           {/*<a href="https://www.freepik.com/icon/users-alt_5529124#fromView=search&page=5&position=51&uuid=9e36625c-161e-4109-b420-ccbe393fc2ea">Icon by UIcons</a>*/}
           <img src="/img/settings_16311406.png" alt="DB" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/user" ? "dim-icon" : ""}`} onClick={handleDbClick} />
           {/* <a href="https://www.freepik.com/icon/user-skill-gear_16311406#fromView=search&page=5&position=3&uuid=9e36625c-161e-4109-b420-ccbe393fc2ea">Icon by UIcons</a> */}
-          <img src="/img/seo-report_7605135.png" alt="RegrReport" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/user" ? "dim-icon" : ""}`} onClick={handleRegrClick} />
+          <img src="/img/seo-report_7605135.png" alt="RegrReport" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/regression-report" ? "dim-icon" : ""}`} onClick={handleRegrClick} />
         </div>
       </header>
 
