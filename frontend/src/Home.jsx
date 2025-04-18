@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import useInactivityRedirect from './utils/useInactivityRedirect';
 import './App.css';
@@ -12,6 +12,7 @@ export default function Home() {
 
   const location = useLocation();
   const isHome = location.pathname !== "/";
+  const isRegression  = location.pathname === "/regression-report";
   const currentLoc = location.pathname;
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ export default function Home() {
       {/* Body */}
       <main className={`main-content ${isHome ? "dim-background" : ""}`}   style={{ height: '97%' }}>
         <div className="content-container" style={{ width: '100%' }}>
-          <div style={{ width: '80%', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: isRegression ? '90%' : '80%', alignItems: 'center', justifyContent: 'center' }}>
             <Outlet />
           </div>
         </div>

@@ -38,7 +38,6 @@ export default function RegressionReport() {
 
   return (
     <div className="user-container">
-      {/* Header row */}
 
                   <div className="top-bar">
                     <h2 className="text-2xl font-bold text-gray-800">Regression Report</h2>
