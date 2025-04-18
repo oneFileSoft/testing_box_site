@@ -16,6 +16,11 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+app.get('/api/version-check', (req, res) => {
+  res.json({ version: "1.2.3", time: new Date().toISOString() });
+});
+
+
 const loginRoute = require('./routes/login');
 app.use('/', loginRoute);
 
@@ -93,9 +98,7 @@ app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 
-app.get('/api/version-check', (req, res) => {
-  res.json({ version: "1.2.3", time: new Date().toISOString() });
-});
+
 // Start the server
 // Start the server
 const host = '0.0.0.0';
