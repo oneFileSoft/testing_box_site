@@ -7,8 +7,9 @@ export default function RegressionReportPage() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalTab, setModalTab] = useState('report'); // 'report' or 'trace'
+  const [modalContent, setModalContent] = useState({ report: '', trace: '' });
 
   const fetchRecords = async () => {
     if (!date) return;
@@ -43,9 +44,12 @@ export default function RegressionReportPage() {
     }
   };
 
-  const openModal = (encodedData) => {
-    const content = decodeAndDecompress(encodedData);
-    setModalContent(content);
+  const openModal = (record) => {
+    setModalContent({
+      report: decodeAndDecompress(record.html),
+      trace: decodeAndDecompress(record.consol)
+    });
+    setModalTab('report');
     setModalVisible(true);
   };
 
@@ -73,13 +77,15 @@ export default function RegressionReportPage() {
             {records.map((record, index) => (
               <div
                 key={index}
-                className="grid grid-cols-3 gap-4 items-center h-[50px] border-b border-gray-200 px-2"
+                className="grid grid-cols-4 gap-4 items-center h-[50px] border-b border-gray-200 px-2"
               >
                 <span className={`font-medium ${record.status ? 'text-green-600' : 'text-red-600'}`}>
                   {record.status ? '✅' : '❌'} {record.buildId}
                 </span>
-                <span className="text-blue-600 cursor-pointer underline" onClick={() => openModal(record.html)}>Show Report</span>
-                <span className="text-blue-600 cursor-pointer underline" onClick={() => openModal(record.consol)}>Show Build Trace</span>
+                <span className="text-blue-600 cursor-pointer underline" onClick={() => openModal(record)}>View Details</span>
+                <span className="text-sm text-gray-500 col-span-2">
+                  {record.created ? format(new Date(record.created), 'yyyy-MM-dd HH:mm:ss') : ''}
+                </span>
               </div>
             ))}
           </div>
@@ -88,15 +94,33 @@ export default function RegressionReportPage() {
 
       {modalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white max-w-3xl w-full p-4 rounded shadow-lg relative">
+          <div className="bg-white max-w-4xl w-full p-4 rounded shadow-lg relative">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
               onClick={() => setModalVisible(false)}
             >
               ✖
             </button>
-            <pre className="whitespace-pre-wrap overflow-y-auto max-h-[70vh]">
-              {modalContent}
+
+            {/* Tabs */}
+            <div className="flex space-x-4 border-b mb-4">
+              <button
+                className={`pb-2 font-semibold ${modalTab === 'report' ? 'border-b-2 border-blue-500 text-blue-700' : 'text-gray-600'}`}
+                onClick={() => setModalTab('report')}
+              >
+                📝 Report
+              </button>
+              <button
+                className={`pb-2 font-semibold ${modalTab === 'trace' ? 'border-b-2 border-blue-500 text-blue-700' : 'text-gray-600'}`}
+                onClick={() => setModalTab('trace')}
+              >
+                ⚙️ Build Trace
+              </button>
+            </div>
+
+            {/* Content */}
+            <pre className="whitespace-pre-wrap overflow-y-auto max-h-[70vh] bg-gray-50 p-4 rounded text-sm text-gray-800">
+              {modalTab === 'report' ? modalContent.report : modalContent.trace}
             </pre>
           </div>
         </div>
