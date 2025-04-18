@@ -43,7 +43,6 @@ export default function RegressionReport() {
 
 
 
-            <div className="home-container">
                 <header className="header" >
                       <div className="top-bar">
                         <h2 className="text-2xl font-bold text-gray-800">Regression Report</h2>
@@ -54,7 +53,6 @@ export default function RegressionReport() {
 
                       </div>
                 </header>
-            </div>
       {loading ? (
         <p className="text-gray-500">Loading builds...</p>
       ) : builds.length === 0 ? (
