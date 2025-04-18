@@ -48,6 +48,15 @@ app.use('/api', insertBuildReport);
 const getBuildRecords = require('./routes/getBuildRecords');
 app.use('/api', getBuildRecords);
 
+const insertRegrReport = require('./routes/insertRegrReport');
+app.use('/api', insertRegrReport);
+
+const getRegrRecords = require('./routes/getRegrRecords');
+app.use('/api', getRegrRecords);
+
+
+
+
 
 
 app.post('/send-email', async (req, res) => {
