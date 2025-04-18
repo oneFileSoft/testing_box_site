@@ -19,11 +19,19 @@ html, body {
   overflow: hidden;
 }
 
-/* Home Page Container */
+/* Home Page Container
 .home-container {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Ensures the container takes full height of the viewport */
+  height: 100vh;
+}
+*/
+.home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  padding-top: 50px; /* Header height */
+  padding-bottom: 3%; /* Footer height */
 }
 .dim-background {
   opacity: 0.8; /* Reduce opacity by 20% */
@@ -90,7 +98,7 @@ html, body {
   padding-left: 16px;
   padding-right: 16px;
   margin-top: 64px; /* Account for the height of the fixed top bar */
-  min-height: calc(100vh - 64px); /* Ensures content takes up the remaining screen height */
+  min-height: calc(100vh - 64px -3%); /* Ensures content takes up the remaining screen height */
   display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
