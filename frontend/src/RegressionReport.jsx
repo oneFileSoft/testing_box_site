@@ -44,7 +44,7 @@ export default function RegressionReport() {
       {/* Header */}
       <header className="header" >
         <div className="top-bar">
-          <h2 className="text-2xl font-bold text-gray-800">Regression Report</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Regression Report: </h2>
           <label htmlFor="report-date" className="text-gray-700 font-medium"> Select Date: </label>
           <input id="report-date" type="date" value={date} onChange={e => setDate(e.target.value)}
           className="border border-gray-300 rounded px-2 py-1" />
@@ -57,19 +57,7 @@ export default function RegressionReport() {
 
 
 
-{/*         <div className="w-full px-4 py-4 border-b border-gray-200"> */}
-{/*           <div className="flex items-center justify-between"> */}
-{/*             <h2 className="text-2xl font-bold text-gray-800">Regression Report</h2> */}
 
-{/*             <div className="flex items-center space-x-2"> */}
-{/*               <label htmlFor="report-date" className="text-gray-700 font-medium"> */}
-{/*                 Select Date: */}
-{/*               </label> */}
-{/*               <input id="report-date" type="date" value={date} */}
-{/*                 onChange={e => setDate(e.target.value)} className="border border-gray-300 rounded px-2 py-1" /> */}
-{/*             </div> */}
-{/*           </div> */}
-{/*         </div> */}
       {loading ? (
         <p className="text-gray-500">Loading builds...</p>
       ) : builds.length === 0 ? (
