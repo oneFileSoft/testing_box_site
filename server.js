@@ -91,19 +91,20 @@ app.post('/send-email', async (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
-//app.get('*', (req, res) => {
-//    res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
-//});
+// Catch-all (* or regex) routes should always be last.
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 
 
 // Start the server
-// Start the server
+//app.listen(port,  () => {
+//  console.log(`Server running at http://${host}:${port}`);
+//});
 const host = '0.0.0.0';
 app.listen(port, host, () => {
   console.log(`Server running at http://${host}:${port}`);
 });
+
 
 
