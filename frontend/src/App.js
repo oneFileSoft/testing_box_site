@@ -26,7 +26,7 @@ import AboutUs from "./AboutUs";
 import User from "./User";
 import UserDetails from "./UserDetails"
 import RegressionReport from "./RegressionReport"
-import RegressionReportPage from "./RegressionReportPage"
+import RegressionReportPageTbl from "./RegressionReportPageTbl"
 
 export default function App() {
   return (
@@ -37,7 +37,7 @@ export default function App() {
         <Route path="user" element={<User />} />
         <Route path="user_details" element={<UserDetails />} />
         <Route path="regression-report-old" element={<RegressionReport />} />
-        <Route path="regression-report" element={<RegressionReportPage />} />
+        <Route path="regression-report" element={<RegressionReportPageTbl />} />
       </Route>
     </Routes>
   );
