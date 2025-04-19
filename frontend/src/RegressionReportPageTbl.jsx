@@ -74,34 +74,34 @@ export default function RegressionReportPage() {
               </tr>
 
 
-      <div className="flex-1 overflow-y-auto">
-        {loading ? ( <p>Loading...</p> ) : records.length === 0 ? (
-          <h3 className="text-center text-gray-600">No regression found for this day</h3>
-        ) : (
-          <div>
-            {records.map((record, index) => (
-              <div key={index} className="grid grid-cols-4 gap-4 items-center h-[50px] border-b border-gray-200 px-2" >
-                <span className={`font-medium ${record.status ? 'text-green-600' : 'text-red-600'}`}>
-                  {record.status ? '✅' : '❌'} {record.buildId}
-                </span>
-                <span className="text-blue-600 cursor-pointer underline" onClick={() => openModal(record)} >
-                  View Details
-                </span>
-                <span className="text-sm text-gray-500 col-span-2">
-                  {record.created ? format(new Date(record.created), 'yyyy-MM-dd HH:mm:ss') : ''}
-                </span>
+              <div className="flex-1 overflow-y-auto">
+                {loading ? ( <p>Loading...</p> ) : records.length === 0 ? (
+                  <h3 className="text-center text-gray-600">No regression found for this day</h3>
+                ) : (
+                  <div>
+                    {records.map((record, index) => (
+                      <div key={index} className="grid grid-cols-4 gap-4 items-center h-[50px] border-b border-gray-200 px-2" >
+                        <span className={`font-medium ${record.status ? 'text-green-600' : 'text-red-600'}`}>
+                          {record.status ? '✅' : '❌'} {record.buildId}
+                        </span>
+                        <span className="text-blue-600 cursor-pointer underline" onClick={() => openModal(record)} >
+                          View Details
+                        </span>
+                        <span className="text-sm text-gray-500 col-span-2">
+                          {record.created ? format(new Date(record.created), 'yyyy-MM-dd HH:mm:ss') : ''}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
 
 
 
 
           </table>
-      </div>
-    <div className="flex flex-col h-full p-4">
+{/*       </div> */}
+{/*      <div className="flex flex-col h-full p-4"> */}
 {/*       <div className="flex items-center justify-between mb-4 border-b pb-2"> */}
 {/*         <h2 className="text-xl font-bold text-gray-800 mr-4">Regression tests:</h2> */}
 {/*         <label htmlFor="report-date" className="text-gray-700 mr-2">Select Date</label> */}
