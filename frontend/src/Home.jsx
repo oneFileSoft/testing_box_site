@@ -42,7 +42,7 @@ export default function Home() {
       {/* Body */}
       <main className={`main-content ${isHome ? "dim-background" : ""}`}   style={{ height: '97%' }}>
         <div className="content-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
-          <div style={{ width: '90%', alignItems: 'center', justifyContent: 'center' }} class="min-h-0">
+          <div style={{ width: '90%', height: '100%', alignItems: 'center', justifyContent: 'center' }} class="min-h-0">
             <Outlet />
           </div>
         </div>
