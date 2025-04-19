@@ -48,15 +48,6 @@ export default function Home() {
         </div>
       </main>
 
-{/*          <div style={{ width: isRegression ? '90%' : '80%', alignItems: 'center', justifyContent: 'center' }}> */}
-
-{/*       <main className={`main-content ${isHome ? "dim-background" : ""}`} style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}> */}
-{/*         <div className="content-container" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}> */}
-{/*           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%' }}> */}
-{/*             <Outlet /> */}
-{/*           </div> */}
-{/*         </div> */}
-{/*       </main> */}
 
       {/* Footer */}
       <footer className="footer" style={{ height: '3%', textAlign: "right"}}>
