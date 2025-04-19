@@ -130,6 +130,7 @@ html, body {
   overflow: hidden;
   width: 100%; 
   height: 60%;
+  margin-top: 120px;
 }
 
 .input-error::placeholder {
@@ -268,7 +269,7 @@ html, body {
   width: 100%;
   height: 50%;
   opacity: 1;
-  margin-top: 100px;
+  margin-top: 120px;
 }
 .del-icon {
   width: 20px;          /* Adjust size of the icon */
