@@ -276,3 +276,6 @@ html, body {
   margin-top: 1px;    /* 3px space between icons */
 }
 
+.my_scr {
+overflow-y: auto;
+}
