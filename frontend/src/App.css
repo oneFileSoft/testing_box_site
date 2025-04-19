@@ -95,6 +95,7 @@ html, body {
 /*********  main div for outlet **************/
 .content-container {
   padding-top: 20px;
+  padding-bottom: 20px;
   padding-left: 16px;
   padding-right: 16px;
   margin-top: 64px; /* Account for the height of the fixed top bar */
