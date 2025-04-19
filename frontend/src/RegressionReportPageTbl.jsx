@@ -1,8 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { format } from 'date-fns';
-import pako from 'pako';
-
 export default function RegressionReportPageTbl() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [records, setRecords] = useState([]);
@@ -58,7 +53,7 @@ export default function RegressionReportPageTbl() {
   return (
     <div className="user-container p-4 flex flex-col flex-1 min-h-0">
       {/* Top bar: title + date input */}
-      <div className="shrink-0 mb-4 flex items-center justify-between sticky top-0 bg-white z-10 border-b py-2">
+      <div className="shrink-0 mb-4 flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-800">Regression tests:</h2>
         <div>
           <label htmlFor="report-date" className="text-gray-700 mr-2">Select Date</label>
@@ -73,7 +68,7 @@ export default function RegressionReportPageTbl() {
       </div>
 
       {/* Scrollable table area */}
-      <div className="overflow-y-auto flex-grow border rounded">
+      <div className="overflow-y-auto flex-1 border rounded">
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-gray-100 sticky top-0">
             <tr>
