@@ -19,20 +19,20 @@ html, body {
   overflow: hidden;
 }
 
-/* Home Page Container
+/* Home Page Container*/
 .home-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
-*/
+/*
 .home-container {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full viewport height */
-  padding-top: 50px; /* Header height */
-  padding-bottom: 3%; /* Footer height */
-}
+  height: 100vh;
+  padding-top: 50px;
+  padding-bottom: 3%;
+}*/
 .dim-background {
   opacity: 0.8; /* Reduce opacity by 20% */
 }
