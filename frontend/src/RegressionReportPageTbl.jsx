@@ -1,3 +1,5 @@
+  import React, { useState, useEffect } from 'react';
+
 export default function RegressionReportPageTbl() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [records, setRecords] = useState([]);
