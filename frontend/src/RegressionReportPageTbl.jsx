@@ -56,7 +56,7 @@ export default function RegressionReportPageTbl() {
   };
 
   return (
-    <div className="user-container p-4 flex flex-col flex-1 min-h-0">
+    <div className="user-regr p-4 flex flex-col flex-1 min-h-0">
       {/* Top bar: title + date input */}
       <div className="shrink-0 mb-4 flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-800">Regression tests:</h2>
