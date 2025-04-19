@@ -62,18 +62,13 @@ export default function RegressionReportPageTbl() {
         <h2 className="text-xl font-bold text-gray-800">Regression tests:</h2>
         <div>
           <label htmlFor="report-date" className="text-gray-700 mr-2">Select Date</label>
-          <input
-            id="report-date"
-            type="date"
-            value={date}
-            onChange={e => setDate(e.target.value)}
-            className="border border-gray-300 rounded px-2 py-1"
-          />
+          <input id="report-date" type="date" value={date} onChange={e => setDate(e.target.value)} className="border border-gray-300 rounded px-2 py-1" />
         </div>
       </div>
 
-      {/* Scrollable table area */}
-      <div className="overflow-y-auto flex-1 border rounded">
+      {/* Scrollable table area
+      <div className="overflow-y-auto flex-1 border rounded">*/}
+      <div className="overflow-y-auto border rounded max-h-[70vh]">
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-gray-100 sticky top-0">
             <tr>
