@@ -1,4 +1,7 @@
-  import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { format } from 'date-fns';  // Add this import
+import axios from 'axios';
+import pako from 'pako';
 
 export default function RegressionReportPageTbl() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
