@@ -124,8 +124,8 @@ const handleBlur = (e) => {
   };
 
 return (
-    <div className="contact-form-container w-f mx-auto p-6 border rounded-lg shadow-lg bg-white">
-    <form onSubmit={handleSubmit}  style={{ width: "100%", height: "60%" }}>
+    <div className="contact-form-container w-f mx-auto p-6 border rounded-lg shadow-lg bg-white" >
+    <form onSubmit={handleSubmit}  style={{ width: "100%", height: "100%" }}>
     <table style={{ width: "100%" }} className="table-style">
       <tr> <td colspan="6"><h2 className="text-2xl font-bold text-center mb-4">Contact Us</h2></td> </tr>
       <tr>
