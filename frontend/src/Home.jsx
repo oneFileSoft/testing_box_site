@@ -23,7 +23,7 @@ export default function Home() {
   const handleRegrClick = () => navigate('/regression-report');
 
   return (
-    <div className="home-container" style={{ paddingTop: '50px', paddingBottom: '3%' }}>
+    <div className="home-container" >
       {/* Header */}
       <header className="header" >
         <div className="top-bar">
