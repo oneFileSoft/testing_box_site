@@ -3,7 +3,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import pako from 'pako';
 
-export default function RegressionReportPage() {
+export default function RegressionReportPageTbl() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(false);
