@@ -54,10 +54,20 @@ app.use('/api', insertRegrReport);
 const getRegrRecords = require('./routes/getRegrRecords');
 app.use('/api', getRegrRecords);
 
-app.post('/report-email', async (req, res) => {
-  const { format, emailTo, message, buildNumb } = req.body;
+//    let mailOptions = {
+//      from: 'test@testingbox.pw',
+//      to: emailTo,
+//      subject: `Build#${buildNumb} - RegressionReport`,
+//      ...(format === 0 ? { html: message } : { text: message }),
+//    };
+const multer = require('multer');
+const upload = multer(); // memoryStorage is default
 
-  if (!format && format !== 0 || !emailTo || !message || !buildNumb) {
+app.post('/report-email', upload.single('attachment'), async (req, res) => {
+  const { format, emailTo, buildNumb } = req.body;
+  const attachmentFile = req.file;
+
+  if ((!format && format !== "0") || !emailTo || !buildNumb) {
     return res.status(400).json({ success: false, message: 'All fields are required' });
   }
 
@@ -72,51 +82,29 @@ app.post('/report-email', async (req, res) => {
       }
     });
 
-//    let mailOptions = {
-//      from: 'test@testingbox.pw',
-//      to: emailTo,
-//      subject: `Build#${buildNumb} - RegressionReport`,
-//      ...(format === 0 ? { html: message } : { text: message }),
-//    };
     let mailOptions = {
       from: 'test@testingbox.pw',
       to: emailTo,
       subject: `Build#${buildNumb} - RegressionReport`,
       text: "Attached is the latest Playwright regression report.",
-      attachments: [
-        {
-          filename: `PlaywrightReport_Build${buildNumb}.html`,
-          content: message,
-          contentType: 'text/html'
-        }
-      ]
+      attachments: []
     };
 
-    const info = await transporter.sendMail(mailOptions);
-
-    if (info.response.toLowerCase().includes("ok")) {
-      console.log("Email sent: " + info.response);
-      return res.status(200).json({ success: true, message: 'Email sent successfully' });
+    if (format === "0" && attachmentFile) {
+      mailOptions.attachments.push({
+        filename: `PlaywrightReport_Build${buildNumb}.html`,
+        content: attachmentFile.buffer,
+        contentType: 'text/html'
+      });
     } else {
-      console.warn("SMTP response but not OK: ", info.response);
-      return res.status(502).json({ success: false, message: 'Failed to send email: ' + info.response });
+      mailOptions.text = req.body.message || mailOptions.text;
     }
 
+    const info = await transporter.sendMail(mailOptions);
+    return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error("Error sending email: ", error);
-
-    // Try to categorize error
-    const errorMessage = error?.message || '';
-    if (errorMessage.includes('Invalid login')) {
-      return res.status(401).json({ success: false, message: 'Authentication failed. Check SMTP credentials.' });
-    } else if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('ECONNECTION')) {
-      return res.status(503).json({ success: false, message: 'Unable to connect to SMTP server.' });
-    } else if (errorMessage.includes('Invalid recipient')) {
-      return res.status(400).json({ success: false, message: 'Invalid recipient address.' });
-    }
-
-    // Fallback: Internal error
-    return res.status(500).json({ success: false, message: 'Internal error: ' + errorMessage });
+    return res.status(500).json({ success: false, message: 'Error: ' + error.message });
   }
 });
 
