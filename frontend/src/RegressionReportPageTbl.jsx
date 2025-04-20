@@ -63,7 +63,7 @@ export default function RegressionReportPageTbl() {
         </div>
       </div>
 
-      <div className="border rounded overflow-y-auto max-h-[70vh]">
+      <div className="my_scr border rounded max-h-[70vh]">
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-gray-100 sticky top-0">
             <tr>
