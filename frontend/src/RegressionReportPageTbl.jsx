@@ -138,13 +138,10 @@ export default function RegressionReportPageTbl() {
               </button>
             </div>
 
-            {modalTab === 'report' ? (
-              <HtmlJsViewer result={modalContent.report} />
-            ) : (
-              <pre className="whitespace-pre-wrap overflow-y-auto max-h-[70vh] bg-gray-50 p-4 rounded text-sm text-gray-800">
-                {modalContent.trace}
-              </pre>
-            )}
+            <HtmlJsViewer
+              result={modalTab === 'report' ? modalContent.report : modalContent.trace}
+              isTrace={modalTab === 'trace'}
+            />
           </div>
         </div>
       )}
