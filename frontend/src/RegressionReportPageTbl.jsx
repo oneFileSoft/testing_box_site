@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { format } from 'date-fns';  // Add this import
+import { format } from 'date-fns';
 import axios from 'axios';
 import pako from 'pako';
 
@@ -46,49 +46,42 @@ export default function RegressionReportPageTbl() {
     }
   };
 
-  const openModal = (record) => {
-    setModalContent({
-      report: decodeAndDecompress(record.html),
-      trace: decodeAndDecompress(record.consol)
-    });
-    setModalTab('report');
+  const openModal = (record, type) => {
+    const content = decodeAndDecompress(type === 'report' ? record.html : record.consol);
+    setModalContent(prev => ({ ...prev, [type]: content }));
+    setModalTab(type);
     setModalVisible(true);
   };
 
   return (
-    <div className="user-regr p-4 flex flex-col flex-1 min-h-0">
-      {/* Top bar: title + date input */}
+    <div className="user-regr p-4 flex flex-col flex-1 min-h-0 text-lg w-[70%] mx-auto">
       <div className="shrink-0 mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-800">Regression tests:</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Regression tests:</h2>
         <div>
           <label htmlFor="report-date" className="text-gray-700 mr-2">Select Date</label>
           <input id="report-date" type="date" value={date} onChange={e => setDate(e.target.value)} className="border border-gray-300 rounded px-2 py-1" />
         </div>
       </div>
 
-      {/* Scrollable table area*/}
-      <div className="my_scr border rounded max-h-[10%]">
+      <div className="border rounded overflow-y-auto max-h-[70vh]">
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-gray-100 sticky top-0">
             <tr>
-              <th className="border px-4 py-2 text-left bg-gray-100">Status</th>
-              <th className="border px-4 py-2 text-left bg-gray-100">Build #</th>
-              <th className="border px-4 py-2 text-left bg-gray-100">Regression Results</th>
-              <th className="border px-4 py-2 text-left bg-gray-100">Created</th>
+              <th className="border px-4 py-2 text-left">Status</th>
+              <th className="border px-4 py-2 text-left">Build #</th>
+              <th className="border px-4 py-2 text-left">Report</th>
+              <th className="border px-4 py-2 text-left">Trace</th>
+              <th className="border px-4 py-2 text-left">Created</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan="4" className="text-center py-4">Loading...</td>
-              </tr>
+              <tr><td colSpan="5" className="text-center py-4">Loading...</td></tr>
             ) : records.length === 0 ? (
-              <tr>
-                <td colSpan="4" className="text-center py-4 text-gray-500">No regression found for this day</td>
-              </tr>
+              <tr><td colSpan="5" className="text-center py-4 text-gray-500">No regression found for this day</td></tr>
             ) : (
               records.map((record, index) => (
-                <tr key={index} className="hover:bg-gray-50">
+                <tr key={index} className="hover:bg-gray-50 border-t">
                   <td className={`border px-4 py-2 font-medium ${record.status ? 'text-green-600' : 'text-red-600'}`}>
                     {record.status ? '✅ Pass' : '❌ Fail'}
                   </td>
@@ -96,9 +89,17 @@ export default function RegressionReportPageTbl() {
                   <td className="border px-4 py-2">
                     <span
                       className="text-blue-600 cursor-pointer underline"
-                      onClick={() => openModal(record)}
+                      onClick={() => openModal(record, 'report')}
                     >
-                      View Details
+                      View Playwright Report
+                    </span>
+                  </td>
+                  <td className="border px-4 py-2">
+                    <span
+                      className="text-blue-600 cursor-pointer underline"
+                      onClick={() => openModal(record, 'trace')}
+                    >
+                      Show Build Trace
                     </span>
                   </td>
                   <td className="border px-4 py-2 text-sm text-gray-600">
@@ -111,7 +112,6 @@ export default function RegressionReportPageTbl() {
         </table>
       </div>
 
-      {/* Modal */}
       {modalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white max-w-4xl w-full p-4 rounded shadow-lg relative">

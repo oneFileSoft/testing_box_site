@@ -183,6 +183,7 @@ html, body {
   color: white;
   text-align: center;
   padding: 40px 20px;
+  border-radius: 8px;
   margin-top: 60px;  /*Ensure the container starts exactly below the top bar */
 }
 
