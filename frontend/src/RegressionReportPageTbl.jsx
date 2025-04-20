@@ -66,9 +66,8 @@ export default function RegressionReportPageTbl() {
         </div>
       </div>
 
-      {/* Scrollable table area
-      <div className="overflow-y-auto flex-1 border rounded">*/}
-      <div className="overflow-y-auto border rounded max-h-[10%]">
+      {/* Scrollable table area*/}
+      <div className="my_scr border rounded max-h-[10%]">
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-gray-100 sticky top-0">
             <tr>
