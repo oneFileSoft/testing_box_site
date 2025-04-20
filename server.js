@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const multer = require('multer');
 
+const upload = multer(); // memoryStorage is default
 const app = express();
 const port = process.env.PORT || 3000;;
 
@@ -54,14 +56,15 @@ app.use('/api', insertRegrReport);
 const getRegrRecords = require('./routes/getRegrRecords');
 app.use('/api', getRegrRecords);
 
+
 //    let mailOptions = {
 //      from: 'test@testingbox.pw',
 //      to: emailTo,
 //      subject: `Build#${buildNumb} - RegressionReport`,
 //      ...(format === 0 ? { html: message } : { text: message }),
 //    };
-const multer = require('multer');
-const upload = multer(); // memoryStorage is default
+
+
 
 app.post('/report-email', upload.single('attachment'), async (req, res) => {
   const { format, emailTo, buildNumb } = req.body;
