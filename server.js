@@ -72,11 +72,24 @@ app.post('/report-email', async (req, res) => {
       }
     });
 
+//    let mailOptions = {
+//      from: 'test@testingbox.pw',
+//      to: emailTo,
+//      subject: `Build#${buildNumb} - RegressionReport`,
+//      ...(format === 0 ? { html: message } : { text: message }),
+//    };
     let mailOptions = {
       from: 'test@testingbox.pw',
       to: emailTo,
       subject: `Build#${buildNumb} - RegressionReport`,
-      ...(format === 0 ? { html: message } : { text: message }),
+      text: "Attached is the latest Playwright regression report.",
+      attachments: [
+        {
+          filename: `PlaywrightReport_Build${buildNumb}.html`,
+          content: message,
+          contentType: 'text/html'
+        }
+      ]
     };
 
     const info = await transporter.sendMail(mailOptions);
