@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import axios from 'axios';
 import pako from 'pako';
+import HtmlJsViewer from './HtmlJsViewer';
 
 export default function RegressionReportPageTbl() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -114,7 +115,7 @@ export default function RegressionReportPageTbl() {
 
       {modalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white max-w-4xl w-full p-4 rounded shadow-lg relative">
+          <div className="bg-white max-w-5xl w-full p-4 rounded shadow-lg relative">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
               onClick={() => setModalVisible(false)}
@@ -137,9 +138,13 @@ export default function RegressionReportPageTbl() {
               </button>
             </div>
 
-            <pre className="whitespace-pre-wrap overflow-y-auto max-h-[70vh] bg-gray-50 p-4 rounded text-sm text-gray-800">
-              {modalTab === 'report' ? modalContent.report : modalContent.trace}
-            </pre>
+            {modalTab === 'report' ? (
+              <HtmlJsViewer result={modalContent.report} />
+            ) : (
+              <pre className="whitespace-pre-wrap overflow-y-auto max-h-[70vh] bg-gray-50 p-4 rounded text-sm text-gray-800">
+                {modalContent.trace}
+              </pre>
+            )}
           </div>
         </div>
       )}
