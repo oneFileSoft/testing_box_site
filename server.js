@@ -71,7 +71,7 @@ app.post('/report-email', upload.single('attachment'), async (req, res) => {
   const attachmentFile = req.file;
 
   if ((!format && format !== "0") || !emailTo || !buildNumb) {
-    return res.status(400).json({ success: false, message: 'All fields are required' });
+    return res.status(400).json({ success: false, message: 'All fields are required got format[' + format+'] emaiTo['+emailTo+'] buidNumb['+buidNumb+']'  });
   }
 
   try {
