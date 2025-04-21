@@ -29,12 +29,12 @@ export default function HtmlJsViewer({ result, isTrace = false }) {
     }
 
     return (
-      <iframe
-        title="HTML Viewer"
-        srcDoc={result}
-        sandbox="allow-scripts allow-same-origin"
-        className="w-full h-[60vh] border rounded"
-      />
+<iframe
+  title="HTML Viewer"
+  srcDoc={result}
+  sandbox="allow-scripts allow-same-origin"
+  className="w-full h-full border rounded"
+/>
     );
   };
 
