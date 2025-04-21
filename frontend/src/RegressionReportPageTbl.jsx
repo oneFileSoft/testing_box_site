@@ -267,8 +267,9 @@ export default function RegressionReportPageTbl() {
       </div>
 
       {modalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white max-w-5xl w-full p-4 rounded shadow-lg relative">
+        <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
+          <div className="relative bg-white w-[90vw] h-[90vh] rounded-xl shadow-2xl overflow-hidden flex flex-col">
+
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
               onClick={() => setModalVisible(false)}
