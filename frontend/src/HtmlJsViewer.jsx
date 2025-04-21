@@ -33,14 +33,24 @@ export default function HtmlJsViewer({ result, isTrace = false }) {
         title="HTML Viewer"
         srcDoc={result}
         sandbox="allow-scripts allow-same-origin"
-        className="w-full h-[60vh] border rounded"
+        className="w-full h-full border rounded"
       />
     );
   };
 
-  return (
-    <div className="rounded-xl border bg-white shadow-sm p-4 overflow-auto max-h-[70vh]">
-      {renderContent()}
-    </div>
-  );
+//   return (
+//     <div className="rounded-xl border bg-white shadow-sm p-4 overflow-auto max-h-[70vh]">
+//       {renderContent()}
+//     </div>
+//   );
+return (
+div className="flex-1 overflow-y-auto">
+  <HtmlJsViewer
+    result={modalTab === 'report' ? modalContent.report : modalContent.trace}
+    isTrace={modalTab === 'trace'}
+  />
+</div>
+);
+
+
 }
