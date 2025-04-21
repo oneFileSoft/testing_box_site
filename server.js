@@ -66,12 +66,65 @@ app.use('/api', getRegrRecords);
 
 
 
+//app.post('/report-email', upload.single('attachment'), async (req, res) => {
+//  const { format, emailTo, buildNumb } = req.body;
+//  const attachmentFile = req.file;
+//
+//  if ((!format && format !== "0") || !emailTo || !buildNumb) {
+//    return res.status(400).json({ success: false, message: 'All fields are required got format[' + format+'] emaiTo['+emailTo+'] buidNumb['+buidNumb+']'  });
+//  }
+//
+//  try {
+//    let transporter = nodemailer.createTransport({
+//      host: 'testingbox.pw',
+//      port: 465,
+//      secure: true,
+//      auth: {
+//        user: 'test@testingbox.pw',
+//        pass: 'zdr6^$rfv'
+//      }
+//    });
+//    await transporter.verify();
+//    let mailOptions = {
+//      from: 'test@testingbox.pw',
+//      to: emailTo,
+//      subject: `Build#${buildNumb} - RegressionReport`,
+//      text: "Attached is the latest Playwright regression report.",
+//      attachments: []
+//    };
+//
+//    if (format === "0" && attachmentFile) {
+//      mailOptions.attachments.push({
+//        filename: `PlaywrightReport_Build${buildNumb}.html`,
+//        content: attachmentFile.buffer,
+//        contentType: 'text/html'
+//      });
+//    } else {
+//      mailOptions.text = req.body.message || mailOptions.text;
+//    }
+//
+//    const info = await transporter.sendMail(mailOptions);
+//
+//    return res.status(200).json({
+//      success: true,
+//      message: 'Email sent successfully',
+//      mailInfo: info // 👈 this contains accepted[], rejected[], etc.
+//    });
+//  } catch (error) {
+//    console.error("Error sending email: ", error);
+//    return res.status(500).json({ success: false, message: 'Error: ' + error.message });
+//  }
+//});
+
 app.post('/report-email', upload.single('attachment'), async (req, res) => {
   const { format, emailTo, buildNumb } = req.body;
   const attachmentFile = req.file;
 
   if ((!format && format !== "0") || !emailTo || !buildNumb) {
-    return res.status(400).json({ success: false, message: 'All fields are required got format[' + format+'] emaiTo['+emailTo+'] buidNumb['+buidNumb+']'  });
+    return res.status(400).json({
+      success: false,
+      message: `All fields are required got format[${format}] emailTo[${emailTo}] buildNumb[${buildNumb}]`
+    });
   }
 
   try {
@@ -85,6 +138,8 @@ app.post('/report-email', upload.single('attachment'), async (req, res) => {
       }
     });
 
+    await transporter.verify(); // ✅ Check SMTP connection
+
     let mailOptions = {
       from: 'test@testingbox.pw',
       to: emailTo,
@@ -97,20 +152,26 @@ app.post('/report-email', upload.single('attachment'), async (req, res) => {
       mailOptions.attachments.push({
         filename: `PlaywrightReport_Build${buildNumb}.html`,
         content: attachmentFile.buffer,
-        contentType: 'text/html'
+        contentType: attachmentFile.mimetype // ✅ More accurate
       });
     } else {
       mailOptions.text = req.body.message || mailOptions.text;
     }
 
-    const info = await transporter.sendMail(mailOptions);
-    return res.status(200).json({ success: true, message: 'Email sent successfully' });
+    const info = await transporter.sendMail(mailOptions); // ✅ Send the email
+    console.log('Email send result:', info);              // ✅ Log it
+
+    return res.status(200).json({
+      success: true,
+      message: 'Email sent successfully',
+      mailInfo: info                                       // ✅ Return it to user
+    });
+
   } catch (error) {
     console.error("Error sending email: ", error);
     return res.status(500).json({ success: false, message: 'Error: ' + error.message });
   }
 });
-
 
 
 
