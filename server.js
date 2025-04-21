@@ -115,7 +115,7 @@ app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
     return res.status(500).json({ success: false, message: 'Error: ' + error.message });
   }
 });
-
+// not sure why but this workd one, and the it stop
 //app.post('/report-email', upload.single('attachment'), async (req, res) => {
 //  const { format, emailTo, buildNumb } = req.body;
 //  const attachmentFile = req.file;
