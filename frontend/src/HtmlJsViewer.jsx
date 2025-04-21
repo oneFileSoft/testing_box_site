@@ -29,17 +29,23 @@ export default function HtmlJsViewer({ result, isTrace = false }) {
     }
 
     return (
-<iframe
-  title="HTML Viewer"
-  srcDoc={result}
-  sandbox="allow-scripts allow-same-origin"
-  className="w-full h-full border rounded"
-/>
+        <iframe
+          title="HTML Viewer"
+          srcDoc={result}
+          sandbox="allow-scripts allow-same-origin"
+          className="w-full h-full border rounded"
+        />
     );
   };
 
+//   return (
+//     <div className="rounded-xl border bg-white shadow-sm p-4 overflow-auto max-h-[70vh]">
+//       {renderContent()}
+//     </div>
+//   );
+
   return (
-    <div className="rounded-xl border bg-white shadow-sm p-4 overflow-auto max-h-[70vh]">
+    <div className="flex-1 overflow-auto">
       {renderContent()}
     </div>
   );
