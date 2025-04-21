@@ -116,62 +116,62 @@ app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
   }
 });
 
-app.post('/report-email', upload.single('attachment'), async (req, res) => {
-  const { format, emailTo, buildNumb } = req.body;
-  const attachmentFile = req.file;
-
-  if ((!format && format !== "0") || !emailTo || !buildNumb) {
-    return res.status(400).json({
-      success: false,
-      message: `All fields are required got format[${format}] emailTo[${emailTo}] buildNumb[${buildNumb}]`
-    });
-  }
-
-  try {
-    let transporter = nodemailer.createTransport({
-      host: 'testingbox.pw',
-      port: 465,
-      secure: true,
-      auth: {
-        user: 'test@testingbox.pw',
-        pass: 'zdr6^$rfv'
-      }
-    });
-
-    await transporter.verify();
-
-    let mailOptions = {
-      from: 'test@testingbox.pw',
-      to: emailTo,
-      subject: `Build#${buildNumb} - RegressionReport`,
-      text: "Attached is the latest Playwright regression report.",
-      attachments: []
-    };
-
-    if (format === "0" && attachmentFile) {
-      mailOptions.attachments.push({
-        filename: `PlaywrightReport_Build${buildNumb}.html`,
-        content: attachmentFile.buffer,
-        contentType: attachmentFile.mimetype
-      });
-    } else {
-      mailOptions.text = req.body.message || mailOptions.text;
-    }
-
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email send result:', info);
-
-    return res.status(200).json({
-      success: true,
-      message: 'Email sent successfully',
-      mailInfo: info
-    });
-
-  } catch (error) {
-    console.error("Error sending email: ", error);
-    return res.status(500).json({ success: false, message: 'Error: ' + error.message });
-  }
-});
+//app.post('/report-email', upload.single('attachment'), async (req, res) => {
+//  const { format, emailTo, buildNumb } = req.body;
+//  const attachmentFile = req.file;
+//
+//  if ((!format && format !== "0") || !emailTo || !buildNumb) {
+//    return res.status(400).json({
+//      success: false,
+//      message: `All fields are required got format[${format}] emailTo[${emailTo}] buildNumb[${buildNumb}]`
+//    });
+//  }
+//
+//  try {
+//    let transporter = nodemailer.createTransport({
+//      host: 'testingbox.pw',
+//      port: 465,
+//      secure: true,
+//      auth: {
+//        user: 'test@testingbox.pw',
+//        pass: 'zdr6^$rfv'
+//      }
+//    });
+//
+//    await transporter.verify();
+//
+//    let mailOptions = {
+//      from: 'test@testingbox.pw',
+//      to: emailTo,
+//      subject: `Build#${buildNumb} - RegressionReport`,
+//      text: "Attached is the latest Playwright regression report.",
+//      attachments: []
+//    };
+//
+//    if (format === "0" && attachmentFile) {
+//      mailOptions.attachments.push({
+//        filename: `PlaywrightReport_Build${buildNumb}.html`,
+//        content: attachmentFile.buffer,
+//        contentType: attachmentFile.mimetype
+//      });
+//    } else {
+//      mailOptions.text = req.body.message || mailOptions.text;
+//    }
+//
+//    const info = await transporter.sendMail(mailOptions);
+//    console.log('Email send result:', info);
+//
+//    return res.status(200).json({
+//      success: true,
+//      message: 'Email sent successfully',
+//      mailInfo: info
+//    });
+//
+//  } catch (error) {
+//    console.error("Error sending email: ", error);
+//    return res.status(500).json({ success: false, message: 'Error: ' + error.message });
+//  }
+//});
 
 
 
