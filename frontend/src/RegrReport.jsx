@@ -64,7 +64,7 @@ const decompress = (bufferObj) => {
       className="w-screen h-screen bg-cover bg-center"
       style={{ backgroundImage: `url('/logo.jpg')` }}
     >
-      <table style={{ width: '100%', height: '100%', backgroundColor: 'rgba(255,255,255,0.9)' }}>
+      <table style={{ width: '80%', height: '80%', backgroundColor: 'rgba(255,255,255,0.9)' }}>
         <tbody>
           <tr>
             {/* Left column: 20% */}
