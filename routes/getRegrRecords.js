@@ -14,6 +14,13 @@ router.get('/getRegrRecords', async (req, res) => {
 
     try {
         const query = "SELECT * FROM regr WHERE DATE(created) = ?  ORDER BY buildId DESC";
+//        const query = `SELECT id, buildId, created, html, consol,
+//                    CASE
+//                      WHEN status = TRUE THEN 'PASS'
+//                      ELSE 'FAIL'
+//                    END AS status
+//                  FROM regr WHERE DATE(created) = ? `;
+
         const [records] = await pool.query(query, [date]);
         console.log(`✅ Builds query returned ${records.length} records`);
 
