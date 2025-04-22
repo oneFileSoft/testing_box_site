@@ -277,6 +277,7 @@ html, body {
   margin-top: 1px;    /* 3px space between icons */
 }
 
+/********    regression page   ***********/
 .user-regr {
   background: lightgray; /* Set background color to light grey */
   display: flex;
@@ -294,3 +295,54 @@ html, body {
 .my_scr {
 overflow-y: auto;
 }
+
+
+.regr-container {
+  display: flex;
+  height: 100vh;
+}
+
+.regr-sidebar {
+  width: 20%;
+  background: #f5f5f5;
+  padding: 10px;
+  overflow-y: auto;
+  border-right: 1px solid #ccc;
+}
+
+.regr-item {
+  margin-bottom: 12px;
+  padding: 8px;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+}
+
+.regr-links button {
+  margin-right: 6px;
+  margin-top: 5px;
+}
+
+.regr-content {
+  width: 80%;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.regr-header {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.regr-body {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+}
+
+.regr-console {
+  background-color: #1e1e1e;
+  color: #00ff00;
+  padding: 10px;
+  white-space: pre-wrap;
+  font-family: monospace;
+}
+
