@@ -113,30 +113,34 @@ export default function RegrReport() {
           )}
         </div>
 
-        {/* Right Panel */}
-        <div className="w-4/5 p-4 flex flex-col">
-          {selected ? (
-            <>
-              <h2 className="text-xl font-bold mb-4">
-                Build #{selected.buildId} –{' '}
-                {selected.type === 'html' ? 'Playwright Report' : 'Console'}
-              </h2>
-              <div className="flex-grow border p-4 bg-white shadow rounded overflow-auto min-h-[500px]">
-                {selected.type === 'html' ? (
-                  <iframe
-                    title="HTML Report"
-                    srcDoc={content}
-                    className="w-full h-full border-0"
-                  />
-                ) : (
-                  <pre className="whitespace-pre-wrap text-sm">{content}</pre>
-                )}
-              </div>
-            </>
-          ) : (
-            <p className="text-gray-500">Select a build and view HTML or Console output.</p>
-          )}
-        </div>
+
+{/* Right Panel */}
+<div className="flex-1 p-4 bg-yellow-50">
+  {selected ? (
+    <>
+      <h2 className="text-xl font-bold mb-4">
+        Build #{selected.buildId} –{' '}
+        {selected.type === 'html' ? 'Playwright Report' : 'Console'}
+      </h2>
+      <div style={{ height: '80vh', border: '1px solid black', background: '#fff' }}>
+        {selected.type === 'html' ? (
+          <iframe
+            title="HTML Report"
+            srcDoc={content}
+            style={{ width: '100%', height: '100%', border: 'none' }}
+          />
+        ) : (
+          <pre className="whitespace-pre-wrap text-sm">{content}</pre>
+        )}
+      </div>
+    </>
+  ) : (
+    <p className="text-gray-500">Select a build and view HTML or Console output.</p>
+  )}
+</div>
+
+
+
       </div>
     </div>
   );
