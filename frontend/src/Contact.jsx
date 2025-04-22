@@ -10,37 +10,10 @@ const Contact = () => {
     lastName: "",
     yourWebsite: "",
     yourEmail: "",
-    email: "contact@arbatrade.us",
+    email: "test@testingbox.pw",
     message: ""
   });
   const [errors, setErrors] = useState({});
-
-//   const validateField = (name, value) => {
-//     let error = "";
-//     if (name === "firstName") {
-//       if (!value) error = "First name is required";
-//       else if (value.length > 100) error = "First name is too long";
-//     } else if (name === "lastName") {
-//       if (!value) error = "Last name is required";
-//       else if (value.length > 100) error = "Last name is too long";
-//     } else if (name === "yourWebsite") {
-//       if (!value) error = "Your website is required";
-//     } else if (name === "yourEmail") {
-//       if (!value) error = "Your email is required";
-//     } else if (name === "message") {
-//       if (!value) error = "Message is required";
-//       else if (value.length > 2000) error = "Message is too long";
-//     }
-//     setErrors(prevErrors => ({ ...prevErrors, [name]: error }));
-//   };
-//
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-//
-//   const handleBlur = (e) => {
-//     validateField(e.target.name, e.target.value);
-//   };
 
 const validateField = (name, value) => {
   let error = "";
