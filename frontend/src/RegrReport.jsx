@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import axios from 'axios';
 import pako from 'pako';
-import './RegrReport.css';
+import './App.css';
 
 export default function RegrReport() {
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
