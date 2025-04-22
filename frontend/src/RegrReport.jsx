@@ -32,16 +32,22 @@ export default function RegrReport() {
     fetchRecords();
   }, [date]);
 
-  const decompress = (bufferObj) => {
-    try {
-      if (!bufferObj?.data) return '❌ No data found';
-      const compressed = Uint8Array.from(bufferObj.data);
-      return pako.ungzip(compressed, { to: 'string' });
-    } catch (err) {
-      console.error('❌ Error decompressing content:', err);
-      return '❌ Decompression failed';
-    }
-  };
+const decompress = (bufferObj) => {
+  try {
+    if (!bufferObj?.data) return '❌ No data found';
+    const compressed = Uint8Array.from(bufferObj.data);
+    let text = pako.ungzip(compressed, { to: 'string' });
+
+    // Fix: Replace all escaped `\n` with real line breaks
+    text = text.replace(/\\n/g, '\n');  // for double-escaped (\\n)
+    text = text.replace(/\r?\n/g, '\n'); // normalize line endings
+
+    return text;
+  } catch (err) {
+    console.error('❌ Error decompressing content:', err);
+    return '❌ Decompression failed';
+  }
+};
 
   const handleSelect = (buildId, type) => {
     const record = records.find((r) => r.buildId === buildId);
