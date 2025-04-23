@@ -95,16 +95,25 @@ const handleSelect = (buildId, type) => {
                         className="text-blue-500 hover:underline text-sm" >
                         HTML
                       </button>
+
+
                       <a
                         href="#"
                         onClick={(e) => {
-                          e.preventDefault(); // Prevents browser jump or reload
-                          handleSelect(rec.buildId, 'html'); // Your custom function
+                          e.preventDefault();
+                          handleSelect(rec.buildId, 'html');
                         }}
-                        className="text-blue-500 hover:underline text-sm"
+                        className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition"
                       >
-                        HTML
+                        <span className="font-semibold text-black">
+                          Build #{rec.buildId}
+                        </span>
+                        <span className={rec.status ? 'green-text' : 'red-text'}>
+                          {rec.status ? 'PASS' : 'FAIL'}
+                        </span> 📝
                       </a>
+
+
                       &nbsp;
                       <button onClick={() => handleSelect(rec.buildId, 'console')}
                         className="text-blue-500 hover:underline text-sm"
