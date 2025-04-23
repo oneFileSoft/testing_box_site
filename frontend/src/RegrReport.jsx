@@ -95,6 +95,16 @@ const handleSelect = (buildId, type) => {
                         className="text-blue-500 hover:underline text-sm" >
                         HTML
                       </button>
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault(); // Prevents browser jump or reload
+                          handleSelect(rec.buildId, 'html'); // Your custom function
+                        }}
+                        className="text-blue-500 hover:underline text-sm"
+                      >
+                        HTML
+                      </a>
                       &nbsp;
                       <button onClick={() => handleSelect(rec.buildId, 'console')}
                         className="text-blue-500 hover:underline text-sm"
