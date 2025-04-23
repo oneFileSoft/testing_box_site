@@ -62,7 +62,7 @@ const handleSelect = (buildId, type) => {
 
   return (
     <div className="w-screen h-screen" >
-      <table style={{ width: '100%', height: '80%', maxHeight: '80%',backgroundColor: 'rgba(237,137,255,1)' }}>
+      <table style={{ width: '100%', height: '70%', maxHeight: '70%',backgroundColor: 'rgba(237,255,137,1)' }}>
         <tbody>
           <tr>
             {/* Left column: 20% */}
