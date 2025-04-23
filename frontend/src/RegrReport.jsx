@@ -62,11 +62,11 @@ const handleSelect = (buildId, type) => {
 
   return (
     <div className="w-screen h-screen" >
-      <table style={{ width: '100%', height: '100%', backgroundColor: 'rgba(235,255,255,1)' }}>
+      <table style={{ width: '100%', height: '80%', backgroundColor: 'rgba(235,255,255,1)' }}>
         <tbody>
           <tr>
             {/* Left column: 20% */}
-            <td className="my_scr" style={{ width: '20%', verticalAlign: 'top', padding: '16px', height: '100vh' }}>
+            <td style={{ width: '20%', verticalAlign: 'top', padding: '16px', height: '100vh',overflowY: 'auto' }}>
               <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
               <input
                 type="date"
