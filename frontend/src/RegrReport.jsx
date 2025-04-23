@@ -69,57 +69,57 @@ const handleSelect = (buildId, type) => {
 
 
 
-<td style={{ width: '20%', verticalAlign: 'top', padding: '0' }}>
-  <div style={{ height: '100vh', overflowY: 'auto', padding: '16px' }}>
-    <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
-    <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mb-4 border px-2 py-1 w-full" />
-    <br />
-    {loading ? (
-      <p>Loading...</p>
-    ) : records.length === 0 ? (
-      <p>No builds for selected date</p>
-    ) : (
-      records.map((rec) => (
-        <div
-          key={rec.buildId}
-          className={`p-2 my-2 border rounded cursor-pointer hover:bg-gray-200 ${
-            selected?.buildId === rec.buildId ? 'bg-blue-100' : ''
-          }`}
-        >
-          <div className="flex justify-between items-center build-row">
-            <div className="text-sm font-medium">
-              <span className="font-semibold text-black">Build #{rec.buildId}</span>{' '}
-              <span className={rec.status ? 'green-text' : 'red-text'}>
-                {rec.status ? 'PASS' : 'FAIL'}
-              </span>
-            </div>
-          </div>
-          <div className="mt-1 space-x-3 build-row">
-  {/*                       <button onClick={() => handleSelect(rec.buildId, 'html')} className="text-blue-500 hover:underline text-sm" >HTML</button> */}
-  {/*                       &nbsp; */}
-  {/*                       <button onClick={() => handleSelect(rec.buildId, 'console')} className="text-blue-500 hover:underline text-sm"> Console</button> */}
+            <td style={{ width: '20%', verticalAlign: 'top', padding: '0' }}>
+              <div style={{ height: '100vh', overflowY: 'auto', padding: '16px' }}>
+                <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mb-4 border px-2 py-1 w-full" />
+                <br />
+                {loading ? (
+                  <p>Loading...</p>
+                ) : records.length === 0 ? (
+                  <p>No builds for selected date</p>
+                ) : (
+                  records.map((rec) => (
+                    <div
+                      key={rec.buildId}
+                      className={`p-2 my-2 border rounded cursor-pointer hover:bg-gray-200 ${
+                        selected?.buildId === rec.buildId ? 'bg-blue-100' : ''
+                      }`}
+                    >
+                      <div className="flex justify-between items-center build-row">
+                        <div className="text-sm font-medium">
+                          <span className="font-semibold text-black">Build #{rec.buildId}</span>{' '}
+                          <span className={rec.status ? 'green-text' : 'red-text'}>
+                            {rec.status ? 'PASS' : 'FAIL'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mt-1 space-x-3 build-row">
+              {/*                       <button onClick={() => handleSelect(rec.buildId, 'html')} className="text-blue-500 hover:underline text-sm" >HTML</button> */}
+              {/*                       &nbsp; */}
+              {/*                       <button onClick={() => handleSelect(rec.buildId, 'console')} className="text-blue-500 hover:underline text-sm"> Console</button> */}
 
-  {/*                       <a href="#" onClick={(e) => {e.preventDefault(); handleSelect(rec.buildId, 'html');}} */}
-  {/*                         className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition"> */}
-  {/*                         <span className="font-semibold text-black"> Build #{rec.buildId} </span> */}
-  {/*                         <span className={rec.status ? 'green-text' : 'red-text'}>{rec.status ? 'PASS' : 'FAIL'}</span> 📝 */}
-  {/*                       </a> */}
-            <a href="#" onClick={(e) => {e.preventDefault(); handleSelect(rec.buildId, 'html');}}
-                className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition">
-                <span className="font-semibold text-black">Playwright </span>
-            </a>
-            &nbsp;
-            <a href="#" onClick={(e) => {e.preventDefault(); handleSelect(rec.buildId, 'console');}}
-              className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition">
-              <span>Console ⚙</span>
-            </a>
-          </div>
-          <hr />
-        </div>
-      ))
-    )}
-  </div>
-</td>
+              {/*                       <a href="#" onClick={(e) => {e.preventDefault(); handleSelect(rec.buildId, 'html');}} */}
+              {/*                         className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition"> */}
+              {/*                         <span className="font-semibold text-black"> Build #{rec.buildId} </span> */}
+              {/*                         <span className={rec.status ? 'green-text' : 'red-text'}>{rec.status ? 'PASS' : 'FAIL'}</span> 📝 */}
+              {/*                       </a> */}
+                        <a href="#" onClick={(e) => {e.preventDefault(); handleSelect(rec.buildId, 'html');}}
+                            className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition">
+                            <span className="font-semibold text-black">Playwright 📝</span>
+                        </a>
+                        &nbsp;
+                        <a href="#" onClick={(e) => {e.preventDefault(); handleSelect(rec.buildId, 'console');}}
+                          className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition">
+                          <span>Console ⚙</span>
+                        </a>
+                      </div>
+                      <hr />
+                    </div>
+                  ))
+                )}
+              </div>
+            </td>
 
 
 
