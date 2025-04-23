@@ -68,6 +68,7 @@ const handleSelect = (buildId, type) => {
             {/* Left column: 20% */}
             <td style={{ width: '20%', verticalAlign: 'top', padding: '16px', height: '100vh',overflowY: 'auto' }}>
               <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
+              <br>
               <input
                 type="date"
                 value={date}
@@ -86,16 +87,13 @@ const handleSelect = (buildId, type) => {
                       selected?.buildId === rec.buildId ? 'bg-blue-100' : ''
                     }`}
                   >
-                    <div className="flex justify-between items-center">
-
-
+                    <div className="flex justify-between items-center p-2 rounded hover:bg-gray-100 cursor-pointer transition">
                       <div className="text-sm font-medium">
                         <span className="font-semibold text-black">Build #{rec.buildId}</span>{' '}
                         <span className={rec.status ? 'green-text' : 'red-text'}>
                           {rec.status ? 'PASS' : 'FAIL'}
                         </span>
                       </div>
-
                     </div>
                     <div className="mt-1 space-x-3">
                       <button
