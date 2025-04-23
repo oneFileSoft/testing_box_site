@@ -345,4 +345,10 @@ overflow-y: auto;
   white-space: pre-wrap;
   font-family: monospace;
 }
+.red-text {
+  color: red;
+}
+.green-text {
+  color: green;
+}
 

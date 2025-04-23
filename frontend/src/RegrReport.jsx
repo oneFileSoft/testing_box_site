@@ -89,7 +89,7 @@ const handleSelect = (buildId, type) => {
                     <div className="flex justify-between items-center">
                       <div className="font-semibold">Build #{rec.buildId}</div>
                       <div className="flex items-center space-x-2">
-                        <span className={`text-sm font-medium ${rec.status ? 'text-green-700' : 'text-red-600'}`}>
+                        <span className={`text-sm font-medium ${rec.status ? 'green-text' : 'red-text'}`}>
                           {rec.status ? 'PASS' : 'FAIL'}
                         </span>
                       </div>
