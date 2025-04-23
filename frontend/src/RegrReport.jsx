@@ -82,44 +82,31 @@ const handleSelect = (buildId, type) => {
                       selected?.buildId === rec.buildId ? 'bg-blue-100' : ''
                     }`}
                   >
-                    <div className="flex justify-between items-center build-row">
-                      <div className="text-sm font-medium">
-                        <span className="font-semibold text-black">Build #{rec.buildId}</span>{' '}
-                        <span className={rec.status ? 'green-text' : 'red-text'}>
-                          {rec.status ? 'PASS' : 'FAIL'}
-                        </span>
-                      </div>
-                    </div>
+{/*                     <div className="flex justify-between items-center build-row"> */}
+{/*                       <div className="text-sm font-medium"> */}
+{/*                         <span className="font-semibold text-black">Build #{rec.buildId}</span>{' '} */}
+{/*                         <span className={rec.status ? 'green-text' : 'red-text'}> */}
+{/*                           {rec.status ? 'PASS' : 'FAIL'} */}
+{/*                         </span> */}
+{/*                       </div> */}
+{/*                     </div> */}
                     <div className="mt-1 space-x-3 build-row">
-                      <button onClick={() => handleSelect(rec.buildId, 'html')}
-                        className="text-blue-500 hover:underline text-sm" >
-                        HTML
-                      </button>
+{/*                       <button onClick={() => handleSelect(rec.buildId, 'html')} className="text-blue-500 hover:underline text-sm" >HTML</button> */}
+{/*                       &nbsp; */}
+{/*                       <button onClick={() => handleSelect(rec.buildId, 'console')} className="text-blue-500 hover:underline text-sm"> Console</button> */}
 
-
-                      <a
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleSelect(rec.buildId, 'html');
-                        }}
-                        className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition"
-                      >
-                        <span className="font-semibold text-black">
-                          Build #{rec.buildId}
-                        </span>
-                        <span className={rec.status ? 'green-text' : 'red-text'}>
-                          {rec.status ? 'PASS' : 'FAIL'}
-                        </span> 📝
+                      <a href="#" onClick={(e) => {e.preventDefault(); handleSelect(rec.buildId, 'html');}}
+                        className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition">
+                        <span className="font-semibold text-black"> Build #{rec.buildId} </span>
+                        <span className={rec.status ? 'green-text' : 'red-text'}>{rec.status ? 'PASS' : 'FAIL'}</span> 📝
+                      </a>
+                      &nbsp;
+                      <a href="#" onClick={(e) => {e.preventDefault(); handleSelect(rec.buildId, 'console');}}
+                        className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer transition">
+                        <span> Console ⚙️</span>
                       </a>
 
 
-                      &nbsp;
-                      <button onClick={() => handleSelect(rec.buildId, 'console')}
-                        className="text-blue-500 hover:underline text-sm"
-                      >
-                        Console
-                      </button>
                     </div>
                     <hr />
                   </div>
