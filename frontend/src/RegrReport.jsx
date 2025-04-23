@@ -68,7 +68,7 @@ const handleSelect = (buildId, type) => {
             {/* Left column: 20% */}
             <td style={{ width: '20%', verticalAlign: 'top', padding: '16px', height: '100vh',overflowY: 'auto' }}>
               <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
-              <br>
+              <br />
               <input
                 type="date"
                 value={date}
