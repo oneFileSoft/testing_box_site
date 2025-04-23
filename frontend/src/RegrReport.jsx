@@ -32,43 +32,44 @@ export default function RegrReport() {
     fetchRecords();
   }, [date]);
 
-const decompress = (bufferObj) => {
-  try {
-    if (!bufferObj?.data) return '❌ No data found';
-    const compressed = Uint8Array.from(bufferObj.data);
-    let text = pako.ungzip(compressed, { to: 'string' });
+  const decompress = (bufferObj) => {
+    try {
+      if (!bufferObj?.data) return '❌ No data found';
+      const compressed = Uint8Array.from(bufferObj.data);
+      return pako.ungzip(compressed, { to: 'string' });
+    } catch (err) {
+      console.error('❌ Error decompressing content:', err);
+      return '❌ Decompression failed';
+    }
+  };
 
-    // Fix: Replace all escaped `\n` with real line breaks
-    text = text.replace(/\\n/g, '\n');  // for double-escaped (\\n)
-    text = text.replace(/\r?\n/g, '\n'); // normalize line endings
+const handleSelect = (buildId, type) => {
+  const record = records.find((r) => r.buildId === buildId);
+  if (!record) return;
 
-    return text;
-  } catch (err) {
-    console.error('❌ Error decompressing content:', err);
-    return '❌ Decompression failed';
+  const raw = type === 'html' ? record.html : record.consol;
+  let text = decompress(raw);
+
+  // Only fix \n for console, not HTML
+  if (type === 'console') {
+    text = text.replace(/\\n/g, '\n').replace(/\r?\n/g, '\n');
   }
+
+  setSelected({ buildId, type });
+  setContent(text);
 };
 
-  const handleSelect = (buildId, type) => {
-    const record = records.find((r) => r.buildId === buildId);
-    if (!record) return;
-
-    const raw = type === 'html' ? record.html : record.consol;
-    const text = decompress(raw);
-    setSelected({ buildId, type });
-    setContent(text);
-  };
 
   return (
     <div
       className="w-screen h-screen bg-cover bg-center"
       style={{ backgroundImage: `url('/logo.jpg')` }}
     >
-      <table style={{ width: '80%', height: '80%', backgroundColor: 'rgba(255,255,255,0.9)' }}>
+      <table style={{ width: '100%', height: '100%', backgroundColor: 'rgba(255,255,255,0.9)' }}>
         <tbody>
           <tr>
             {/* Left column: 20% */}
-            <td style={{ width: '20%', verticalAlign: 'top', padding: '16px' }}>
+            <td style={{ width: '20%', verticalAlign: 'top', padding: '16px', height: '100vh',overflowY: 'auto' }}>
               <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
               <input
                 type="date"
