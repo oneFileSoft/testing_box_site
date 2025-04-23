@@ -82,7 +82,7 @@ const handleSelect = (buildId, type) => {
                       selected?.buildId === rec.buildId ? 'bg-blue-100' : ''
                     }`}
                   >
-                    <div className="flex justify-between items-center p-2 rounded hover:bg-gray-100 cursor-pointer transition">
+                    <div className="flex justify-between items-center build-row">
                       <div className="text-sm font-medium">
                         <span className="font-semibold text-black">Build #{rec.buildId}</span>{' '}
                         <span className={rec.status ? 'green-text' : 'red-text'}>
