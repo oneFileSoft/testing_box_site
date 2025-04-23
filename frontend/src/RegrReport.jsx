@@ -144,7 +144,7 @@ const handleSelect = (buildId, type) => {
 
                       style={{
                         flexGrow: 0,
-                        minHeight: "5em",
+                        width: '100%',
                         height: "100%",
                       }} ></textarea>
 
