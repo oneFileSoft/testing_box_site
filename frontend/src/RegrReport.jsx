@@ -90,15 +90,13 @@ const handleSelect = (buildId, type) => {
                         </span>
                       </div>
                     </div>
-                    <div className="mt-1 space-x-3">
-                      <button
-                        onClick={() => handleSelect(rec.buildId, 'html')}
-                        className="text-blue-500 hover:underline text-sm"
-                      >
+                    <div className="mt-1 space-x-3 build-row">
+                      <button onClick={() => handleSelect(rec.buildId, 'html')}
+                        className="text-blue-500 hover:underline text-sm" >
                         HTML
                       </button>
-                      <button
-                        onClick={() => handleSelect(rec.buildId, 'console')}
+                      &nbsp;
+                      <button onClick={() => handleSelect(rec.buildId, 'console')}
                         className="text-blue-500 hover:underline text-sm"
                       >
                         Console
