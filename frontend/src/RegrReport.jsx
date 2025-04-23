@@ -109,7 +109,7 @@ const handleSelect = (buildId, type) => {
                         Console
                       </button>
                     </div>
-                    <hr>
+                    <hr />
                   </div>
                 ))
               )}
