@@ -61,10 +61,10 @@ const handleSelect = (buildId, type) => {
 
 
   return (
-    <div
-      className="w-screen h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url('/logo.jpg')` }}
-    >
+//     <div
+//       className="w-screen h-screen bg-cover bg-center"
+//       style={{ backgroundImage: `url('/logo.jpg')` }}
+//     >
       <table style={{ width: '100%', height: '100%', backgroundColor: 'rgba(255,255,255,0.9)' }}>
         <tbody>
           <tr>
