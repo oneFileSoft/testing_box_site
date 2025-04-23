@@ -146,6 +146,7 @@ const handleSelect = (buildId, type) => {
                         flexGrow: 0,
                         width: '100%',
                         height: "100%",
+                        resize: none;
                       }} ></textarea>
 
                     )}
