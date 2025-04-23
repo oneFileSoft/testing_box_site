@@ -61,15 +61,12 @@ const handleSelect = (buildId, type) => {
 
 
   return (
-//     <div
-//       className="w-screen h-screen bg-cover bg-center"
-//       style={{ backgroundImage: `url('/logo.jpg')` }}
-//     >
-      <table style={{ width: '100%', height: '100%', backgroundColor: 'rgba(255,255,255,0.9)' }}>
+    <div className="w-screen h-screen" >
+      <table style={{ width: '100%', height: '100%', backgroundColor: 'rgba(235,255,255,0.9)' }}>
         <tbody>
           <tr>
             {/* Left column: 20% */}
-            <td style={{ width: '20%', verticalAlign: 'top', padding: '16px', height: '100vh',overflowY: 'auto' }}>
+            <td className="my_scr" style={{ width: '20%', verticalAlign: 'top', padding: '16px', height: '100vh',overflowY: 'auto' }}>
               <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
               <input
                 type="date"
