@@ -78,11 +78,11 @@ const handleSelect = (buildId, type) => {
                 ) : (
                   records.map((rec) => (
                     <div key={rec.buildId}
-                      className={`p-2 my-2 border rounded cursor-pointer hover:bg-gray-200 ${
+                      className={`p-2 my-2 build-row border rounded cursor-pointer hover:bg-gray-200 ${
                         selected?.buildId === rec.buildId ? 'bg-blue-100' : ''
                       }`}
                     >
-                      <div className="flex justify-between items-center build-row">
+                      <div className="flex justify-between items-center">
                         <div className="text-sm font-medium">
                           <span className="font-semibold text-black">Build #{rec.buildId}</span>{' '}
                           <span className={rec.status ? 'green-text' : 'red-text'}>
@@ -90,7 +90,7 @@ const handleSelect = (buildId, type) => {
                           </span>
                         </div>
                       </div>
-                      <div className="mt-1 space-x-3 build-row">
+                      <div className="mt-1 space-x-3">
               {/*                       <button onClick={() => handleSelect(rec.buildId, 'html')} className="text-blue-500 hover:underline text-sm" >HTML</button> */}
               {/*                       &nbsp; */}
               {/*                       <button onClick={() => handleSelect(rec.buildId, 'console')} className="text-blue-500 hover:underline text-sm"> Console</button> */}
