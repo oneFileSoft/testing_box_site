@@ -26,7 +26,8 @@ router.post('/insertExpense', async (req, res) => {
             const [result] = await pool.query(insertQuery, values);
         
             if (result.affectedRows === 1) {
-                return res.status(200).json({ success: true, message: "User expenses inserted successfully!" });
+                return res.status(200).json({ success: true, message: "User expenses include "
+                + transDescr + " for the amount + " + transTotal + " inserted successfully!" });
             } else {
                 console.error("Unexpected insert result:", result);
                 return res.status(500).json({ success: false, message: "User expenses not inserted due to an unexpected issue." });
