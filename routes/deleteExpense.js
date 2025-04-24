@@ -3,26 +3,41 @@ const pool = require('../config/db');
 const router = express.Router();
 
 router.delete('/deleteExpense', async (req, res) => {
-    const { userId, expenseId } = req.body;
+    const { userId, expenseId, transDescr } = req.body;
 
     // Validate input parameters
-    if (!userId || !expenseId) {
-        console.log("Validation failed: Missing userId or expenseId");
-        return res.status(400).json({ success: false, message: "userId and expenseId are required" });
+    if (!userId) {
+        console.log("Validation failed: Missing userId");
+        return res.status(400).json({ success: false, message: "userId is required" });
     }
 
     try {
         // Check if the expense exists and belongs to the user
-        const checkQuery = "SELECT * FROM expenses WHERE id = ? AND userId = ?";
-        const [rows] = await pool.query(checkQuery, [expenseId, userId]);
+          let deleteQuery = '';
+          let params = [];
 
-        if (rows.length === 0) {
-            console.log("Expense not found or does not belong to user");
-            return res.status(404).json({ success: false, message: "Expense not found or unauthorized" });
-        }
+          if (expenseId) {
+                const checkQuery = "SELECT * FROM expenses WHERE id = ? AND userId = ?";
+                const [rows] = await pool.query(checkQuery, [expenseId, userId]);
+
+                if (rows.length === 0) {
+                    console.log("Expense not found or does not belong to user");
+                    return res.status(404).json({ success: false, message: "Expense: "
+                         + expenseId +" not found or unauthorized for this User" });
+                }
+            deleteQuery = "DELETE FROM expenses WHERE userId = ? AND id = ?";
+            params = [userId, expenseId];
+          } else if (transDescr) {
+            deleteQuery = "DELETE FROM expenses WHERE userId = ? AND transDescr = ?";
+            params = [userId, transDescr];
+          } else {
+            return res.status(400).json({
+              success: false,
+              message: "Either expenseId or transDescr must be provided"
+            });
+          }
 
         // Delete the expense
-        const deleteQuery = "DELETE FROM expenses WHERE id = ?";
         await pool.query(deleteQuery, [expenseId]);
 
         return res.status(200).json({ success: true, message: "Expense deleted successfully" });
