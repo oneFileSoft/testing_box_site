@@ -59,8 +59,8 @@ export default function User() {
                 showToastError("Failed to delete record." + response.data.message);
             }
         } catch (error) {
-            showToastError("Error deleting record: " + error + "\n" + response.data.message);
-        }
+            const message = error.response?.data?.message || error.message;
+            showToastError("Error deleting record: " + message);        }
     };
 
     const hashPassword = async (password) => {
