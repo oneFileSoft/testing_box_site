@@ -177,7 +177,7 @@ const getStoredUsername = (index) => {
                 setRecords([]);
                 showToastSuccess("Record inserted successfully.");
                 fetchRecordsForUser();
-                setRecords([...records, `${transDescr} | ${transTotal} | ${transDate}`]);
+                setRecords([...records, {transDescr | transTotal | transDate}]);
                 setTransDescr(''); setTransTotal(''); setTransDate('');
             } else { showToastError(response.data.message || 'Insert failed'); }
         } catch (error) { showToastError("Error inserting record: " + error);  }
