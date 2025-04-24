@@ -227,7 +227,7 @@ const getStoredUsername = (index) => {
                                             <td className="border p-2">{record.transTotal}</td>
                                             <td className="border p-2">{handleShortDateInput(record.transDate)}</td>
                                             <td className="border p-2">
-                                                <button className="bg-red-500 text-white py-1 px-2 rounded" onClick={() => handleDelete(userId, record.transId)}>Delete</button>
+                                                <button className="bg-red-500 text-white py-1 px-2 rounded" onClick={() => handleDelete(userId, record.id)}>Delete</button>
                                             </td>
                                         </tr>
                                     ))}
