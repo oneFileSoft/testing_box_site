@@ -46,6 +46,10 @@ export default function User() {
     }, [userId]);
 
     const handleDelete = async (userId, id) => {
+        if (!id) {
+          showToastError("Cannot delete — expense ID is missing.");
+          return;
+        }
         if (!window.confirm("Are you sure you want to delete this record?")) return;
 
         try {
@@ -240,58 +244,3 @@ const getStoredUsername = (index) => {
 
 
 
-
-                    // <table className="border-collapse w-full border border-gray-400 mt-4">
-                    //     <thead>
-                    //         <tr className="bg-gray-200">
-                    //             <th className="border p-2">Transaction Description</th>
-                    //             <th className="border p-2">Amount</th>
-                    //             <th className="border p-2">Date</th>
-                    //             <th className="border p-2">Actions</th>
-                    //         </tr>
-                    //     </thead>
-                    //     <tbody>
-                    //         {records.length > 0 ? (
-                    //             records.map((record, index) => (
-                    //                 <tr key={index} className="border">
-                    //                     <td className="border p-2">{record.transDescr}</td>
-                    //                     <td className="border p-2">{record.transTotal}</td>
-                    //                     <td className="border p-2">{record.transDate ? new Date(record.transDate).toLocaleDateString('en-GB') : "Invalid Date"}</td>
-                    //                     <td className="border p-2 text-center">
-                    //                         <img src="/img/dRec.jpg" alt="Delete" className="del-icon cursor-pointer w-6 h-6" onClick={() => handleDelete(record.userId, record.id)} />
-                    //                     </td>
-                    //                 </tr>
-                    //             ))
-                    //         ) : (
-                    //             <tr>
-                    //                 <td colSpan="4" className="border p-2 text-center">No expenses found.</td>
-                    //             </tr>
-                    //         )}
-                    //     </tbody>
-                    //     {records.length > 0 && (
-                    //         <tfoot>
-                    //             <tr className="bg-gray-200 font-bold">
-                    //                 <td className="border p-2 text-right" colSpan="2">Total:</td>
-                    //                 <td className="border p-2">
-                    //                     {records.reduce((total, record) => total + (parseFloat(record.transTotal) || 0), 0)}
-                    //                 </td>
-                    //                 <td className="border p-2"></td>
-                    //             </tr>
-                    //         </tfoot>
-                    //     )}
-                    // </table>
-
-
-
-
-                    // <h2>Add Expense</h2>
-                    // <input type="text" placeholder="Description" value={transDescr} onChange={(e) => setTransDescr(e.target.value)} className="border p-2 w-60 mb-2 block" />
-                    // <input type="number" placeholder="Total Amount" value={transTotal} onChange={(e) => setTransTotal(e.target.value)} className="border p-2 w-40 block" />
-                    // <input type="text" placeholder="DD/MM/YYYY" value={transDate} onChange={(e) => setTransDate(e.target.value)} className="border p-2 w-40 block" />
-                    // <button onClick={handleInsertExpense} className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Insert Record</button>
-                    // <h3 className="mt-4">User Expenses</h3>
-                    // <ul>
-                    //     {records.map((record, index) => (
-                    //         <li key={index} className="border p-2 mt-2">{record}</li>
-                    //     ))}
-                    // </ul>
