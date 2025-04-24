@@ -38,7 +38,7 @@ router.delete('/deleteExpense', async (req, res) => {
           }
 
         // Delete the expense
-        await pool.query(deleteQuery, [expenseId]);
+        await pool.query(deleteQuery, params);
 
         return res.status(200).json({ success: true, message: "Expense deleted successfully" });
     } catch (error) {
