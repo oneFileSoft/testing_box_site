@@ -66,9 +66,6 @@ const handleSelect = (buildId, type) => {
         <tbody>
           <tr>
             {/* Left column: 20% */}
-
-
-
             <td style={{ width: '20%', verticalAlign: 'top', padding: '0' }}>
               <div style={{ height: '100vh', overflowY: 'auto', padding: '16px' }}>
                 <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
@@ -80,8 +77,7 @@ const handleSelect = (buildId, type) => {
                   <p>No builds for selected date</p>
                 ) : (
                   records.map((rec) => (
-                    <div
-                      key={rec.buildId}
+                    <div key={rec.buildId}
                       className={`p-2 my-2 border rounded cursor-pointer hover:bg-gray-200 ${
                         selected?.buildId === rec.buildId ? 'bg-blue-100' : ''
                       }`}
@@ -128,8 +124,7 @@ const handleSelect = (buildId, type) => {
             <td style={{ width: '80%', verticalAlign: 'top', padding: '16px' }}>
               {selected ? (
                 <>
-                  <h2 className="text-xl font-bold mb-4">
-                    Build #{selected.buildId} –{' '}
+                  <h2 className="text-xl font-bold mb-4"> Build #{selected.buildId} –{' '}
                     {selected.type === 'html' ? 'Playwright Report' : 'Console'}
                   </h2>
                   <div style={{ height: '80vh', border: '1px solid #ccc', background: '#fff' }}>

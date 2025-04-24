@@ -184,8 +184,8 @@ const getStoredUsername = (index) => {
             {!userId ? (
                 <>
                     <h2>Login or insert new User</h2>
-                    <input type="text" placeholder="Your User Name" value={username} onChange={(e) => setUsername(e.target.value)} className="border p-2 w-40 mb-2 block" />
-                    <input type="password" placeholder="Your Password" value={password} onChange={(e) => setPassword(e.target.value)} className="border p-2 w-40 block" />
+                    <input type="text" id='uname' placeholder="Your User Name" value={username} onChange={(e) => setUsername(e.target.value)} className="border p-2 w-40 mb-2 block" maxLength={25} />
+                    <input type="password" id='passw' placeholder="Your Password" value={password} onChange={(e) => setPassword(e.target.value)} className="border p-2 w-40 block" />
                     <button onClick={handleLogin} className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Authenticate</button>
                     &nbsp;
                     <input type="password" placeholder="Admin password"
