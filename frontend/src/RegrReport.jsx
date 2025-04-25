@@ -75,7 +75,7 @@ export default function RegrReport() {
         <tbody>
           <tr>
             {/* Left panel */}
-            <td style={{ width: '20%', verticalAlign: 'top', padding: '0' }}>
+            <td style={{ width: '20%', height: '90vh', verticalAlign: 'top', padding: '0' }}>
               <div style={{ height: '100%', maxHeight: 'calc(100vh - 16px)', overflowY: 'auto', padding: '16px' }}>
                 <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
                 <input
