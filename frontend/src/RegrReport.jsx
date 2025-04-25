@@ -70,7 +70,7 @@ export default function RegrReport() {
   };
 
   return (
-    <div className="w-screen h-screen" style={{marginTop: '60px'}}>
+    <div className="w-screen h-screen" style={{marginTop: '40px'}}>
       <table style={{ width: '100%', height: '70%', maxHeight: '70%', backgroundColor: 'rgba(237,255,255,1)' }}>
         <tbody>
           <tr>
