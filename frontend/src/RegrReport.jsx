@@ -121,7 +121,7 @@ const handleSelect = (buildId, type) => {
                   <h2 className="text-xl font-bold mb-4"> Build #{selected.buildId} –{' '}
                     {selected.type === 'html' ? 'Playwright Report' : 'Console'}
                   </h2>
-                  <div style={{ overflow: 'auto', height: '80vh', border: '1px solid #ccc', background: '#fff' }}>
+                  <div style={{ height: '80vh', border: '1px solid #ccc', background: '#fff' }}>
                     {selected.type === 'html' ? (
                       <iframe
                         title="HTML Report"
