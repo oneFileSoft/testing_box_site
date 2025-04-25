@@ -121,9 +121,10 @@ const handleSelect = (buildId, type) => {
                   <h2 className="text-xl font-bold mb-4"> Build #{selected.buildId} –{' '}
                     {selected.type === 'html' ? 'Playwright Report' : 'Console'}
                   </h2>
-                  <div style={{ height: '80vh', border: '1px solid #ccc', background: '#fff' }}>
+                  <div style={{ overflow: 'auto', height: '80vh', border: '1px solid #ccc', background: '#fff' }}>
                     {selected.type === 'html' ? (
                       <iframe title="HTML Report" srcDoc={content}
+                        sandbox="allow-scripts allow-same-origin"
                       style={{ width: '100%', height: '100%', border: 'none' }} />
                     ) : (
                     <textarea  name="message" value={content}
