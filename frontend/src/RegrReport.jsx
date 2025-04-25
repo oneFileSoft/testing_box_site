@@ -138,55 +138,45 @@ export default function RegrReport() {
 
             {/* Right panel */}
 <td style={{ width: '80%', verticalAlign: 'top', padding: '16px' }}>
-  {loading ? (
-    <>
-      <h2 className="text-xl font-bold mb-4">Loading reports...</h2>
-      <div style={{
-        overflow: 'auto',
-        height: '80vh',
-        border: '1px solid #ccc',
-        background: '#fff'
-      }}>
-        <textarea
-          name="loadingMessage"
-          value="Loading builds..."
-          readOnly
-          className="w-full h-full p-2 border rounded-lg focus:outline-none"
-          style={{ flexGrow: 0, width: '100%', height: '100%', resize: 'none', color: 'gray', fontStyle: 'italic' }}
+  <div
+    style={{
+      overflow: 'auto',
+      height: '80vh',
+      border: '1px solid #ccc',
+      background: '#fff',
+      minHeight: '400px', // 👈 Always reserve some vertical space
+      display: 'flex',
+      flexDirection: 'column'
+    }}
+  >
+    {loading ? (
+      <textarea
+        name="loadingMessage"
+        value="Loading builds..."
+        readOnly
+        className="w-full h-full p-2 border rounded-lg focus:outline-none"
+        style={{ flexGrow: 1, resize: 'none', color: 'gray', fontStyle: 'italic' }}
+      />
+    ) : selected ? (
+      selected.type === 'html' ? (
+        <iframe
+          title="HTML Report"
+          srcDoc={content}
+          sandbox="allow-scripts allow-same-origin"
+          style={{ width: '100%', height: '100%', border: 'none' }}
         />
-      </div>
-    </>
-  ) : selected ? (
-    <>
-      <h2 className="text-xl font-bold mb-4">
-        Build #{selected.buildId} – {selected.type === 'html' ? 'Playwright Report' : 'Console'}
-      </h2>
-      <div style={{
-        overflow: 'auto',
-        height: '80vh',
-        border: '1px solid #ccc',
-        background: '#fff'
-      }}>
-        {selected.type === 'html' ? (
-          <iframe
-            title="HTML Report"
-            srcDoc={content}
-            sandbox="allow-scripts allow-same-origin"
-            style={{ width: '100%', height: '100%', border: 'none' }}
-          />
-        ) : (
-          <textarea
-            name="message"
-            value={content}
-            className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            style={{ flexGrow: 0, width: '100%', height: '100%', resize: 'none' }}
-          />
-        )}
-      </div>
-    </>
-  ) : (
-    <p className="text-gray-500">Select a build and view HTML or Console output.</p>
-  )}
+      ) : (
+        <textarea
+          name="message"
+          value={content}
+          className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          style={{ flexGrow: 1, resize: 'none' }}
+        />
+      )
+    ) : (
+      <p className="text-gray-500 p-4">Select a build and view HTML or Console output.</p>
+    )}
+  </div>
 </td>
           </tr>
         </tbody>
