@@ -70,7 +70,7 @@ export default function RegrReport() {
   };
 
   return (
-    <div className="w-screen h-screen" style={{margin-top: '60px';}}>
+    <div className="w-screen h-screen" style={{margin-top: '60px'}}>
       <table style={{ width: '100%', height: '70%', maxHeight: '70%', backgroundColor: 'rgba(237,255,255,1)' }}>
         <tbody>
           <tr>
@@ -140,22 +140,31 @@ export default function RegrReport() {
 <td style={{ width: '80%', verticalAlign: 'top', padding: '16px' }}>
   <div
     style={{
-      overflow: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
       height: '80vh',
       border: '1px solid #ccc',
       background: '#fff',
-      minHeight: '400px', // 👈 Always reserve some vertical space
-      display: 'flex',
-      flexDirection: 'column'
+      padding: 0,
+      overflow: 'hidden', // Ensure no weird scroll artifacts
     }}
   >
     {loading ? (
       <textarea
-        name="loadingMessage"
-        value="Loading builds..."
+        name="message"
+        value={content}
         readOnly
-        className="w-full h-full p-2 border rounded-lg focus:outline-none"
-        style={{ flexGrow: 1, resize: 'none', color: 'gray', fontStyle: 'italic' }}
+        className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        style={{
+          flexGrow: 1,
+          resize: 'none',
+          border: 'none',
+          margin: 0,
+          padding: '12px',
+          fontFamily: 'monospace',
+          backgroundColor: 'white',
+          overflow: 'auto',
+        }}
       />
     ) : selected ? (
       selected.type === 'html' ? (
