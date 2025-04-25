@@ -123,11 +123,8 @@ const handleSelect = (buildId, type) => {
                   </h2>
                   <div style={{ height: '80vh', border: '1px solid #ccc', background: '#fff' }}>
                     {selected.type === 'html' ? (
-                      <iframe
-                        title="HTML Report"
-                        srcDoc={content}
-                        style={{ width: '100%', height: '100%', border: 'none' }}
-                      />
+                      <iframe title="HTML Report" srcDoc={content}
+                      style={{ width: '100%', height: '100%', border: 'none' }} />
                     ) : (
                     <textarea  name="message" value={content}
                       className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
