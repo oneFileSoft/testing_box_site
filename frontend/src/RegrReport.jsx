@@ -9,6 +9,7 @@ export default function RegrReport() {
   const [selected, setSelected] = useState(null);
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const [forceRender, setForceRender] = useState(true); // 👈 New trick for 1ms redraw
 
   const fetchRecords = async (targetDate) => {
     setLoading(true);
@@ -18,11 +19,11 @@ export default function RegrReport() {
         setRecords(response.data.builds || []);
       } else {
         console.error('❌ Failed to fetch records');
-        setRecords([]); // force re-render
+        setRecords([]);
       }
     } catch (err) {
       console.error('🔥 Error fetching data:', err);
-      setRecords([]); // force re-render
+      setRecords([]);
     } finally {
       setLoading(false);
       setSelected(null);
@@ -31,13 +32,15 @@ export default function RegrReport() {
   };
 
   useEffect(() => {
-    fetchRecords(date); // load initial
+    const timer = setTimeout(() => setForceRender(false), 1); // 👈 after 1ms, disable fake render
+    fetchRecords(date); // fetch records for today
+    return () => clearTimeout(timer);
   }, []);
 
   const handleDateChange = (e) => {
     const newDate = e.target.value;
     setDate(newDate);
-    fetchRecords(newDate); // force fetch on change
+    fetchRecords(newDate);
   };
 
   const decompress = (bufferObj) => {
@@ -71,7 +74,7 @@ export default function RegrReport() {
       <table style={{ width: '100%', height: '70%', maxHeight: '70%', backgroundColor: 'rgba(237,255,255,1)' }}>
         <tbody>
           <tr>
-            {/* Left column: 20% */}
+            {/* Left panel */}
             <td style={{ width: '20%', verticalAlign: 'top', padding: '0' }}>
               <div style={{ height: '100%', maxHeight: 'calc(100vh - 16px)', overflowY: 'auto', padding: '16px' }}>
                 <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
@@ -129,32 +132,50 @@ export default function RegrReport() {
                     </div>
                   ))
                 )}
-                <div style={{ height: '48px' }} />
+                <div style={{ height: '48px' }} /> {/* Spacer at bottom */}
               </div>
             </td>
 
-            {/* Right column: 80% */}
+            {/* Right panel */}
             <td style={{ width: '80%', verticalAlign: 'top', padding: '16px' }}>
-              {selected ? (
+              {selected || forceRender ? (
                 <>
-                  <h2 className="text-xl font-bold mb-4">
-                    Build #{selected.buildId} – {selected.type === 'html' ? 'Playwright Report' : 'Console'}
-                  </h2>
+                  {selected && (
+                    <h2 className="text-xl font-bold mb-4">
+                      Build #{selected.buildId} – {selected.type === 'html' ? 'Playwright Report' : 'Console'}
+                    </h2>
+                  )}
                   <div
-                    style={{ overflow: 'auto', height: '80vh', border: '1px solid #ccc', background: '#fff' }}
+                    style={{
+                      overflow: 'auto',
+                      height: '80vh',
+                      border: '1px solid #ccc',
+                      background: '#fff',
+                    }}
                   >
-                    {selected.type === 'html' ? (
-                      <iframe
-                        title="HTML Report"
-                        srcDoc={content}
-                        sandbox="allow-scripts allow-same-origin"
-                        style={{ width: '100%', height: '100%', border: 'none' }}
-                      />
+                    {selected ? (
+                      selected.type === 'html' ? (
+                        <iframe
+                          title="HTML Report"
+                          srcDoc={content}
+                          sandbox="allow-scripts allow-same-origin"
+                          style={{ width: '100%', height: '100%', border: 'none' }}
+                        />
+                      ) : (
+                        <textarea
+                          name="message"
+                          value={content}
+                          className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          style={{ flexGrow: 0, width: '100%', height: '100%', resize: 'none' }}
+                        />
+                      )
                     ) : (
+                      // During forceRender, just show empty textarea
                       <textarea
-                        name="message"
-                        value={content}
-                        className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        name="forceRender"
+                        value=""
+                        readOnly
+                        className="w-full h-full p-2 border rounded-lg focus:outline-none"
                         style={{ flexGrow: 0, width: '100%', height: '100%', resize: 'none' }}
                       />
                     )}
