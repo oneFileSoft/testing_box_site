@@ -126,7 +126,6 @@ const handleSelect = (buildId, type) => {
                       <iframe
                         title="HTML Report"
                         srcDoc={content}
-                        sandbox="allow-scripts allow-same-origin"
                         style={{ width: '100%', height: '100%', border: 'none' }}
                       />
                     ) : (
