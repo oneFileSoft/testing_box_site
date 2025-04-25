@@ -32,7 +32,7 @@ export default function RegrReport() {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setForceRender(false), 1); // 👈 after 1ms, disable fake render
+    const timer = setTimeout(() => setForceRender(false), 10); // 👈 after 1ms, disable fake render
     fetchRecords(date); // fetch records for today
     return () => clearTimeout(timer);
   }, []);
