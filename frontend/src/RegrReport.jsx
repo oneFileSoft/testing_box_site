@@ -137,7 +137,7 @@ export default function RegrReport() {
             </td>
 
             {/* Right panel */}
-<td style={{ width: '80%', verticalAlign: 'top', padding: '16px' }}>
+<td style={{ width: '80%', height: '90vh', verticalAlign: 'top', padding: '16px' }}>
   <div
     style={{
       display: 'flex',
