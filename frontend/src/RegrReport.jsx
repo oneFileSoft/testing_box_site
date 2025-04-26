@@ -142,7 +142,7 @@ export default function RegrReport() {
     style={{
       display: 'flex',
       flexDirection: 'column',
-      height: '80vh',
+      height: '90vh',
       border: '1px solid #ccc',
       background: '#fff',
       padding: 0,
