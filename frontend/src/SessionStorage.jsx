@@ -27,8 +27,7 @@ export default function SessionStorage() {
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
-//         <div className="user-container">
+    <div className="user-container" style={{ padding: '2rem', fontFamily: 'Arial' }}>
       <h2>
         Please login using the following credentials:<br />
         Username: <strong>{generatedUsername}</strong>, Password: <strong>{generatedPassword}</strong>
