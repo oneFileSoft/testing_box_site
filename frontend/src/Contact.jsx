@@ -56,45 +56,74 @@ const handleBlur = (e) => {
       document.getElementById("message").focus();
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    let tempErrors = {};
-    Object.keys(formData).forEach(field => {
-      validateField(field, formData[field]);
-      if (errors[field]) tempErrors[field] = errors[field];
-    });
 
-    if (Object.keys(tempErrors).length === 0) {
-      try {
-        if (formData.firstName.length === 0 || formData.lastName.length === 0 || formData.yourEmail.length === 0 || formData.message.length === 0 )  {
-            showToastError("Please, fill out all required fields!");
-        } else {
-            const response = await axios.post("/send-email", {
-              name: formData.firstName + " " + formData.lastName,
-              email: formData.email,
-              message: "Person: " + formData.firstName + " " + formData.lastName + "\nWebsite: " + formData.yourWebsite + "\nPerson's email: " + formData.yourEmail + "\nMessage:\n\n" + formData.message
-            });
-    
-            if (response.data.success) {
-              showToastSuccess(formData.firstName + " " + formData.lastName + "\nYour email has been sent successfully!");
-              setFormData({
-                firstName: "",
-                lastName: "",
-                yourWebsite: "",
-                yourEmail: "",
-                email: email,
-                message: ""
-              });
-            } else {
-              showToastError("Failed to send email: " + response.data.message);
-            }
-        }    
-      } catch (error) {
-        showToastError("Failed to send email: " + error.message);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  let tempErrors = {};
+  Object.keys(formData).forEach(field => {
+    validateField(field, formData[field]);
+    if (errors[field]) tempErrors[field] = errors[field];
+  });
+
+  if (Object.keys(tempErrors).length === 0) {
+    try {
+      const { firstName, lastName, yourWebsite, yourEmail, email, message } = formData;
+
+      if (!firstName || !lastName || !yourEmail || !message) {
+        showToastError("Please, fill out all required fields!");
+        return;
       }
+
+//       const response = await axios.post("/send-email", {
+//               name: formData.firstName + " " + formData.lastName,
+//               email: formData.email,
+//               message: "Person: " + formData.firstName + " " + formData.lastName + "\nWebsite: " + formData.yourWebsite + "\nPerson's email: " + formData.yourEmail + "\nMessage:\n\n" + formData.message
+//       });  same as:
+      const response = await axios.post("/send-email", {
+        name: `${firstName} ${lastName}`,
+        email: email,
+        message: `Person: ${firstName} ${lastName}\nWebsite: ${yourWebsite}\nPerson's email: ${yourEmail}\nMessage:\n\n${message}`
+      });
+
+      if (response.data.success) {
+        showToastSuccess(`${firstName} ${lastName}\nYour email has been sent successfully!`);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          yourWebsite: "",
+          yourEmail: "",
+          email: email,
+          message: ""
+        });
+      } else {
+        const errDetails = response.data?.error || {};
+        const errMsg = [
+          `Failed to send email.`,
+          errDetails.message ? `\nMessage: ${errDetails.message}` : '',
+          errDetails.code ? `\nCode: ${errDetails.code}` : '',
+          errDetails.response ? `\nSMTP: ${errDetails.response}` : ''
+        ].join('');
+
+        showToastError(errMsg);
+      }
+
+    } catch (error) {
+      const apiError = error.response?.data?.error;
+      const fallbackMessage = error.response?.data?.message || error.message || "Unknown error occurred.";
+      const detailedError = apiError
+        ? [
+            fallbackMessage,
+            apiError.message ? `\nMessage: ${apiError.message}` : '',
+            apiError.code ? `\nCode: ${apiError.code}` : '',
+            apiError.response ? `\nSMTP: ${apiError.response}` : ''
+          ].join('')
+        : fallbackMessage;
+
+      showToastError("Failed to send email:\n" + detailedError);
     }
-  };
+  }
+};
 
 return (
     <div className="contact-form-container w-f mx-auto p-6 border rounded-lg shadow-lg bg-white" >

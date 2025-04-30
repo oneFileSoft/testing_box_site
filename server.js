@@ -73,7 +73,7 @@ app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
   if ((!format && format !== "0") || !emailTo || !buildNumb) {
     return res.status(400).json({ success: false, message: 'All fields are required got format[' + format+'] emaiTo['+emailTo+'] buidNumb['+buidNumb+']'  });
   }
-
+ ////// server233.web-hosting.com   mail.privateemail.com
   try {
     let transporter = nodemailer.createTransport({
       host: 'mail.privateemail.com',
@@ -197,17 +197,26 @@ app.post('/send-email', async (req, res) => {
       text: message,
     });
 
-    if (info.response.includes("OK")) {
-      console.log("Email have been sent successfully: " + info.response);
-      return res.status(200).json({ success: true, message: 'Email sent successfully' });
-    } else {
-      console.log("Email not sent: " + info.response);
-      return res.status(500).json({ success: false, message: 'Error sending email. ' + info.response});
-    }
+    return res.status(200).json({
+          success: true,
+          message: 'Email sent successfully',
+          messageId: info.messageId,
+          accepted: info.accepted,
+          response: info.response
+        });
 
   } catch (error) {
     console.error("Error sending email: ", error);
-    return res.status(500).json({ success: false, message: 'Error sending email. ' + error });
+    return res.status(500).json({
+          success: false,
+          message: 'Failed to send email.',
+          error: {
+            message: error.message,
+            code: error.code || null,
+            response: error.response || null,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+          }
+        });
   }
 });
 
