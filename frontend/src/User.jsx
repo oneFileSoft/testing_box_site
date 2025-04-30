@@ -4,6 +4,8 @@ import axios from 'axios';
 import { ToastContainer } from "react-toastify";
 import { showToastSuccess, showToastError } from './utils/toastUtils';
 import { fromZonedTime, format } from 'date-fns-tz';
+// import { fromZonedTime, format, zonedTimeToUtc } from 'date-fns-tz';
+
 import { parseISO } from 'date-fns';
 import "./App.css";
 
@@ -23,74 +25,113 @@ export default function User() {
         if (!userId) return;
         try {
             const response = await axios.get(`/getExpenses?userId=${userId}`);
+            console.log("Response from backend:", response.data);
             if (response.data.success) {
                 setRecords(response.data.expenses);
             } else {
+                console.error("Failed to fetch records: ", response.data.message);
                 showToastError("Failed to fetch records: " + response.data.message);
             }
         } catch (error) {
+            console.error("Error fetching records:", error);
             showToastError("Error fetching records: " + error.message);
         }
     };
 
     useEffect(() => {
-        if (userId) fetchRecordsForUser();
+        if (userId) {
+            console.log("(useEffect) -> User ID:", userId);
+            fetchRecordsForUser();
+        }
     }, [userId]);
 
     const handleDelete = async (userId, id) => {
-        if (!id || !window.confirm("Are you sure you want to delete this record?")) return;
+        if (!id) {
+          showToastError("Cannot delete — expense ID is missing.");
+          return;
+        }
+        if (!window.confirm("Are you sure you want to delete this record?")) return;
 
         try {
             const response = await axios.delete('/deleteExpense', { data: { userId, expenseId: id } });
+
             if (response.data.success) {
                 setRecords([]);
                 showToastSuccess("Record deleted successfully.");
                 fetchRecordsForUser();
             } else {
-                showToastError("Failed to delete record: " + response.data.message);
+                showToastError("Failed to delete record." + response.data.message);
             }
         } catch (error) {
-            showToastError("Error deleting record: " + (error.response?.data?.message || error.message));
-        }
+            const message = error.response?.data?.message || error.message;
+            showToastError("Error deleting record: " + message);        }
     };
 
     const hashPassword = async (password) => {
         const encoder = new TextEncoder();
-        const keyMaterial = await window.crypto.subtle.importKey("raw", encoder.encode(password), { name: "PBKDF2" }, false, ["deriveBits"]);
-        const derivedKey = await window.crypto.subtle.deriveBits({ name: "PBKDF2", salt: encoder.encode(password), iterations: 300000, hash: "SHA-512" }, keyMaterial, 512);
-        return btoa(String.fromCharCode(...new Uint8Array(derivedKey)));
-    };
+        const keyMaterial = await window.crypto.subtle.importKey(
+            "raw",
+            encoder.encode(password),
+            { name: "PBKDF2" },
+            false,
+            ["deriveBits"]
+        );
+        const derivedKey = await window.crypto.subtle.deriveBits(
+            {
+                name: "PBKDF2",
+                salt: encoder.encode(password),
+                iterations: 300000,
+                hash: "SHA-512"
+            },
+            keyMaterial,
+            512
+        );
 
-    const handleLogin = async () => {
-        if (!username || !password) return showToastError("Username and password are required!");
-        try {
-            const hashedUsername = username.slice(0, 3) + await hashPassword(username);
-            const hashedPassword = await hashPassword(password);
-            const response = await axios.post('/login', { username: hashedUsername, password: hashedPassword });
-            if (response.data.success) {
-                sessionStorage.setItem('user', `${username}__${response.data.userId}`);
-                setUserId(response.data.userId);
-                showToastSuccess(`Welcome, ${username}!`);
-            } else {
-                showToastError(response.data.message || "Login failed");
-            }
-        } catch (error) {
-            showToastError("Error during login: " + (error.response?.data?.message || error.message));
+        return btoa(String.fromCharCode(...new Uint8Array(derivedKey))); // Convert to Base64
+    };
+const handleLogin = async () => {
+    if (!username || !password) { showToastError("Username and password are required!"); return; }
+
+    try {
+        const hashedUsername = username.slice(0, 3) + await hashPassword(username);
+        const hashedPassword = await hashPassword(password);
+
+        const response = await axios.post('/login', { username: hashedUsername, password: hashedPassword });
+
+        if (response.data.success) {
+            sessionStorage.setItem('user', `${username}__${response.data.userId}`);
+            setUserId(response.data.userId);
+            showToastSuccess(`Welcome, ${username}!`);
+        } else {
+            showToastError(response.data.message || "Login failed");
         }
-    };
-
+    } catch (error) {
+        showToastError("Error during login: " + (error.response?.data?.message || error.message));
+    }
+};
     const handleInsertUser = async () => {
         if (!username || !password || !secureKey) {
-            return showToastError('[Username], [Password] and [Admin password] are required fields!');
+            showToastError('[Username], [Password] and [Admin password] are required fields!');
+            return;
         }
+        const un = username;
         const hashedUsername = username.slice(0, 3) + await hashPassword(username);
         const hashedPassword = await hashPassword(password);
 
         try {
             const response = await axios.post('/insert', { username: hashedUsername, password: hashedPassword, dbKey: await hashPassword(secureKey) });
-            response.data.success ? showToastSuccess(`User: ${username} inserted successfully.`) : showToastError(response.data.message || 'Insert failed');
+
+            if (response.data.success) {
+                showToastSuccess(`User: ${un} inserted successfully.`);
+            } else {
+                showToastError(response.data.message || 'Insert failed');
+            }
         } catch (error) {
-            showToastError("Error inserting User: " + (error.response?.data?.message || error.message));
+            if (error.response) {
+                showToastError("Error inserting User: " + error.response.data.message);
+            } else {
+                showToastError("Error inserting User: " + error.message);
+            }
         }
     };
 
@@ -101,41 +142,49 @@ export default function User() {
 
     const handleDateInput = (inputDate) => {
         const timeZone = 'America/Chicago';
-        return format(fromZonedTime(parseISO(inputDate), timeZone), "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: 'UTC' });
+        const zonedDate = fromZonedTime(parseISO(inputDate), timeZone);
+        return format(zonedDate, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: 'UTC' });
     };
-
     const handleShortDateInput = (inputDate) => {
         const timeZone = 'America/Chicago';
-        return format(fromZonedTime(parseISO(inputDate), timeZone), "MM-dd-yyyy", { timeZone: 'UTC' });
+        const zonedDate = fromZonedTime(parseISO(inputDate), timeZone);
+        return format(zonedDate, "MM-dd-yyyy", { timeZone: 'UTC' });
     };
 
-    const getStoredUsername = (index) => sessionStorage.getItem('user')?.split('__')[index] || '';
-
+const getStoredUsername = (index) => {
+    const storedUser = sessionStorage.getItem('user');
+    return storedUser ? storedUser.split('__')[index] : '';
+};
     const handleInsertExpense = async () => {
-        const storedUser = sessionStorage.getItem('user');
-        const userId = storedUser?.split('__')[1];
-        if (!userId) return showToastError("You'll need to re-authenticate\nthis User for adding new Expenses");
-
-        if (!transDescr || transDescr.length > 2000) return showToastError('Description is required and must be under 2000 characters!');
-        if (!transTotal || isNaN(parseFloat(transTotal))) return showToastError('Total amount must be a valid number!');
-
+            const storedUser = sessionStorage.getItem('user');
+            const userId = storedUser ? storedUser.split('__')[1] : null;
+            if (userId ==null) {
+                await showToastError("You'll need to re-authenticate\nthis User for adding new Expenses");
+                navigate('/');
+            }
+        if (!transDescr || transDescr.length > 2000) {
+            showToastError('Description is required and must be under 2000 characters!');
+            return;
+        }
+        if (!transTotal || isNaN(parseFloat(transTotal))) {
+            showToastError('Total amount must be a valid number!');
+            return;
+        }
         try {
-            const response = await axios.post('/insertExpense', { userId, transDescr, transTotal, transDate: handleDateInput(transDate) });
+            const formatedDate = handleDateInput(transDate);
+            const response = await axios.post('/insertExpense', { userId, transDescr, transTotal, transDate: formatedDate });
             if (response.data.success) {
                 setRecords([]);
                 showToastSuccess("Record inserted successfully.");
                 await fetchRecordsForUser();
+//                 setRecords([...records, {transDescr | transTotal | transDate}]);
                 setTransDescr(''); setTransTotal(''); setTransDate('');
-            } else {
-                showToastError(response.data.message || 'Insert failed');
-            }
-        } catch (error) {
-            showToastError("Error inserting record: " + error);
-        }
+            } else { showToastError(response.data.message || 'Insert failed'); }
+        } catch (error) { showToastError("Error inserting record: " + error);  }
     };
 
     return (
-        <div className="user-container" style={{ minHeight: '90vh', overflow: 'auto' }}>
+        <div className="user-container" style={{ overflowY: "auto", width: "100%" }}>
             {!userId ? (
                 <>
                     <h2>Login or insert new User</h2>
@@ -143,24 +192,26 @@ export default function User() {
                     <input type="password" id='passw' placeholder="Your Password" value={password} onChange={(e) => setPassword(e.target.value)} className="border p-2 w-40 block" />
                     <button onClick={handleLogin} className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Authenticate</button>
                     &nbsp;
-                    <input type="password" placeholder="Admin password" value={secureKey} onChange={(e) => setSecureKey(e.target.value)} className="border p-2 w-40 ml-2" />
-                    <button onClick={handleInsertUser} className="bg-blue-500 text-white py-2 px-4 rounded">Insert New-User</button>
+                    <input type="password" placeholder="Admin password"
+                           value={secureKey} onChange={(e) => setSecureKey(e.target.value)} className="border p-2 w-40 ml-2" />
+                    <button onClick={handleInsertUser} className="bg-blue-500 text-white py-2 px-4 rounded"> Insert New-User </button>
+                    &nbsp;
                 </>
             ) : (
                 <>
                     <div>
                         <div className="flex items-center mt-4">
                             <h2>Add Expense for {getStoredUsername(0)} &nbsp;&nbsp;&nbsp;
-                                <button onClick={checkOtherUsers} className="bg-green-500 text-white py-2 px-4 rounded">See other users:</button>
+                              <button onClick={() => checkOtherUsers()} className="bg-green-500 text-white py-2 px-4 rounded" > See other users: </button>
                             </h2>
                         </div>
-                        <input type="text" placeholder="Description" value={transDescr} onChange={(e) => setTransDescr(e.target.value)} className="border p-2 w-60 mb-2 block" style={{ width: "90%" }} />
-                        <input type="number" placeholder="Total Amount" value={transTotal} onChange={(e) => setTransTotal(e.target.value)} className="border p-2 w-40 block" style={{ width: "90%" }} />
-                        <input type="date" value={transDate} onChange={(e) => setTransDate(e.target.value)} className="border p-2 w-40 block" style={{ width: "90%" }} />
-                        <button onClick={handleInsertExpense} className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Insert Record</button>
+                        <input type="text" placeholder="Description" value={transDescr} onChange={(e) => setTransDescr(e.target.value)} className="border p-2 w-60 mb-2 block" style={{ width: "90%" }}  />
+                        <input type="number" placeholder="Total Amount" value={transTotal} onChange={(e) => setTransTotal(e.target.value)} className="border p-2 w-40 block" style={{ width: "90%" }}  />
+                        <input type="date" value={transDate} onChange={(e) => setTransDate(e.target.value)} className="border p-2 w-40 block" style={{ width: "90%" }}  />
+                        <button onClick={() => handleInsertExpense()} className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Insert Record</button>
 
                         <h3 className="mt-4">User Expenses</h3>
-                        <div data-testid="expense-scroll" style={{ height: '400px', overflowY: 'auto', overflowX: 'hidden', width: '100%', border: '1px solid #ccc', marginTop: '1rem' }}>
+                        <div style={{ maxHeight: '400px', overflowY: 'auto', width: '100%' }}>
                             <table className="border-collapse w-full border border-gray-400 mt-4">
                                 <thead>
                                     <tr className="bg-gray-200">
@@ -190,3 +241,6 @@ export default function User() {
         </div>
     );
 }
+
+
+
