@@ -20,8 +20,18 @@ export default function SessionStorage() {
     e.preventDefault();
     if (inputUsername === generatedUsername && inputPassword === generatedPassword) {
       setLoggedIn(true);
+      sessionStorage.setItem('credentials',"authentication OK.");
+      sessionStorage.setItem('userName', inputUsername);
+      sessionStorage.setItem('password', inputPassword);
       setError(false);
     } else {
+        if (inputUsername !== generatedUsername && inputPassword === generatedPassword) {
+            sessionStorage.setItem('credentials', "wrong user name.");
+        } else if(inputUsername == generatedUsername && inputPassword !== generatedPassword) {
+            sessionStorage.setItem('credentials', "wrong password.");
+        } else {
+            sessionStorage.setItem('credentials', "both credentials are wrong.");
+        }
       setError(true);
     }
   };
@@ -35,18 +45,8 @@ export default function SessionStorage() {
 
       {!loggedIn && (
         <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '1rem' }}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={inputUsername}
-            onChange={(e) => setInputUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={inputPassword}
-            onChange={(e) => setInputPassword(e.target.value)}
-          />
+          <input type="text" placeholder="Username" value={inputUsername} onChange={(e) => setInputUsername(e.target.value)} />
+          <input type="password" placeholder="Password" value={inputPassword} onChange={(e) => setInputPassword(e.target.value)} />
           <button type="submit">Submit</button>
         </form>
       )}
