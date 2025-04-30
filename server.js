@@ -79,10 +79,8 @@ app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
       host: 'mail.privateemail.com',
       port: 465,
       secure: true,
-      auth: {
-        user: 'test@testingbox.pw',
-        pass: 'zdr6^$rfv'
-      }
+      service: 'namecheap',
+      auth: { user: 'test@testingbox.pw', pass: 'zdr6^$rfv' }
     });
     await transporter.verify();
     let mailOptions = {
