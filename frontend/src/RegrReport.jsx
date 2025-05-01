@@ -45,16 +45,31 @@ export default function RegrReport() {
     fetchRecords(newDate);
   };
 
-  const decompress = (bufferObj) => {
-    try {
-      if (!bufferObj?.data) return '❌ No data found';
-      const compressed = Uint8Array.from(bufferObj.data);
-      return pako.ungzip(compressed, { to: 'string' });
-    } catch (err) {
-      console.error('❌ Error decompressing content:', err);
-      return '❌ Decompression failed';
-    }
-  };
+//   const decompress = (bufferObj) => {
+//     try {
+//       if (!bufferObj?.data) return '❌ No data found';
+//       const compressed = Uint8Array.from(bufferObj.data);
+//       return pako.ungzip(compressed, { to: 'string' });
+//     } catch (err) {
+//       console.error('❌ Error decompressing content:', err);
+//       return '❌ Decompression failed';
+//     }
+//   };
+const decompress = (bufferObj) => {
+  try {
+    if (!bufferObj?.data) return '❌ No data found';
+    const compressed = Uint8Array.from(bufferObj.data);
+    let html = pako.ungzip(compressed, { to: 'string' });
+
+    // ✅ Strip invalid data URLs (e.g., data/xyz.zip)
+    html = html.replace(/"data\/[a-f0-9]{40}\.zip"/g, '""');
+
+    return html;
+  } catch (err) {
+    console.error('❌ Error decompressing content:', err);
+    return '❌ Decompression failed';
+  }
+};
 
   const handleSelect = (buildId, type) => {
     const record = records.find((r) => r.buildId === buildId);
