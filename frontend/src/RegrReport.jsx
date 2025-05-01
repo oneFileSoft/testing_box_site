@@ -83,6 +83,7 @@ const decompress = (bufferObj) => {
       setContent(text);
       setIframeSrc(null);
     } else {
+      text = text.replace(/new URL\("data\/[a-f0-9]{40}\.zip"\)/g, 'new URL("about:blank")');
       const blob = new Blob([text], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       setIframeSrc(url);
