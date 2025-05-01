@@ -83,8 +83,8 @@ const handleSelect = (buildId, type) => {
     setContent(text);
     setIframeSrc(null);
   } else {
-    // 👇 Fix broken URL calls in Playwright HTML
-    text = text.replace(/new URL\((["'`])data\/[a-f0-9]{40}\.zip\1\)/g, 'new URL("about:blank")');
+    // 🛠️ Replace all 'data/<hash>.zip' references
+    text = text.replace(/data\/[a-f0-9]{40}\.zip/g, 'about:blank');
 
     const blob = new Blob([text], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
@@ -94,6 +94,7 @@ const handleSelect = (buildId, type) => {
 
   setSelected({ buildId, type });
 };
+
 
 
   return (
