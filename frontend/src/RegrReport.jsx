@@ -8,8 +8,9 @@ export default function RegrReport() {
   const [records, setRecords] = useState([]);
   const [selected, setSelected] = useState(null);
   const [content, setContent] = useState('');
+  const [iframeSrc, setIframeSrc] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [forceRender, setForceRender] = useState(true); // 👈 New trick for 1ms redraw
+  const [forceRender, setForceRender] = useState(true);
 
   const fetchRecords = async (targetDate) => {
     setLoading(true);
@@ -28,12 +29,13 @@ export default function RegrReport() {
       setLoading(false);
       setSelected(null);
       setContent('');
+      setIframeSrc(null);
     }
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setForceRender(false), 10); // 👈 after 1ms, disable fake render
-    fetchRecords(date); // fetch records for today
+    const timer = setTimeout(() => setForceRender(false), 10);
+    fetchRecords(date);
     return () => clearTimeout(timer);
   }, []);
 
@@ -63,18 +65,23 @@ export default function RegrReport() {
 
     if (type === 'console') {
       text = text.replace(/\\n/g, '\n').replace(/\r?\n/g, '\n');
+      setContent(text);
+      setIframeSrc(null);
+    } else {
+      const blob = new Blob([text], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      setIframeSrc(url);
+      setContent('');
     }
 
     setSelected({ buildId, type });
-    setContent(text);
   };
 
   return (
-    <div className="w-screen h-screen" style={{marginTop: '20px'}}>
+    <div className="w-screen h-screen" style={{ marginTop: '20px' }}>
       <table style={{ width: '100%', height: '70%', maxHeight: '70%', backgroundColor: 'rgba(237,255,255,1)' }}>
         <tbody>
           <tr>
-            {/* Left panel */}
             <td style={{ width: '20%', height: '90vh', verticalAlign: 'top', padding: '0' }}>
               <div style={{ height: '100%', maxHeight: 'calc(100vh - 16px)', overflowY: 'auto', padding: '16px' }}>
                 <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
@@ -132,61 +139,59 @@ export default function RegrReport() {
                     </div>
                   ))
                 )}
-                <div style={{ height: '48px' }} /> {/* Spacer at bottom */}
+                <div style={{ height: '48px' }} />
               </div>
             </td>
-
-            {/* Right panel */}
-<td style={{ width: '80%', height: '100vh', verticalAlign: 'top', padding: '16px' }}>
-  <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '85vh',
-      border: '1px solid #ccc',
-      background: '#fff',
-      padding: 0,
-      overflow: 'hidden', // Ensure no weird scroll artifacts
-    }}
-  >
-    {loading ? (
-      <textarea
-        name="message"
-        value={content}
-        readOnly
-        className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        style={{
-          flexGrow: 1,
-          resize: 'none',
-          border: 'none',
-          margin: 0,
-          padding: '12px',
-          fontFamily: 'monospace',
-          backgroundColor: 'white',
-          overflow: 'auto',
-        }}
-      />
-    ) : selected ? (
-      selected.type === 'html' ? (
-        <iframe
-          title="HTML Report"
-          srcDoc={content}
-          sandbox="allow-scripts allow-same-origin"
-          style={{ width: '100%', height: '100%', border: 'none' }}
-        />
-      ) : (
-        <textarea
-          name="message"
-          value={content}
-          className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          style={{ flexGrow: 1, resize: 'none' }}
-        />
-      )
-    ) : (
-      <p className="text-gray-500 p-4">Select a build and view HTML or Console output.</p>
-    )}
-  </div>
-</td>
+            <td style={{ width: '80%', height: '100vh', verticalAlign: 'top', padding: '16px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '85vh',
+                  border: '1px solid #ccc',
+                  background: '#fff',
+                  padding: 0,
+                  overflow: 'hidden'
+                }}
+              >
+                {loading ? (
+                  <textarea
+                    name="message"
+                    value={content}
+                    readOnly
+                    className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{
+                      flexGrow: 1,
+                      resize: 'none',
+                      border: 'none',
+                      margin: 0,
+                      padding: '12px',
+                      fontFamily: 'monospace',
+                      backgroundColor: 'white',
+                      overflow: 'auto'
+                    }}
+                  />
+                ) : selected ? (
+                  selected.type === 'html' ? (
+                    <iframe
+                      title="HTML Report"
+                      src={iframeSrc}
+                      sandbox="allow-scripts allow-same-origin"
+                      style={{ width: '100%', height: '100%', border: 'none' }}
+                    />
+                  ) : (
+                    <textarea
+                      name="message"
+                      value={content}
+                      className="w-full h-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{ flexGrow: 1, resize: 'none' }}
+                    />
+                  )
+                ) : (
+                  <p className="text-gray-500 p-4">Select a build and view HTML or Console output.</p>
+                )}
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
