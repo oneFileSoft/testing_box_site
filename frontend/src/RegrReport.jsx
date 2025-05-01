@@ -71,27 +71,30 @@ const decompress = (bufferObj) => {
   }
 };
 
-  const handleSelect = (buildId, type) => {
-    const record = records.find((r) => r.buildId === buildId);
-    if (!record) return;
+const handleSelect = (buildId, type) => {
+  const record = records.find((r) => r.buildId === buildId);
+  if (!record) return;
 
-    const raw = type === 'html' ? record.html : record.consol;
-    let text = decompress(raw);
+  const raw = type === 'html' ? record.html : record.consol;
+  let text = decompress(raw);
 
-    if (type === 'console') {
-      text = text.replace(/\\n/g, '\n').replace(/\r?\n/g, '\n');
-      setContent(text);
-      setIframeSrc(null);
-    } else {
-      text = text.replace(/new URL\("data\/[a-f0-9]{40}\.zip"\)/g, 'new URL("about:blank")');
-      const blob = new Blob([text], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      setIframeSrc(url);
-      setContent('');
-    }
+  if (type === 'console') {
+    text = text.replace(/\\n/g, '\n').replace(/\r?\n/g, '\n');
+    setContent(text);
+    setIframeSrc(null);
+  } else {
+    // 👇 Fix broken URL calls in Playwright HTML
+    text = text.replace(/new URL\((["'`])data\/[a-f0-9]{40}\.zip\1\)/g, 'new URL("about:blank")');
 
-    setSelected({ buildId, type });
-  };
+    const blob = new Blob([text], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    setIframeSrc(url);
+    setContent('');
+  }
+
+  setSelected({ buildId, type });
+};
+
 
   return (
     <div className="w-screen h-screen" style={{ marginTop: '20px' }}>
