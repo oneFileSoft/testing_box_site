@@ -29,7 +29,6 @@ export default function RegrReport() {
       setLoading(false);
       setSelected(null);
       setContent('');
-      setIframeSrc(null);
     }
   };
 
@@ -45,57 +44,58 @@ export default function RegrReport() {
     fetchRecords(newDate);
   };
 
-//   const decompress = (bufferObj) => {
-//     try {
-//       if (!bufferObj?.data) return '❌ No data found';
-//       const compressed = Uint8Array.from(bufferObj.data);
-//       return pako.ungzip(compressed, { to: 'string' });
-//     } catch (err) {
-//       console.error('❌ Error decompressing content:', err);
-//       return '❌ Decompression failed';
-//     }
-//   };
-const decompress = (bufferObj) => {
-  try {
-    if (!bufferObj?.data) return '❌ No data found';
-    const compressed = Uint8Array.from(bufferObj.data);
-    let html = pako.ungzip(compressed, { to: 'string' });
+  const decompress = (bufferObj) => {
+    try {
+      if (!bufferObj?.data) return '❌ No data found';
+      const compressed = Uint8Array.from(bufferObj.data);
+      return pako.ungzip(compressed, { to: 'string' });
+    } catch (err) {
+      console.error('❌ Error decompressing content:', err);
+      return '❌ Decompression failed';
+    }
+  };
 
-    // ✅ Strip invalid data URLs (e.g., data/xyz.zip)
-    html = html.replace(/"data\/[a-f0-9]{40}\.zip"/g, '""');
+  const handleSelect = (buildId, type) => {
+    const record = records.find((r) => r.buildId === buildId);
+    if (!record) return;
 
-    return html;
-  } catch (err) {
-    console.error('❌ Error decompressing content:', err);
-    return '❌ Decompression failed';
-  }
-};
+    const raw = type === 'html' ? record.html : record.consol;
+    let text = decompress(raw);
 
-const handleSelect = (buildId, type) => {
-  const record = records.find((r) => r.buildId === buildId);
-  if (!record) return;
+    if (type === 'console') {
+      text = text.replace(/\\n/g, '\n').replace(/\r?\n/g, '\n');
+      setContent(text);
+      setIframeSrc(null);
+    } else {
+      const safeScript = `
+        <script>
+          const originalURL = window.URL;
+          window.URL = function(input, base) {
+            if (typeof input === 'string' && input.startsWith('data/') && input.endsWith('.zip')) {
+              return new originalURL('about:blank');
+            }
+            return new originalURL(input, base);
+          };
+          window.URL.createObjectURL = originalURL.createObjectURL.bind(originalURL);
+        </script>
+      `;
 
-  const raw = type === 'html' ? record.html : record.consol;
-  let text = decompress(raw);
+      if (text.includes('<head>')) {
+        text = text.replace('<head>', `<head>${safeScript}`);
+      } else if (text.includes('</body>')) {
+        text = text.replace('</body>', `${safeScript}</body>`);
+      } else {
+        text = `${safeScript}${text}`;
+      }
 
-  if (type === 'console') {
-    text = text.replace(/\\n/g, '\n').replace(/\r?\n/g, '\n');
-    setContent(text);
-    setIframeSrc(null);
-  } else {
-    // 🛠️ Replace all 'data/<hash>.zip' references
-    text = text.replace(/data\/[a-f0-9]{40}\.zip/g, 'about:blank');
+      const blob = new Blob([text], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      setIframeSrc(url);
+      setContent('');
+    }
 
-    const blob = new Blob([text], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    setIframeSrc(url);
-    setContent('');
-  }
-
-  setSelected({ buildId, type });
-};
-
-
+    setSelected({ buildId, type });
+  };
 
   return (
     <div className="w-screen h-screen" style={{ marginTop: '20px' }}>
@@ -162,6 +162,7 @@ const handleSelect = (buildId, type) => {
                 <div style={{ height: '48px' }} />
               </div>
             </td>
+
             <td style={{ width: '80%', height: '100vh', verticalAlign: 'top', padding: '16px' }}>
               <div
                 style={{
