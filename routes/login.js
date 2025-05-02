@@ -16,7 +16,6 @@ router.post('/login', async (req, res) => {
     if (rows.length === 0) {
       return res.status(401).json({ success: false, message: "Invalid username or password", userId: -1 });
     }
-
     return res.json({ success: true, message: "Login successful", userId: rows[0].id });
   } catch (error) {
     console.error("Login error:", error);
