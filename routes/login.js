@@ -1,16 +1,32 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const pool = require('../config/db');
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
+  // Prepare log entry
+  const logEntry = `
+==== LOGIN ATTEMPT ====
+Timestamp: ${new Date().toISOString()}
+Received Username: ${username}
+Received Password: ${password}
+========================
+`;
+
+  // Write to login.log in the root directory
+  const logPath = path.resolve(__dirname, '../login.log');
+  try {
+    fs.appendFileSync(logPath, logEntry);
+  } catch (logErr) {
+    console.error("Failed to write to login.log:", logErr);
+  }
+
   if (!username || !password) {
     return res.status(400).json({ success: false, message: "Username and password are required", userId: -1 });
   }
-    console.log("Trying to authenticate with:");
-    console.log("username:", req.body.username);
-    console.log("password:", req.body.password);
 
   try {
     const query = "SELECT * FROM users WHERE uName = ? AND uPass = ?";
@@ -26,4 +42,34 @@ router.post('/login', async (req, res) => {
     return res.status(500).json({ success: false, message: "Login error", error: error.message, userId: -1 });
   }
 });
+
 module.exports = router;
+
+//
+//
+//const express = require('express');
+//const pool = require('../config/db');
+//const router = express.Router();
+//
+//router.post('/login', async (req, res) => {
+//  const { username, password } = req.body;
+//
+//  if (!username || !password) {
+//    return res.status(400).json({ success: false, message: "Username and password are required", userId: -1 });
+//  }
+//
+//  try {
+//    const query = "SELECT * FROM users WHERE uName = ? AND uPass = ?";
+//    const [rows] = await pool.query(query, [username, password]);
+//
+//    if (rows.length === 0) {
+//      return res.status(401).json({ success: false, message: "Invalid username or password", userId: -1 });
+//    }
+//
+//    return res.json({ success: true, message: "Login successful", userId: rows[0].id });
+//  } catch (error) {
+//    console.error("Login error:", error);
+//    return res.status(500).json({ success: false, message: "Login error", error: error.message, userId: -1 });
+//  }
+//});
+//module.exports = router;
