@@ -8,6 +8,9 @@ router.post('/login', async (req, res) => {
   if (!username || !password) {
     return res.status(400).json({ success: false, message: "Username and password are required", userId: -1 });
   }
+    console.log("Trying to authenticate with:");
+    console.log("username:", req.body.username);
+    console.log("password:", req.body.password);
 
   try {
     const query = "SELECT * FROM users WHERE uName = ? AND uPass = ?";
@@ -18,7 +21,6 @@ router.post('/login', async (req, res) => {
     }
 
     return res.json({ success: true, message: "Login successful", userId: rows[0].id });
-
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).json({ success: false, message: "Login error", error: error.message, userId: -1 });
