@@ -10,7 +10,7 @@ const Contact = () => {
     lastName: "",
     yourWebsite: "",
     yourEmail: "",
-    email: "test@testingbox.pw",
+    email: "",
     message: ""
   });
   const [errors, setErrors] = useState({});
