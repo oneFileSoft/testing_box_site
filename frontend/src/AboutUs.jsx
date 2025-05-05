@@ -24,38 +24,38 @@ const AboutUs = () => {
 
       {/* Jenkins Controller Section */}
       <div className="about-box">
-        <div className="jenkins-content">
-          <h2>Jenkins controller</h2>
-          <p>
-            Jenkins monitors the release branch of the Web repository. Upon
-            detecting a push event, it performs the following actions:
-          </p>
+        <h2>Jenkins controller</h2>
+        <p>
+          Jenkins monitors the release branch of the Web repository. Upon
+          detecting a push event, it performs the following actions:
+        </p>
 
-          <div className="jenkins-flex">
-            <ul className="jenkins-list">
-              {actions.map((text, index) => (
-                <li
-                  key={index}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                  style={{
-                    textDecoration: hoveredIndex === index ? "underline" : "none",
-                    cursor: "pointer",
-                    margin: "6px 0"
-                  }}
-                >
-                  {text}
-                </li>
-              ))}
-            </ul>
+        <div className="jenkins-flex">
+          {/* Step List */}
+          <ul className="jenkins-list">
+            {actions.map((text, index) => (
+              <li
+                key={index}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                style={{
+                  textDecoration: hoveredIndex === index ? "underline" : "none",
+                  cursor: "pointer",
+                  margin: "6px 0"
+                }}
+              >
+                {text}
+              </li>
+            ))}
+          </ul>
 
-            {hoveredIndex !== null && (
-              <div className="jenkins-detail-box">
-                <h3>Detail</h3>
-                <p>{actions[hoveredIndex]}</p>
-              </div>
-            )}
-          </div>
+          {/* Hover Detail */}
+          {hoveredIndex !== null && (
+            <div className="jenkins-detail-box">
+              <h3>Detail</h3>
+              <p>{actions[hoveredIndex]}</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -80,6 +80,8 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
+
 
 
 

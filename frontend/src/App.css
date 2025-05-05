@@ -181,7 +181,6 @@ html, body {
   margin-bottom: 30px;
 }
 
-/* Layout inside .about-box */
 .jenkins-flex {
   display: flex;
   flex-wrap: wrap;
@@ -189,7 +188,6 @@ html, body {
   margin-top: 15px;
 }
 
-/* Left: List */
 .jenkins-list {
   flex: 1 1 60%;
   list-style: disc inside;
@@ -197,7 +195,6 @@ html, body {
   padding-left: 0;
 }
 
-/* Right: Detail box */
 .jenkins-detail-box {
   flex: 1 1 35%;
   background: white;
@@ -208,7 +205,6 @@ html, body {
   color: #1f2937;
 }
 
-/* Mobile: stack */
 @media (max-width: 768px) {
   .jenkins-flex {
     flex-direction: column;
@@ -219,6 +215,7 @@ html, body {
     margin-top: 15px;
   }
 }
+
 
 
 /****************************** User form ************************************/
