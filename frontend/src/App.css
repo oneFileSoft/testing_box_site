@@ -171,9 +171,7 @@ html, body {
 
 /****************************** aboutUs form **************************/
 
-/* about-box: internal flex layout for hover-based split */
 .about-box {
-  position: relative;
   max-width: 800px;
   background: white;
   color: #1f2937;
@@ -182,17 +180,18 @@ html, body {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
   margin-bottom: 30px;
+  overflow: hidden; /* prevents floating children from overlapping */
 }
 
-/* When hovered: create flex split for controller and detail inside the box */
 .about-box.with-detail .jenkins-flex {
   display: flex;
   gap: 20px;
   justify-content: space-between;
   margin-top: 15px;
+  flex-wrap: wrap;
 }
 
-/* Left column: bullet list */
+/* List of steps */
 .jenkins-list {
   flex: 1;
   list-style: disc inside;
@@ -200,9 +199,10 @@ html, body {
   margin: 0;
 }
 
-/* Right column: detail box */
+/* Detail panel */
 .jenkins-detail-box {
   flex: 1;
+  min-width: 250px;
   max-width: 300px;
   background: white;
   padding: 15px;
@@ -212,7 +212,7 @@ html, body {
   color: #1f2937;
 }
 
-/* Responsive layout: stack items on mobile */
+/* Responsive stack for mobile */
 @media (max-width: 768px) {
   .about-box.with-detail .jenkins-flex {
     flex-direction: column;
