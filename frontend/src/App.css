@@ -171,89 +171,65 @@ html, body {
 
 /****************************** aboutUs form **************************/
 
-/* Background Gradient */
-.about-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; /* Align content to start at the top */
-  background: linear-gradient(to right, #3b82f6, #9333ea); /* Blue to Purple */
-  background-position: top center; /* Ensure gradient starts at the top */
-  background-size: cover; /* Ensure gradient stretches over the content */
-  color: white;
-  text-align: center;
-  padding: 40px 20px;
-  border-radius: 8px;
-  margin-top: 60px;  /*Ensure the container starts exactly below the top bar */
-}
-
-
-
-/* Hero Section */
-.about-hero h1 {
-  font-size: 3rem; /* Equivalent to text-4xl */
-  font-weight: bold;
-}
-
-.about-hero p {
-  font-size: 1.25rem; /* Equivalent to text-lg */
-  margin-top: 10px;
-}
-
-/* About Section */
+/* Update existing .about-box to allow flexible layout on hover */
 .about-box {
   max-width: 800px;
   background: white;
   color: #1f2937;
-  /* padding: 20px; */
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+
+  /* New additions */
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Why Choose Us Section */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  margin-top: 20px;
-  text-align: center;
+/* When user hovers a line, shift the controller box left */
+.about-box.shift-left > div:first-child {
+  width: 60%;
 }
 
-@media (min-width: 768px) {
-  .about-grid {
-    grid-template-columns: 1fr 1fr; /* Two columns on larger screens */
+/* Display the right-side detail box */
+.about-box.shift-left > .details-box {
+  width: 38%;
+}
+
+/* Style for the details panel */
+.details-box {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Textarea inside the details panel */
+.details-box textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .about-box {
+    flex-direction: column;
+  }
+
+  .about-box.shift-left > div,
+  .about-box.shift-left > .details-box {
+    width: 100%;
+  }
+
+  .details-box {
+    margin-top: 20px;
+    padding-left: 0;
   }
 }
-
-.about-card {
-  background: white;
-  color: #1f2937;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Call to Action */
-.about-cta {
-  margin-top: 20px;
-}
-
-.about-cta button {
-  background: white;
-  color: #3b82f6;
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out;
-}
-
-.about-cta button:hover {
-  background: #e5e7eb;
-}
-
-
 
 /****************************** User form ************************************/
 .user-container {

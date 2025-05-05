@@ -1,50 +1,87 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "./App.css"; // Import the custom styles
+/* Ensure about-box splits into two columns on large screens */
+.about-box {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  transition: all 0.3s ease-in-out;
+}
 
-const AboutUs = () => {
-  const navigate = useNavigate();  
-  const handleContactClick = () => navigate('/contact');    
-  return (
-    <div className="about-container">
-      {/* Hero Section */}
-      <div className="about-hero">
-        <h2 style={{ color: 'black' }}>CI / CD workflow</h2>
-      </div>
+/* Default widths for desktop */
+.about-box > div {
+  width: 100%;
+}
 
-      {/* About Section */}
-      <div className="about-box">
-        <h2>Jenkins controller</h2>
-        <p>
-          Jenkins monitors the release branch of the Web repository. Upon detecting a push event, it performs the following actions:
-        </p>
-        <ul>
-          <li>Pulls both the Web and Test repositories onto the Jenkins agent host.</li>
-          <li>Launches the Web application locally on the Jenkins environment.</li>
-          <li>Executes regression tests from the Test repository against the deployed Web application.</li>
-          <li>Sends the regression test report back to the developer.</li>
-          <li>If all tests pass, Jenkins deploys the new version to the production web hosting environment.</li>
-        </ul>
-      </div>
+/* When details panel is open, split layout */
+.about-box.shift-left > div:first-child {
+  width: 60%;
+}
+.about-box.shift-left > .details-box {
+  width: 38%;
+}
 
-      {/* Why Choose Us Section */}
-      <div className="about-grid">
-        <div className="about-card">
-          <h3>Web site</h3>
-          <p>modern, responsive code of React.</p>
-        </div>
-        <div className="about-card">
-          <h3>Regression</h3>
-          <p>light and fast execution from Playwright</p>
-        </div>
-      </div>
+/* Mobile layout: stack vertically */
+@media (max-width: 768px) {
+  .about-box {
+    flex-direction: column;
+  }
 
-      {/* Call to Action */}
-      <div className="about-cta">
-        <button onClick={handleContactClick}>Contact Us</button>
-      </div>
-    </div>
-  );
-};
+  .about-box.shift-left > div,
+  .about-box.shift-left > .details-box {
+    width: 100%;
+  }
 
-export default AboutUs;
+  .details-box {
+    margin-top: 15px;
+  }
+}
+
+// import React from "react";
+// import { useNavigate } from "react-router-dom";
+// import "./App.css"; // Import the custom styles
+//
+// const AboutUs = () => {
+//   const navigate = useNavigate();
+//   const handleContactClick = () => navigate('/contact');
+//   return (
+//     <div className="about-container">
+//       {/* Hero Section */}
+//       <div className="about-hero">
+//         <h2 style={{ color: 'black' }}>CI / CD workflow</h2>
+//       </div>
+//
+//       {/* About Section */}
+//       <div className="about-box">
+//         <h2>Jenkins controller</h2>
+//         <p>
+//           Jenkins monitors the release branch of the Web repository. Upon detecting a push event, it performs the following actions:
+//         </p>
+//         <ul>
+//           <li>Pulls both the Web and Test repositories onto the Jenkins agent host.</li>
+//           <li>Launches the Web application locally on the Jenkins environment.</li>
+//           <li>Executes regression tests from the Test repository against the deployed Web application.</li>
+//           <li>Sends the regression test report back to the developer.</li>
+//           <li>If all tests pass, Jenkins deploys the new version to the production web hosting environment.</li>
+//         </ul>
+//       </div>
+//
+//       {/* Why Choose Us Section */}
+//       <div className="about-grid">
+//         <div className="about-card">
+//           <h3>Web site</h3>
+//           <p>modern, responsive code of React.</p>
+//         </div>
+//         <div className="about-card">
+//           <h3>Regression</h3>
+//           <p>light and fast execution from Playwright</p>
+//         </div>
+//       </div>
+//
+//       {/* Call to Action */}
+//       <div className="about-cta">
+//         <button onClick={handleContactClick}>Contact Us</button>
+//       </div>
+//     </div>
+//   );
+// };
+//
+// export default AboutUs;
