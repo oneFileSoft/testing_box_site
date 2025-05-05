@@ -178,32 +178,28 @@ html, body {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
   margin-bottom: 30px;
-  overflow: hidden; /* prevents floating children from overlapping */
 }
 
-.about-box.with-detail .jenkins-flex {
+/* Layout inside .about-box */
+.jenkins-flex {
   display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  margin-top: 15px;
   flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 15px;
 }
 
-/* List of steps */
+/* Left: List */
 .jenkins-list {
-  flex: 1;
+  flex: 1 1 60%;
   list-style: disc inside;
-  padding-left: 0;
   margin: 0;
+  padding-left: 0;
 }
 
-/* Detail panel */
+/* Right: Detail box */
 .jenkins-detail-box {
-  flex: 1;
-  min-width: 250px;
-  max-width: 300px;
+  flex: 1 1 35%;
   background: white;
   padding: 15px;
   border-radius: 8px;
@@ -212,14 +208,14 @@ html, body {
   color: #1f2937;
 }
 
-/* Responsive stack for mobile */
+/* Mobile: stack */
 @media (max-width: 768px) {
-  .about-box.with-detail .jenkins-flex {
+  .jenkins-flex {
     flex-direction: column;
   }
 
   .jenkins-detail-box {
-    max-width: 100%;
+    width: 100%;
     margin-top: 15px;
   }
 }

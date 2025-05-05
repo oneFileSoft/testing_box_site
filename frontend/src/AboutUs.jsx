@@ -23,7 +23,7 @@ const AboutUs = () => {
       </div>
 
       {/* Jenkins Controller Section */}
-      <div className={`about-box ${hoveredIndex !== null ? "with-detail" : ""}`}>
+      <div className="about-box">
         <div className="jenkins-content">
           <h2>Jenkins controller</h2>
           <p>
@@ -71,7 +71,7 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* Contact Button */}
+      {/* Call to Action */}
       <div className="about-cta">
         <button onClick={handleContactClick}>Contact Us</button>
       </div>
