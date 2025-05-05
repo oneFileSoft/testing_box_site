@@ -171,7 +171,7 @@ html, body {
 
 /****************************** aboutUs form **************************/
 
-/* Make about-box support internal layout shift without breaking card */
+/* about-box: internal flex layout for hover-based split */
 .about-box {
   position: relative;
   max-width: 800px;
@@ -181,55 +181,48 @@ html, body {
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
-  margin-bottom: 30px; /* add gap from next section */
+  margin-bottom: 30px;
 }
 
-/* Let controller section slightly shift on hover */
-.about-box.shift-left .controller-box {
-  margin-right: 220px;
+/* When hovered: create flex split for controller and detail inside the box */
+.about-box.with-detail .jenkins-flex {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-top: 15px;
 }
 
-/* Floating detail box inside .about-box */
-.details-box {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 200px;
+/* Left column: bullet list */
+.jenkins-list {
+  flex: 1;
+  list-style: disc inside;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Right column: detail box */
+.jenkins-detail-box {
+  flex: 1;
+  max-width: 300px;
   background: white;
+  padding: 15px;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  font-size: 0.95rem;
   color: #1f2937;
-  z-index: 10;
 }
 
-/* Text inside the details box */
-.details-box textarea {
-  width: 100%;
-  border: none;
-  background: transparent;
-  resize: none;
-  font-size: 0.9rem;
-  line-height: 1.3rem;
-  color: #1f2937;
-  font-family: inherit;
-  padding: 0;
-  outline: none;
-}
-
-/* Responsive: stack layout on mobile */
+/* Responsive layout: stack items on mobile */
 @media (max-width: 768px) {
-  .about-box.shift-left .controller-box {
-    margin-right: 0;
+  .about-box.with-detail .jenkins-flex {
+    flex-direction: column;
   }
 
-  .details-box {
-    position: static;
-    width: 100%;
-    margin-top: 20px;
+  .jenkins-detail-box {
+    max-width: 100%;
+    margin-top: 15px;
   }
 }
-
 
 
 /****************************** User form ************************************/
