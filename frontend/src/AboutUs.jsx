@@ -14,10 +14,6 @@ const AboutUs = () => {
   const navigate = useNavigate();
   const [hoveredStep, setHoveredStep] = useState(null);
 
-  const handleContactClick = () => {
-    navigate("/contact");
-  };
-
   return (
     <div className="about-container">
       {/* Hero Section */}
@@ -25,15 +21,14 @@ const AboutUs = () => {
         <h2 style={{ color: "black" }}>CI / CD workflow</h2>
       </div>
 
-      {/* Jenkins Controller Section */}
-      <div className="about-box">
-        <h2>Jenkins controller</h2>
-        <p>
-          Jenkins monitors the release branch of the Web repository. Upon detecting a push event, it performs the following actions:
-        </p>
+      {/* Main Jenkins Box */}
+      <div className={`about-box ${hoveredStep !== null ? "shift-left" : ""}`}>
+        <div className="controller-box">
+          <h2>Jenkins controller</h2>
+          <p>
+            Jenkins monitors the release branch of the Web repository. Upon detecting a push event, it performs the following actions:
+          </p>
 
-        <div className="jenkins-flex">
-          {/* Step List */}
           <ul className="jenkins-list">
             {steps.map((step, index) => (
               <li
@@ -50,15 +45,14 @@ const AboutUs = () => {
               </li>
             ))}
           </ul>
-
-          {/* Detail Box */}
-          {hoveredStep !== null && (
-            <div className="jenkins-detail-box">
-              <h3>Detail</h3>
-              <p>{steps[hoveredStep]}</p>
-            </div>
-          )}
         </div>
+
+        {hoveredStep !== null && (
+          <div className="details-box">
+            <h3>Detail</h3>
+            <p>{steps[hoveredStep]}</p>
+          </div>
+        )}
       </div>
 
       {/* Why Choose Us Section */}
@@ -73,9 +67,9 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* Contact Button */}
+      {/* Contact CTA */}
       <div className="about-cta">
-        <button onClick={handleContactClick}>Contact Us</button>
+        <button onClick={() => navigate("/contact")}>Contact Us</button>
       </div>
     </div>
   );

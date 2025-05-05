@@ -171,98 +171,87 @@ html, body {
 
 /****************************** aboutUs form **************************/
 
-/* === Updated AboutUs Styles with Hover Detail Support === */
+/* Background Gradient */
+.about-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Align content to start at the top */
+  background: linear-gradient(to right, #3b82f6, #9333ea); /* Blue to Purple */
+  background-position: top center; /* Ensure gradient starts at the top */
+  background-size: cover; /* Ensure gradient stretches over the content */
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 8px;
+  margin-top: 60px;  /*Ensure the container starts exactly below the top bar */
+}
 
-/* Main white box layout */
+
+
+/* Hero Section */
+.about-hero h1 {
+  font-size: 3rem; /* Equivalent to text-4xl */
+  font-weight: bold;
+}
+
+.about-hero p {
+  font-size: 1.25rem; /* Equivalent to text-lg */
+  margin-top: 10px;
+}
+
+/* About Section */
 .about-box {
   max-width: 800px;
   background: white;
   color: #1f2937;
+  /* padding: 20px; */
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+}
+
+/* Why Choose Us Section */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr 1fr; /* Two columns on larger screens */
+  }
+}
+
+.about-card {
+  background: white;
+  color: #1f2937;
   padding: 20px;
-  transition: all 0.3s ease-in-out;
-  text-align: left;
-  gap: 20px;
-  margin-bottom: 30px; /* ensure spacing before next section */
-}
-
-/* Wrap Jenkins list + description */
-.controller-box {
-  width: 100%;
-}
-
-/* When hovering, shrink main content and make room for detail */
-.about-box.shift-left .controller-box {
-  width: 60%;
-}
-
-/* Hover detail panel */
-.details-box {
-  width: 38%;
-  background: white;
-  color: #1f2937;
-  padding: 10px;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive stacking on mobile */
-@media (max-width: 768px) {
-  .about-box {
-    flex-direction: column;
-  }
-
-  .about-box.shift-left .controller-box,
-  .about-box.shift-left .details-box {
-    width: 100%;
-  }
-
-  .details-box {
-    margin-top: 20px;
-  }
+/* Call to Action */
+.about-cta {
+  margin-top: 20px;
 }
 
-/* Additional styles for list + detail layout inside .about-box */
-.jenkins-flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 15px;
-}
-
-.jenkins-list {
-  flex: 1 1 60%;
-  list-style: disc inside;
-  margin: 0;
-  padding-left: 0;
-}
-
-.jenkins-detail-box {
-  flex: 1 1 35%;
+.about-cta button {
   background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  font-size: 0.95rem;
-  color: #1f2937;
+  color: #3b82f6;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
 }
 
-/* Mobile behavior for detail */
-@media (max-width: 768px) {
-  .jenkins-flex {
-    flex-direction: column;
-  }
-
-  .jenkins-detail-box {
-    width: 100%;
-    margin-top: 15px;
-  }
+.about-cta button:hover {
+  background: #e5e7eb;
 }
-
 
 
 
