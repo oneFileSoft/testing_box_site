@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 
-const actions = [
+const steps = [
   "Pulls both the Web and Test repositories onto the Jenkins agent host.",
   "Launches the Web application locally on the Jenkins environment.",
   "Executes regression tests from the Test repository against the deployed Web application.",
@@ -12,8 +12,11 @@ const actions = [
 
 const AboutUs = () => {
   const navigate = useNavigate();
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const handleContactClick = () => navigate("/contact");
+  const [hoveredStep, setHoveredStep] = useState(null);
+
+  const handleContactClick = () => {
+    navigate("/contact");
+  };
 
   return (
     <div className="about-container">
@@ -26,34 +29,33 @@ const AboutUs = () => {
       <div className="about-box">
         <h2>Jenkins controller</h2>
         <p>
-          Jenkins monitors the release branch of the Web repository. Upon
-          detecting a push event, it performs the following actions:
+          Jenkins monitors the release branch of the Web repository. Upon detecting a push event, it performs the following actions:
         </p>
 
         <div className="jenkins-flex">
           {/* Step List */}
           <ul className="jenkins-list">
-            {actions.map((text, index) => (
+            {steps.map((step, index) => (
               <li
                 key={index}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
+                onMouseEnter={() => setHoveredStep(index)}
+                onMouseLeave={() => setHoveredStep(null)}
                 style={{
-                  textDecoration: hoveredIndex === index ? "underline" : "none",
+                  textDecoration: hoveredStep === index ? "underline" : "none",
                   cursor: "pointer",
-                  margin: "6px 0"
+                  marginBottom: "8px"
                 }}
               >
-                {text}
+                {step}
               </li>
             ))}
           </ul>
 
-          {/* Hover Detail */}
-          {hoveredIndex !== null && (
+          {/* Detail Box */}
+          {hoveredStep !== null && (
             <div className="jenkins-detail-box">
               <h3>Detail</h3>
-              <p>{actions[hoveredIndex]}</p>
+              <p>{steps[hoveredStep]}</p>
             </div>
           )}
         </div>
@@ -71,7 +73,7 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* Call to Action */}
+      {/* Contact Button */}
       <div className="about-cta">
         <button onClick={handleContactClick}>Contact Us</button>
       </div>
@@ -80,7 +82,6 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
-
 
 
 
