@@ -185,7 +185,8 @@ html, body {
   padding: 40px 20px;
   border-radius: 8px;
   margin-top: 40px;
-  min-height: 100vh; /* replaces h-screen logic */
+  min-height: 100vh; /* ✅ dynamic height, allows expansion */
+  box-sizing: border-box;
 }
 
 /* Hero Section */
