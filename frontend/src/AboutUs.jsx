@@ -15,7 +15,7 @@ const AboutUs = () => {
   const [selectedStep, setSelectedStep] = useState(null);
 
   return (
-    <div className="about-container">
+    <div className="about-container w-screen h-screen" >
       {/* Hero Section */}
       <div className="about-hero">
         <h2 style={{ color: "black" }}>CI / CD workflow</h2>
