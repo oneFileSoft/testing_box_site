@@ -21,8 +21,8 @@ const AboutUs = () => {
         <h2 style={{ color: "black" }}>CI / CD workflow</h2>
       </div>
 
-      {/* Jenkins Controller Section */}
-      <div className={`about-box ${selectedStep !== null ? "shift-left" : ""}`}>
+      {/* Jenkins Controller Box */}
+      <div className="about-box">
         <div className="controller-box">
           <h2>Jenkins controller</h2>
           <p>
@@ -35,9 +35,7 @@ const AboutUs = () => {
                 key={index}
                 onClick={() => setSelectedStep(index)}
                 style={{
-                  textDecoration: selectedStep === index ? "underline" : "none",
-                  cursor: "pointer",
-                  marginBottom: "8px"
+                  textDecoration: selectedStep === index ? "underline" : "none"
                 }}
               >
                 {step}
@@ -51,19 +49,8 @@ const AboutUs = () => {
             <h3>Detail</h3>
             <textarea
               readOnly
-              value={steps[selectedStep]}
               rows={5}
-              style={{
-                width: "100%",
-                resize: "vertical",
-                fontFamily: "inherit",
-                fontSize: "0.9rem",
-                lineHeight: "1.4rem",
-                border: "1px solid #ccc",
-                borderRadius: "6px",
-                padding: "8px",
-                color: "#1f2937"
-              }}
+              value={steps[selectedStep]}
             />
           </div>
         )}

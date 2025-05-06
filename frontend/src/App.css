@@ -176,38 +176,80 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Align content to start at the top */
+  justify-content: center;
   background: linear-gradient(to right, #3b82f6, #9333ea); /* Blue to Purple */
-  background-position: top center; /* Ensure gradient starts at the top */
-  background-size: cover; /* Ensure gradient stretches over the content */
+  background-position: top center;
+  background-size: cover;
   color: white;
   text-align: center;
   padding: 40px 20px;
   border-radius: 8px;
-  margin-top: 60px;  /*Ensure the container starts exactly below the top bar */
+  margin-top: 60px;
 }
-
-
 
 /* Hero Section */
 .about-hero h1 {
-  font-size: 3rem; /* Equivalent to text-4xl */
+  font-size: 3rem;
   font-weight: bold;
 }
 
 .about-hero p {
-  font-size: 1.25rem; /* Equivalent to text-lg */
+  font-size: 1.25rem;
   margin-top: 10px;
 }
 
 /* About Section */
 .about-box {
+  width: 100%;
   max-width: 800px;
   background: white;
   color: #1f2937;
-  /* padding: 20px; */
+  padding: 20px;
+  margin-top: 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.jenkins-list {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.jenkins-list li {
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: text-decoration 0.2s;
+}
+
+.jenkins-list li:hover {
+  text-decoration: underline;
+}
+
+.details-box {
+  margin-top: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.details-box h3 {
+  margin-bottom: 10px;
+}
+
+.details-box textarea {
+  width: 100%;
+  resize: vertical;
+  overflow: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4rem;
+  color: #1f2937;
+  background-color: #f9fafb;
+  box-sizing: border-box;
 }
 
 /* Why Choose Us Section */
@@ -221,7 +263,7 @@ html, body {
 
 @media (min-width: 768px) {
   .about-grid {
-    grid-template-columns: 1fr 1fr; /* Two columns on larger screens */
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -252,7 +294,6 @@ html, body {
 .about-cta button:hover {
   background: #e5e7eb;
 }
-
 
 
 /****************************** User form ************************************/
