@@ -47,7 +47,22 @@ const AboutUs = () => {
           {selectedStep !== null && (
             <div className="details-box">
               <h3>Detail</h3>
-              <textarea readOnly rows={5} value={steps[selectedStep]} />
+              <textarea readOnly rows={6} value={steps[selectedStep]}
+              style={{
+                      resize: "none",
+                      height: "120px",
+                      width: "100%",
+                      overflow: "auto",
+                      fontFamily: "inherit",
+                      fontSize: "0.9rem",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid #ccc",
+                      boxSizing: "border-box",
+                      backgroundColor: "#f9fafb",
+                      color: "#1f2937",
+                      lineHeight: "1.4rem"
+                    }}/>
             </div>
           )}
         </div>
