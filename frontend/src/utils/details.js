@@ -32,7 +32,7 @@ const details = [
      Email addresses	      If Jenkins needs user email info for notifications.	None
      Followers	                    Not needed.	                                    None
      Private repository invitations	Not needed unless working with private repos.	None`,
-  'Launches the Web application locally on the Jenkins environment.
+ `Launches the Web application locally on the Jenkins environment.
      At this moment we already have Node.js installed globally. In order to setup WebSite on localhost,          cd frontend
      We need to reinstall node dependence which will be read from APP_FOLDER/frontend/package.json
      by running following commands from pipeline script:
@@ -42,9 +42,8 @@ const details = [
      In the end, it tries to capture PID of the started WebSite, so just in case of not responding,
      script automatically will shut down hanging process:
               npm install
-              nohup node server.js > jenkins-local-server.log 2>&1 & SERVER_PID=$!
-  ',
-  'Executes regression tests from the Test repository against the deployed Web application.
+              nohup node server.js > jenkins-local-server.log 2>&1 & SERVER_PID=$!`,
+  `Executes regression tests from the Test repository against the deployed Web application.
      Enthought we have on Jenkins workspace Playwright installed globally,
      prior to run regression, we need to reinstall/refresh Playwright dependence, this is why in workspace
      we going to have these command to be executed by pipeline:
