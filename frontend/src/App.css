@@ -302,7 +302,6 @@ html, body {
 }
 .controller-box.expanded {
   padding-bottom: 10px; /* simulate "taking space" of hidden about-grid */
-  padding-top: 10px
 }
 
 /****************************** User form ************************************/
