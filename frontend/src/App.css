@@ -217,9 +217,8 @@ html, body {
 }
 .about-box.expanded {
   padding: 10px;
-  margin-top: 40px;
-  margin-bottom: 30px; /* extra spacing from next section */
-  border-radius: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px; /* extra spacing from next section */
 }
 
 .jenkins-list {
