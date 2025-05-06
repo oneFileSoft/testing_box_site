@@ -243,7 +243,7 @@ html, body {
 
 .details-box textarea {
   width: 100%;
-  height: "120px",
+  height: 120px;
   resize: none;
   overflow: auto;
   border: 1px solid #ccc;
