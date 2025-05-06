@@ -10,6 +10,15 @@ const steps = [
   "If all tests pass, Jenkins deploys the new version to the production web hosting environment."
 ];
 
+const details = [
+  "vvvvvvvvvvvvPulls both the Web and Test repositories onto the Jenkins agent host.",
+  "sssssssssssLaunches the Web application locally on the Jenkins environment.",
+  "eeeeeeeeeeeeeeeeExecutes regression tests from the Test repository against the deployed Web application.",
+  "gggggggggggggggSends the regression test report back to the developer.",
+  "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr\n"+
+  "If all tests pass, Jenkins deploys the new version to the production web hosting environment."
+];
+
 const AboutUs = () => {
   const navigate = useNavigate();
   const [selectedStep, setSelectedStep] = useState(null);
@@ -47,7 +56,7 @@ const AboutUs = () => {
           {selectedStep !== null && (
             <div className="details-box">
               <h3>Detail</h3>
-              <textarea readOnly value={steps[selectedStep]} />
+              <textarea readOnly value={details[selectedStep]} />
             </div>
           )}
         </div>
