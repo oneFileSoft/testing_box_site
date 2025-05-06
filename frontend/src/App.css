@@ -215,6 +215,12 @@ html, body {
   box-sizing: border-box;
   text-align: left;
 }
+.about-box.expanded {
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 30px; /* extra spacing from next section */
+  border-radius: 8px;
+}
 
 .jenkins-list {
   padding-left: 20px;

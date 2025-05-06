@@ -133,7 +133,7 @@ const AboutUs = () => {
       </div>
 
       {/* Jenkins Controller Box */}
-      <div className="about-box">
+      <div className={`about-box ${selectedStep !== null ? "expanded" : ""}`}>
         <div className={`controller-box ${selectedStep !== null ? "expanded" : ""}`}>
           <h2>Jenkins controller</h2>
           <p>
