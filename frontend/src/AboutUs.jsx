@@ -11,10 +11,9 @@ const steps = [
 ];
 
 const details = [
-  "Jenkins monitors the release branch of the Web repository. Upon detecting a push event, it performs the following",
   "Pulls both the Web and Test repositories onto the Jenkins agent host:\n"+
   "1. Generate PAT from GitHub\n(Profile -> Settings-> left.sidebar.Developer Settings->PersonalAccessToken ->\n"+
-  "   select Fine-grained tokens -> Generate):\n"+,
+  "   select Fine-grained tokens -> Generate):\n"+
   "   Select the scopes (permissions) you want to grant the token. For example, for accessing repositories, you\n"+
   "   would select Repo.\n"+
   "   In the Token setting, define repository accessibility, token-expiration time and some permissions\n"+
