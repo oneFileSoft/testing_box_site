@@ -301,8 +301,7 @@ html, body {
   background: #e5e7eb;
 }
 .controller-box.expanded {
-  padding-bottom: 20px; /* simulate "taking space" of hidden about-grid */
-  margin-bottom: 10px
+  padding-bottom: 10px; /* simulate "taking space" of hidden about-grid */
 }
 
 /****************************** User form ************************************/
