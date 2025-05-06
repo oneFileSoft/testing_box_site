@@ -176,8 +176,8 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: linear-gradient(to right, #3b82f6, #9333ea); /* Blue to Purple */
+  justify-content: flex-start;
+  background: linear-gradient(to right, #3b82f6, #9333ea);
   background-position: top center;
   background-size: cover;
   color: white;
@@ -185,6 +185,7 @@ html, body {
   padding: 40px 20px;
   border-radius: 8px;
   margin-top: 40px;
+  min-height: 100vh; /* replaces h-screen logic */
 }
 
 /* Hero Section */
@@ -206,6 +207,7 @@ html, body {
   color: #1f2937;
   padding: 20px;
   margin-top: 20px;
+  margin-bottom: 30px; /* extra spacing from next section */
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -250,6 +252,7 @@ html, body {
   color: #1f2937;
   background-color: #f9fafb;
   box-sizing: border-box;
+  min-height: 100px; /* to prevent jumpiness */
 }
 
 /* Why Choose Us Section */
