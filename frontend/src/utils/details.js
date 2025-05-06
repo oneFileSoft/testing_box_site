@@ -217,7 +217,7 @@ const details = [
       environment {
         PLAYWRIGHT_DIR = 'playwright-tests'
         WEBSITE_DIR = 'website'
-        PLAYWRIGHT_REPORT_DIR = "${PLAYWRIGHT_DIR}/playwright-report"
+        PLAYWRIGHT_REPORT_DIR = "$ {PLAYWRIGHT_DIR}/playwright-report"
       }
 
       stages {
@@ -226,7 +226,7 @@ const details = [
             script {
               echo "Starting checkout of repositories..."
 
-              dir("${WEBSITE_DIR}") {
+              dir("$ {WEBSITE_DIR}") {
                 deleteDir()
                 git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
                     url: 'https://github.com/oneFileSoft/testing_box_site.git',
@@ -234,7 +234,7 @@ const details = [
                 echo "*************** Website repository checked out successfully ***************"
               }
 
-              dir("${PLAYWRIGHT_DIR}") {
+              dir("$ {PLAYWRIGHT_DIR}") {
                 deleteDir()
                 git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
                     url: 'https://github.com/oneFileSoft/testing_box_playwright.git',
@@ -254,14 +254,14 @@ const details = [
           steps {
             script {
               echo "Creating db.js file with injected credentials..."
-              dir("${WEBSITE_DIR}/config") {
+              dir("$ {WEBSITE_DIR}/config") {
                 writeFile file: 'db.js', text: """
                   const mysql = require('mysql2');
 
                   const pool = mysql.createPool({
                     host: 'localhost',
-                    user: '${DB_CREDENTIALS_USR}',
-                    password: '${DB_CREDENTIALS_PSW}',
+                    user: '$ {DB_CREDENTIALS_USR}',
+                    password: '$ {DB_CREDENTIALS_PSW}',
                     database: 'test_DB',
                     port: '3306',
                     waitForConnections: true,
@@ -381,7 +381,7 @@ const details = [
         stage('Install Playwright Dependencies') {
           steps {
             script {
-              dir("${PLAYWRIGHT_DIR}") {
+              dir("$ {PLAYWRIGHT_DIR}") {
                 sh '''
                   npm install --save-dev @playwright/test
                   npx playwright install
@@ -400,7 +400,7 @@ const details = [
     stage('Run Playwright Regression') {
       steps {
         script {
-          dir("${PLAYWRIGHT_DIR}") {
+          dir("$ {PLAYWRIGHT_DIR}") {
 
             // Reusable method for sending the report
             def sendReport = {
@@ -425,7 +425,7 @@ const details = [
                   format: "1",
                   emailTo: "i_slava_i@yahoo.com",
                   message: fallbackMessage,
-                  buildNumb: "${env.BUILD_ID}"
+                  buildNumb: "$ {env.BUILD_ID}"
                 ]
                 def emailPayload = groovy.json.JsonOutput.toJson(payload)
                 writeFile file: 'payload.json', text: emailPayload
@@ -456,8 +456,8 @@ const details = [
         stage('Archive Playwright HTML Report') {
           steps {
             script {
-              sh "ls -l ${PLAYWRIGHT_REPORT_DIR} || true"
-              archiveArtifacts artifacts: "${PLAYWRIGHT_REPORT_DIR}/**", fingerprint: true
+              sh "ls -l $ {PLAYWRIGHT_REPORT_DIR} || true"
+              archiveArtifacts artifacts: "$ {PLAYWRIGHT_REPORT_DIR}/**", fingerprint: true
             }
           }
         }

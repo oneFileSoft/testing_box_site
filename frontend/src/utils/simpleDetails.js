@@ -50,7 +50,7 @@ const simpleDetails = [
    3. Enable the “GitHub hook trigger for SCM polling” option in pipeline settings.
       (Purpose: Automatically starts Jenkins builds whenever code changes are pushed to your GitHub repository.)
    4. Finally, create a comprehensive Jenkins pipeline script responsible for:
-      • Installing dependencies for Playwright and the local WebSite (including database seeding).
+      • Installing dependencies for Playwright and the WebSite at WORKSPACE-localhost (including database seeding).
       • Automatically running regression tests and emailing reports to developers.
       • Upon successful regression, automatically triggering the deployment and rebuilding of the latest website version on your web-hosting environment.
      (Purpose: Automates end-to-end delivery, improving efficiency and ensuring reliability with minimal manual intervention.)`
