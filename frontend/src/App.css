@@ -299,7 +299,9 @@ html, body {
 .about-cta button:hover {
   background: #e5e7eb;
 }
-
+.controller-box.expanded {
+  padding-bottom: 60px; /* simulate "taking space" of hidden about-grid */
+}
 
 /****************************** User form ************************************/
 .user-container {
