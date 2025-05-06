@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+// src/AboutUs.jsx
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
-import details from "./utils/details";
+
+// your simple fallback details
+import simpleDetails from "./utils/simpleDetails";
+
+// dynamic import for the full details chunk
+const loadDetails = () =>
+  import(/* webpackChunkName: "details" */ "./utils/details");
 
 const steps = [
   "Pulls both the Web and Test repositories onto the Jenkins agent host.",
@@ -12,10 +19,48 @@ const steps = [
   "*** General setting-up for Jenkins Controller/Agent"
 ];
 
-
 const AboutUs = () => {
   const navigate = useNavigate();
   const [selectedStep, setSelectedStep] = useState(null);
+  const [detailsData, setDetailsData] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
+
+  // Read and check sessionStorage.user
+  const storedUser =
+    typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
+  const isAuthorized = storedUser === "slava__49";
+
+  // Clear sessionStorage.user on unload or unmount
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem("user");
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      sessionStorage.removeItem("user");
+    };
+  }, []);
+
+  // On click, either fetch full details or just select the simple text
+  const handleStepClick = async (index) => {
+    setSelectedStep(index);
+
+    if (isAuthorized && !detailsData) {
+      setLoadingDetails(true);
+      try {
+        const mod = await loadDetails();
+        setDetailsData(mod.default);
+      } catch (err) {
+        console.error("Failed to load details:", err);
+      } finally {
+        setLoadingDetails(false);
+      }
+    }
+  };
+
+  // Choose which array to read from
+  const whichDetails = isAuthorized ? detailsData : simpleDetails;
 
   return (
     <div className="about-container">
@@ -25,21 +70,23 @@ const AboutUs = () => {
       </div>
 
       {/* Jenkins Controller Box */}
-      <div className={`about-box ${selectedStep !== null ? "expanded" : ""}`}>
-        <div className={`controller-box ${selectedStep !== null ? "expanded" : ""}`}>
+      <div className="about-box">
+        <div className="controller-box">
           <h2>Jenkins controller</h2>
           <p>
-            Jenkins monitors the release branch of the Web repository. Upon detecting a push event, it performs the following actions:
+            Jenkins monitors the release branch of the Web repository. Upon
+            detecting a push event, it performs the following actions:
           </p>
 
           <ul className="jenkins-list">
-            {steps.map((step, index) => (
+            {steps.map((step, idx) => (
               <li
-                key={index}
-                onClick={() => setSelectedStep(index)}
+                key={idx}
+                onClick={() => handleStepClick(idx)}
                 style={{
-                  textDecoration: selectedStep === index ? "underline" : "none",
-                  cursor: "pointer"
+                  textDecoration:
+                    selectedStep === idx ? "underline" : "none",
+                  cursor: "pointer",
                 }}
               >
                 {step}
@@ -50,7 +97,26 @@ const AboutUs = () => {
           {selectedStep !== null && (
             <div className="details-box">
               <h3>Detail</h3>
-              <textarea readOnly rows={8} value={details[selectedStep]} />
+
+              {isAuthorized ? (
+                loadingDetails ? (
+                  <p>Loading full details…</p>
+                ) : detailsData ? (
+                  <textarea
+                    readOnly
+                    rows={8}
+                    value={whichDetails[selectedStep] || ""}
+                  />
+                ) : (
+                  <p>Click again to load details.</p>
+                )
+              ) : (
+                <textarea
+                  readOnly
+                  rows={8}
+                  value={whichDetails[selectedStep]}
+                />
+              )}
             </div>
           )}
         </div>
@@ -79,6 +145,7 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
 
 
 // import React, { useState } from "react";
