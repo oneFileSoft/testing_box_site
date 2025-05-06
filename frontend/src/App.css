@@ -185,8 +185,8 @@ html, body {
   padding: 40px 20px;
   border-radius: 8px;
   margin-top: 20px;
-  min-height: 95vh; /* ✅ dynamic height, allows expansion */
-  max-height: 95vh;
+  min-height: 90vh; /* ✅ dynamic height, allows expansion */
+  max-height: 90vh;
   box-sizing: border-box;
 }
 
