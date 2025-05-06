@@ -47,7 +47,7 @@ const AboutUs = () => {
           {selectedStep !== null && (
             <div className="details-box">
               <h3>Detail</h3>
-              <textarea readOnly rows={6} value={steps[selectedStep]} />
+              <textarea readOnly value={steps[selectedStep]} />
             </div>
           )}
         </div>
