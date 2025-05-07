@@ -217,7 +217,7 @@ pipeline {
   environment {
     PLAYWRIGHT_DIR = 'playwright-tests'
     WEBSITE_DIR = 'website'
-    PLAYWRIGHT_REPORT_DIR = "\${PLAYWRIGHT_DIR}/playwright-report"
+    PLAYWRIGHT_REPORT_DIR = "$ {PLAYWRIGHT_DIR}/playwright-report"
   }
 
   stages {
@@ -226,7 +226,7 @@ pipeline {
         script {
           echo "Starting checkout of repositories..."
 
-          dir("\${WEBSITE_DIR}") {
+          dir("$ {WEBSITE_DIR}") {
             deleteDir()
             git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
                 url: 'https://github.com/oneFileSoft/testing_box_site.git',
@@ -234,7 +234,7 @@ pipeline {
             echo "*************** Website repository checked out successfully ***************"
           }
 
-          dir("\${PLAYWRIGHT_DIR}") {
+          dir("$ {PLAYWRIGHT_DIR}") {
             deleteDir()
             git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
                 url: 'https://github.com/oneFileSoft/testing_box_playwright.git',
@@ -252,14 +252,14 @@ pipeline {
       steps {
         script {
           echo "Creating db.js file with injected credentials..."
-          dir("\${WEBSITE_DIR}/config") {
+          dir("$ {WEBSITE_DIR}/config") {
             writeFile file: 'db.js', text: """
               const mysql = require('mysql2');
 
               const pool = mysql.createPool({
                 host: 'localhost',
-                user: '\${DB_CREDENTIALS_USR}',
-                password: '\${DB_CREDENTIALS_PSW}',
+                user: '$ {DB_CREDENTIALS_USR}',
+                password: '$ {DB_CREDENTIALS_PSW}',
                 database: 'test_DB',
                 port: '3306',
                 waitForConnections: true,
@@ -295,7 +295,7 @@ pipeline {
   environment {
     PLAYWRIGHT_DIR = 'playwright-tests'
     WEBSITE_DIR = 'website'
-    PLAYWRIGHT_REPORT_DIR = "${PLAYWRIGHT_DIR}/playwright-report"
+    PLAYWRIGHT_REPORT_DIR = "$ {PLAYWRIGHT_DIR}/playwright-report"
   }
 
   stages {
@@ -304,7 +304,7 @@ pipeline {
         script {
           echo "Starting checkout of repositories..."
 
-          dir("${WEBSITE_DIR}") {
+          dir("$ {WEBSITE_DIR}") {
             deleteDir()
             git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
                 url: 'https://github.com/oneFileSoft/testing_box_site.git',
@@ -312,7 +312,7 @@ pipeline {
             echo "*************** Website repository checked out successfully ***************"
           }
 
-          dir("${PLAYWRIGHT_DIR}") {
+          dir("$ {PLAYWRIGHT_DIR}") {
             deleteDir()
             git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
                 url: 'https://github.com/oneFileSoft/testing_box_playwright.git',
@@ -330,14 +330,14 @@ pipeline {
       steps {
         script {
           echo "Creating db.js file with injected credentials..."
-          dir("${WEBSITE_DIR}/config") {
+          dir("$ {WEBSITE_DIR}/config") {
             writeFile file: 'db.js', text: """
               const mysql = require('mysql2');
 
               const pool = mysql.createPool({
                 host: 'localhost',
-                user: '${DB_CREDENTIALS_USR}',
-                password: '${DB_CREDENTIALS_PSW}',
+                user: '$ {DB_CREDENTIALS_USR}',
+                password: '$ {DB_CREDENTIALS_PSW}',
                 database: 'test_DB',
                 port: '3306',
                 waitForConnections: true,
@@ -415,7 +415,7 @@ pipeline {
     stage('Start Website on Jenkins Host') {
       steps {
         script {
-          dir("${WEBSITE_DIR}") {
+          dir("$ {WEBSITE_DIR}") {
             sh '''
               cd frontend
               npm install
@@ -451,7 +451,7 @@ pipeline {
     stage('Install Playwright Dependencies') {
       steps {
         script {
-          dir("${PLAYWRIGHT_DIR}") {
+          dir("$ {PLAYWRIGHT_DIR}") {
             sh '''
               npm install --save-dev @playwright/test
               npx playwright install
@@ -468,7 +468,7 @@ pipeline {
 stage('Run Playwright Regression') {
   steps {
     script {
-      dir("${PLAYWRIGHT_DIR}") {
+      dir("$ {PLAYWRIGHT_DIR}") {
 
         // Reusable method for sending the report
         def sendReport = {
@@ -478,22 +478,22 @@ stage('Run Playwright Regression') {
           sleep 5 // ensure file system has flushed report
 
           if (fileExists(reportFile)) {
-            echo "✅ Playwright report found at: ${reportFile}"
+            echo "✅ Playwright report found at: $ {reportFile}"
             sleep 5
             sh """
               curl -X POST https://testingbox.pw/report-api-email \\
                 -F "format=0" \\
                 -F "emailTo=i_slava_i@yahoo.com" \\
-                -F "buildNumb=${env.BUILD_ID}" \\
-                -F "attachment=@${reportFile};type=text/html"
+                -F "buildNumb=$ {env.BUILD_ID}" \\
+                -F "attachment=@$ {reportFile};type=text/html"
             """
           } else {
-            echo "❌ No report file found at ${reportFile}"
+            echo "❌ No report file found at $ {reportFile}"
             def payload = [
               format: "1",
               emailTo: "i_slava_i@yahoo.com",
               message: fallbackMessage,
-              buildNumb: "${env.BUILD_ID}"
+              buildNumb: "$ {env.BUILD_ID}"
             ]
             def emailPayload = groovy.json.JsonOutput.toJson(payload)
             writeFile file: 'payload.json', text: emailPayload
@@ -524,8 +524,8 @@ stage('Run Playwright Regression') {
     stage('Archive Playwright HTML Report') {
       steps {
         script {
-          sh "ls -l ${PLAYWRIGHT_REPORT_DIR} || true"
-          archiveArtifacts artifacts: "${PLAYWRIGHT_REPORT_DIR}/**", fingerprint: true
+          sh "ls -l $ {PLAYWRIGHT_REPORT_DIR} || true"
+          archiveArtifacts artifacts: "$ {PLAYWRIGHT_REPORT_DIR}/**", fingerprint: true
         }
       }
     }
@@ -570,11 +570,11 @@ post {
 
       withCredentials([usernamePassword(credentialsId: 'credentialId_ForFetchingConsoleLog', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
         def consoleLog = sh(
-          script: "curl -s --user \"$USERNAME:$PASSWORD\" \"${env.BUILD_URL}consoleText\"",
+          script: "curl -s --user \"$ USERNAME:$ PASSWORD\" \"$ {env.BUILD_URL}consoleText\"",
           returnStdout: true
         ).trim()
-        echo "✅ Raw console log size: ${consoleLog.length()} bytes"
-        def escapedLog = "Build# ${env.BUILD_ID} " + consoleLog
+        echo "✅ Raw console log size: $ {consoleLog.length()} bytes"
+        def escapedLog = "Build# $ {env.BUILD_ID} " + consoleLog
           .replace("\\", "\\\\")
           .replace("\"", "\\\"")
           .replace("\n", "\\n")
@@ -590,29 +590,29 @@ post {
           .replace("[Pipeline] echo", "")
         def gzippedConsoleLog = gzip(escapedLog)
         def encodedConsoleLog = encode64(gzippedConsoleLog)
-        echo "✅ Gzipped+Base64 ConsoleLog size: ${encodedConsoleLog.length()} chars"
+        echo "✅ Gzipped+Base64 ConsoleLog size: $ {encodedConsoleLog.length()} chars"
 
 
-        def htmlReportPath = "${env.PLAYWRIGHT_REPORT_DIR}/index.html"
+        def htmlReportPath = "$ {env.PLAYWRIGHT_REPORT_DIR}/index.html"
         def encodedHtmlContent = ""
         if (fileExists(htmlReportPath)) {
           def htmlContent = readFile(file: htmlReportPath)
-          echo "✅ Raw HTML report size: ${htmlContent.length()} bytes"
+          echo "✅ Raw HTML report size: $ {htmlContent.length()} bytes"
           def gzippedHtmlContent = gzip(htmlContent)
           encodedHtmlContent = encode64(gzippedHtmlContent)
         }  else {
             encodedHtmlContent = encode64(gzip("<html>Reggression was skipped...</html>"))
         }
-        echo "✅ Gzipped+Base64 HTML size: ${encodedHtmlContent.length()} chars"
+        echo "✅ Gzipped+Base64 HTML size: $ {encodedHtmlContent.length()} chars"
 
 
       def theStatus = (currentBuild.result == null || currentBuild.result == 'SUCCESS')
       def jsonPayload = """
             {
-              "buildId": "${env.BUILD_ID}",
-              "status": ${theStatus},
-              "html": "${encodedHtmlContent}",
-              "consol": "${encodedConsoleLog}"
+              "buildId": "$ {env.BUILD_ID}",
+              "status": $ {theStatus},
+              "html": "$ {encodedHtmlContent}",
+              "consol": "$ {encodedConsoleLog}"
             }
 
           """
@@ -627,8 +627,8 @@ post {
       }
 
       sh "pkill -f 'node server.js' || true"
-      sh "rm -rf ${PLAYWRIGHT_DIR}/node_modules ${WEBSITE_DIR}/node_modules"
-      sh "rm -rf ${PLAYWRIGHT_REPORT_DIR}"
+      sh "rm -rf $ {PLAYWRIGHT_DIR}/node_modules $ {WEBSITE_DIR}/node_modules"
+      sh "rm -rf $ {PLAYWRIGHT_REPORT_DIR}"
       echo "*************** Cleaned up environment ***************"
   }
 }
@@ -660,7 +660,7 @@ pipeline {
   environment {
     PLAYWRIGHT_DIR = 'playwright-tests'
     WEBSITE_DIR = 'website'
-    PLAYWRIGHT_REPORT_DIR = "${PLAYWRIGHT_DIR}/playwright-report"
+    PLAYWRIGHT_REPORT_DIR = "$ {PLAYWRIGHT_DIR}/playwright-report"
   }
 
   stages {
@@ -669,7 +669,7 @@ pipeline {
         script {
           echo "Starting checkout of repositories..."
 
-          dir("${WEBSITE_DIR}") {
+          dir("$ {WEBSITE_DIR}") {
             deleteDir()
             git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
                 url: 'https://github.com/oneFileSoft/testing_box_site.git',
@@ -677,7 +677,7 @@ pipeline {
             echo "*************** Website repository checked out successfully ***************"
           }
 
-          dir("${PLAYWRIGHT_DIR}") {
+          dir("$ {PLAYWRIGHT_DIR}") {
             deleteDir()
             git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
                 url: 'https://github.com/oneFileSoft/testing_box_playwright.git',
@@ -695,14 +695,14 @@ pipeline {
       steps {
         script {
           echo "Creating db.js file with injected credentials..."
-          dir("${WEBSITE_DIR}/config") {
+          dir("$ {WEBSITE_DIR}/config") {
             writeFile file: 'db.js', text: """
               const mysql = require('mysql2');
 
               const pool = mysql.createPool({
                 host: 'localhost',
-                user: '${DB_CREDENTIALS_USR}',
-                password: '${DB_CREDENTIALS_PSW}',
+                user: '$ {DB_CREDENTIALS_USR}',
+                password: '$ {DB_CREDENTIALS_PSW}',
                 database: 'test_DB',
                 port: '3306',
                 waitForConnections: true,
@@ -780,7 +780,7 @@ pipeline {
     stage('Start Website on Jenkins Host') {
       steps {
         script {
-          dir("${WEBSITE_DIR}") {
+          dir("$ {WEBSITE_DIR}") {
             sh '''
               cd frontend
               npm install
@@ -816,7 +816,7 @@ pipeline {
     stage('Install Playwright Dependencies') {
       steps {
         script {
-          dir("${PLAYWRIGHT_DIR}") {
+          dir("$ {PLAYWRIGHT_DIR}") {
             sh '''
               npm install --save-dev @playwright/test
               npx playwright install
@@ -833,7 +833,7 @@ pipeline {
     stage('Run Playwright Regression') {
       steps {
         script {
-          dir("${PLAYWRIGHT_DIR}") {
+          dir("$ {PLAYWRIGHT_DIR}") {
 
             def sendReport = {
               def reportFile = "playwright-report/index.html"
@@ -842,22 +842,22 @@ pipeline {
               sleep 5 // ensure file system has flushed report
 
               if (fileExists(reportFile)) {
-                echo "✅ Playwright report found at: ${reportFile}"
+                echo "✅ Playwright report found at: $ {reportFile}"
                 sleep 5
                 sh """
                   curl -X POST https://testingbox.pw/report-api-email \\
                     -F "format=0" \\
                     -F "emailTo=i_slava_i@yahoo.com" \\
-                    -F "buildNumb=${env.BUILD_ID}" \\
-                    -F "attachment=@${reportFile};type=text/html"
+                    -F "buildNumb=$ {env.BUILD_ID}" \\
+                    -F "attachment=@$ {reportFile};type=text/html"
                 """
               } else {
-                echo "❌ No report file found at ${reportFile}"
+                echo "❌ No report file found at $ {reportFile}"
                 def payload = [
                   format: "1",
                   emailTo: "i_slava_i@yahoo.com",
                   message: fallbackMessage,
-                  buildNumb: "${env.BUILD_ID}"
+                  buildNumb: "$ {env.BUILD_ID}"
                 ]
                 def emailPayload = groovy.json.JsonOutput.toJson(payload)
                 writeFile file: 'payload.json', text: emailPayload
@@ -886,8 +886,8 @@ pipeline {
     stage('Archive Playwright HTML Report') {
       steps {
         script {
-          sh "ls -l ${PLAYWRIGHT_REPORT_DIR} || true"
-          archiveArtifacts artifacts: "${PLAYWRIGHT_REPORT_DIR}/**", fingerprint: true
+          sh "ls -l $ {PLAYWRIGHT_REPORT_DIR} || true"
+          archiveArtifacts artifacts: "$ {PLAYWRIGHT_REPORT_DIR}/**", fingerprint: true
         }
       }
     }
@@ -930,11 +930,11 @@ pipeline {
 
         withCredentials([usernamePassword(credentialsId: 'credentialId_ForFetchingConsoleLog', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
           def consoleLog = sh(
-            script: "curl -s --user \"$USERNAME:$PASSWORD\" \"${env.BUILD_URL}consoleText\"",
+            script: "curl -s --user \"$ USERNAME:$ PASSWORD\" \"$ {env.BUILD_URL}consoleText\"",
             returnStdout: true
           ).trim()
-          echo "✅ Raw console log size: ${consoleLog.length()} bytes"
-          def escapedLog = "Build# ${env.BUILD_ID} " + consoleLog
+          echo "✅ Raw console log size: $ { consoleLog.length()} bytes"
+          def escapedLog = "Build# $ {env.BUILD_ID} " + consoleLog
             .replace("\\", "\\\\")
             .replace("\"", "\\\"")
             .replace("\n", "\\n")
@@ -950,27 +950,27 @@ pipeline {
             .replace("[Pipeline] echo", "")
           def gzippedConsoleLog = gzip(escapedLog)
           def encodedConsoleLog = encode64(gzippedConsoleLog)
-          echo "✅ Gzipped+Base64 ConsoleLog size: ${encodedConsoleLog.length()} chars"
+          echo "✅ Gzipped+Base64 ConsoleLog size: $ {encodedConsoleLog.length()} chars"
 
-          def htmlReportPath = "${env.PLAYWRIGHT_REPORT_DIR}/index.html"
+          def htmlReportPath = "$ {env.PLAYWRIGHT_REPORT_DIR}/index.html"
           def encodedHtmlContent = ""
           if (fileExists(htmlReportPath)) {
             def htmlContent = readFile(file: htmlReportPath)
-            echo "✅ Raw HTML report size: ${htmlContent.length()} bytes"
+            echo "✅ Raw HTML report size: $ {htmlContent.length()} bytes"
             def gzippedHtmlContent = gzip(htmlContent)
             encodedHtmlContent = encode64(gzippedHtmlContent)
           }  else {
             encodedHtmlContent = encode64(gzip("<html>Reggression was skipped...</html>"))
           }
-          echo "✅ Gzipped+Base64 HTML size: ${encodedHtmlContent.length()} chars"
+          echo "✅ Gzipped+Base64 HTML size: $ {encodedHtmlContent.length()} chars"
 
           def theStatus = (currentBuild.result == null || currentBuild.result == 'SUCCESS')
           def jsonPayload = """
             {
-              "buildId": "${env.BUILD_ID}",
-              "status": ${theStatus},
-              "html": "${encodedHtmlContent}",
-              "consol": "${encodedConsoleLog}"
+              "buildId": "$ {env.BUILD_ID}",
+              "status": $ {theStatus},
+              "html": "$ {encodedHtmlContent}",
+              "consol": "$ {encodedConsoleLog}"
             }
           """
           httpRequest(
@@ -984,8 +984,8 @@ pipeline {
         }
 
         sh "pkill -f 'node server.js' || true"
-        sh "rm -rf ${PLAYWRIGHT_DIR}/node_modules ${WEBSITE_DIR}/node_modules"
-        sh "rm -rf ${PLAYWRIGHT_REPORT_DIR}"
+        sh "rm -rf $ {PLAYWRIGHT_DIR}/node_modules $ {WEBSITE_DIR}/node_modules"
+        sh "rm -rf $ {PLAYWRIGHT_REPORT_DIR}"
         echo "*************** Cleaned up environment ***************"
       }
     }
