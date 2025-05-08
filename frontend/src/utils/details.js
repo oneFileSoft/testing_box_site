@@ -733,7 +733,7 @@ async function findMatchInDataSet(request, endpoint, dataKey, fieldName, expecte
   console.log("  --- checking if "+dataKey+"."+fieldName+" contain: " + expectedValue);
   console.log("  --- Number of " + dataKey +" = " + records.length);
   const found = records.some(item => item[fieldName] === expectedValue);
-  console.log("  --- ExpectedValue(${expectedValue}) found in ${dataKey}.${fieldName} = ${found}");
+  console.log("  --- ExpectedValue($ {expectedValue}) found in $ {dataKey}.$ {fieldName} = $ {found}");
   let arrAdditionals = [];
   if (additionalKeyValuesToPrint !== undefined) {
        arrAdditionals = additionalKeyValuesToPrint.split(",");
@@ -750,7 +750,7 @@ async function findMatchInDataSet(request, endpoint, dataKey, fieldName, expecte
 //res.status(200).json({ success: true, message: "User expenses include " + transDescr + " for the amount + " + transTotal + " inserted successfully!"
 test('Api test --- INSERT(Post) - GET(get) - DELETE(Delete) by GIU', async ({ page, request }) => {
   let generatedId = 0;
-  const myNumb = parseFloat("{utils.getRandomInt()}.${utils.getRandomInt()}");
+  const myNumb = parseFloat("{utils.getRandomInt()}.$ {utils.getRandomInt()}");
   const transDecr = "Test from Playwright " + myNumb;
   await page.evaluate(() => sessionStorage.clear());
   await findMatchInDataSet(request, "/getExpenses?userId=45", "expenses", "transDescr", transDecr);
@@ -864,7 +864,7 @@ test('Api test --- INSERT(Post) - GET(get) - DELETE(Delete) by GIU', async ({ pa
       let tries = 0;
       while (!foundDecription && tries < 10) {
         const activityTexts = await page.locator('tr td:first-child').allTextContents();
-        console.log("[Try #${tries}] Found rows:" + activityTexts);
+        console.log("[Try #$ {tries}] Found rows:" + activityTexts);
         if (activityTexts.includes(transDecr)) {
           console.log("✅ Found inserted description: " + transDecr);
           foundDecription = true;
@@ -933,7 +933,7 @@ test('Api test --- INSERT(Post) - GET(get) - DELETE(Delete) by GIU', async ({ pa
         // await page.getByRole('row', { name: 'Test from Playwright 35.19 35' }).getByRole('button').click();
         // await page.locator('tr').filter({ hasText: transDecr }).locator('button').click();
         // await page.locator('tr:has-text("Test from Playwright 35.19")').locator('button').click();
-        await page.locator("bendedComa"tr:has-text("${transDecr}")"bendedComa").locator('button').click();
+        await page.locator("bendedComa"tr:has-text("$ {transDecr}")"bendedComa").locator('button').click();
         break;
       }
     }
@@ -984,7 +984,7 @@ test('Api test --- INSERT(Post) - GET(get) - DELETE(Delete) by GIU', async ({ pa
 /////e2e-api
 test('Api test --- INSERT(Post) - GET(get) - DELETE(Delete) by API', async ({ page, request }) => {
   let generatedId = 0;
-  const myNumb = parseFloat("bendedComa"${utils.getRandomInt()}.${utils.getRandomInt()}"bendedComa");
+  const myNumb = parseFloat("bendedComa"$ {utils.getRandomInt()}.$ {utils.getRandomInt()}"bendedComa");
   const transDecr = "Test from Playwright " + myNumb;
 
   await test.step("step#1: INSERT new activities by API", async() => {
