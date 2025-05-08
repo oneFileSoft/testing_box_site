@@ -1520,6 +1520,209 @@ pipeline {
   }
 }
 
+
+////////////////////////////////////////////////////////
+///////////////// example of class /////////////////////
+////////////////////////////////////////////////////////
+
+in the folder /page_classes/ I have 2 classes:
+
+*******************   loginPageClass.js:
+export class My_LogInPage {
+
+    constructor(page, url) {
+        this.pom_page = page;
+        this.pom_url = url === undefined? 'https://freelance-learn-automation.vercel.app/login': url;
+        this.pom_username = '#email1';
+        this.pom_password = "//input[@id='password1']"; // can be '#password1' too!
+        this.pom_btn_signIn = "button[type='submit']";
+        this.pom_manage_button ="//span[normalize-space()='Manage']";
+    }
+
+    async logIntoApp(user, password) {
+        await this.pom_page.goto(this.pom_url);
+        await this.pom_page.waitForLoadState();
+        // await this.pom_page.fill(this.pom_username, "admin@email.com"); //old , but supported
+        // await this.pom_page.fill(this.pom_password, "admin@123");
+        // await this.pom_page.click(this.pom_btn_signIn);
+        if (user === undefined) {
+            user = "admin@email.com"
+        }
+        if (password === undefined) {
+            password = "admin@123"
+        }
+        await this.pom_page.locator(this.pom_username).fill(user); // ✅ Use locator
+        await this.pom_page.locator(this.pom_password).fill(password); // ✅ Use locator
+        await this.pom_page.locator(this.pom_btn_signIn).click(); // ✅ Use locator
+    }
+    async getManageButton() {
+        // await this.pom_page.locator(this.pom_manage_button).waitFor();
+        return this.pom_page.locator(this.pom_manage_button);
+    }
+}
+
+
+
+********************  and  logOutClass.js:
+import { expect } from "playwright/test";
+
+export class My_LogOutProfile {
+
+    constructor(page) {
+        this.pom_page = page;
+        this.pom_header_text = "//h1[normalize-space()='Learn Automation Courses']";
+        this.pom_menu_icon = "//img[@alt='menu']";
+        this.pom_btn_signOut = "button[class='nav-menu-item']";
+        this.pom_localStorage = '';
+    }
+
+    async checkHeader() {
+        await this.pom_page.locator(this.pom_header_text).waitFor();
+        return await this.pom_page.locator(this.pom_header_text).textContent();
+    }
+
+    async logOutProfile() {
+        await this.pom_page.locator(this.pom_menu_icon).click();
+        await this.pom_page.locator(this.pom_menu_icon).waitFor(); // wait's for appiarance
+        await this.pom_page.locator(this.pom_btn_signOut).click();
+    }
+
+    async addToCart() {
+        await this.pom_page.getByText('Add to Cart').first().click();
+    }
+
+    async checkCart_numberItems(number) {
+        const cartButton = this.pom_page.locator('.cartBtn');
+        if (number == 0) {
+            await expect (this.pom_page.locator('.count')).toBeHidden();
+        } else {
+            if (await cartButton.isVisible()) { // ✅ Ensure the cart button is visible
+                const countLocator = this.pom_page.locator('.count');
+
+                // ✅ Wait for the element to be visible before getting text
+                await countLocator.waitFor({ state: 'visible' });
+
+                const numberOfItems = await countLocator.innerText();
+                expect(numberOfItems.toString()).toBe(number.toString());
+                expect(numberOfItems !== undefined && numberOfItems.toString() === number.toString());
+            } else {
+                throw new Error("Cart button is not visible, cannot check item count");
+            }
+        }
+    }
+
+    async getValueOfLocalStorage(key) {
+        this.pom_localStorage = await this.pom_page.evaluate((key) => {
+            const value = localStorage.getItem(key);
+            return value ? value.toString() : null;
+        }, key);
+        return this.pom_localStorage;
+    }
+
+    async getSpecificTagFromBody(keyInBody) {
+        if (!this.pom_localStorage) {
+            throw new Error("Local storage value is empty. Ensure it's fetched before calling this method.");
+        }
+        const body = JSON.parse(this.pom_localStorage);
+        return body[keyInBody];
+    }
+
+    async removeItem() {
+        await this.pom_page.getByRole('button', { name: 'Remove from Cart' }).click()
+        expect (await this.pom_page.getByRole('button', { name: 'Remove from Cart' })).toBeVisible ;
+    }
+}
+
+
+
+
+**********************  in the tests/logOutFromClass.spec.js, I'm showing usage of classes:
+import { test, expect } from '@playwright/test';
+import {My_LogInPage} from '../pages__classes/loginPageClass';
+import {My_LogOutProfile} from '../pages__classes/logOutClass';
+
+test('logingOut from usage of class', async ({ page }) => {
+  const loginPage = new My_LogInPage(page); // Pass Playwright page instance, inside of class it instantiate URL
+  await loginPage.logIntoApp("admin@email.com", "admin@123"); // Call the login method
+  const manageButton = await loginPage.getManageButton(); // ✅  using returnable method from class
+  expect (manageButton).toBeVisible();
+
+  const logOut = new My_LogOutProfile(page);
+  const headerText = await logOut.checkHeader()
+  expect (headerText.includes("Automation Courses")).toBeTruthy();
+  await logOut.logOutProfile()
+  await expect(manageButton).toBeHidden();
+  page.pause();
+});
+
+
+
+
+/////////////   example of fixtures
+
+*******************in the folder /fixtures/ I have a file fixture_log_in.js:
+import { test as baseTest } from '@playwright/test';
+import { My_LogInPage } from '../pages__classes/loginPageClass';
+
+export const login_procedure = baseTest.extend({
+    authenticatedPage: async ({ page }, use) => {
+        const loginPage = new My_LogInPage(page);
+        await loginPage.logIntoApp();
+        await use(loginPage); // ✅ Passes the instance of My_LogInPage to the test
+    }
+});
+
+
+and this is example of how can I use pure class and fixture, in the test
+******************** log_Out_classAndFixtures_localStorage.spec.js:
+import { test, expect } from '@playwright/test'; // ✅ Import Playwright's default 'test' used in 1st case
+import { login_procedure } from '../fixtures/fixture_log_in'; //    using in second case
+import { My_LogInPage } from '../pages__classes/loginPageClass';
+import { My_LogOutProfile } from '../pages__classes/logOutClass';
+
+test('Logging out using class', async ({ page }) => {
+    const loginPage = new My_LogInPage(page);
+    await loginPage.logIntoApp("admin@email.com", "admin@123");
+
+    const manageButton = await loginPage.getManageButton();
+    await expect(manageButton).toBeVisible();
+
+    const logOut = new My_LogOutProfile(page);
+    const headerText = await logOut.checkHeader();
+    expect(headerText.includes("Automation Courses")).toBeTruthy();
+
+    await logOut.logOutProfile();
+    await expect(manageButton).toBeHidden();
+});
+
+// ✅ Use login_procedure directly, and in the end, it return current PAGE
+login_procedure('Add Item to the cart', async ({ authenticatedPage }) => {
+    const manageButton = await authenticatedPage.getManageButton();
+    await expect(manageButton).toBeVisible();
+    await expect(manageButton.isVisible()).toBeTruthy();
+    await expect(authenticatedPage.pom_page).toHaveURL(/freelance-learn-automation.vercel/);
+
+    const profilePage = new My_LogOutProfile(authenticatedPage.pom_page);
+    let cartValueFromLocalStorage = await profilePage.getValueOfLocalStorage("cart");
+    // console.log("Before adding to the cart, expected 'null' cause 'cart' not been created " + cartValueFromLocalStorage);
+    expect (cartValueFromLocalStorage === null);
+    await profilePage.addToCart();
+    await profilePage.checkCart_numberItems(1);
+
+    const nameOfAddedBook = await profilePage.pom_page.locator('.name').first().innerText();
+    console.log(" name been added: " + nameOfAddedBook)
+
+    await profilePage.getValueOfLocalStorage("cart"); // now cart has '[..... description:"XXXX", .....]
+    const valueFromLocalStorage = await profilePage.getSpecificTagFromBody('description');
+    expect (nameOfAddedBook == valueFromLocalStorage) ;
+
+
+    await profilePage.removeItem();
+    await profilePage.checkCart_numberItems(0);
+    await profilePage.logOutProfile();
+    await expect(manageButton).toBeHidden();
+});
+
   `
 ];
 export default details;
