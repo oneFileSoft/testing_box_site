@@ -731,7 +731,7 @@ async function findMatchInDataSet(request, endpoint, dataKey, fieldName, expecte
   console.log("  --- "+confirmBody.toString());
   const records = confirmBody[dataKey];
   console.log("  --- checking if "+dataKey+"."+fieldName+" contain: " + expectedValue);
-  console.log("  --- Number of ${dataKey} = ${records.length}");
+  console.log("  --- Number of " + dataKey +" = " + records.length);
   const found = records.some(item => item[fieldName] === expectedValue);
   console.log("  --- ExpectedValue(${expectedValue}) found in ${dataKey}.${fieldName} = ${found}");
   let arrAdditionals = [];
