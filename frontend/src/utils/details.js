@@ -446,11 +446,11 @@ test('Prevention of Submit of Email, with all empty fields', async ({ page }) =>
   test('Successfull Email send', async ({ page }) => {
     console.log("Filling required fielsd (all *), and selecting specific Email-To from combo-box");
     console.log("All available options: " +
-                `<select name="email" value={formData.email} onChange={handleChange} onBlur={handleBlur} className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ width: "100%" }}>
+                "<select name="email" value={formData.email} onChange={handleChange} onBlur={handleBlur} className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ width: "100%" }}>
                    <option value="test@testingbox.pw">General box: contact us</option>
                    <option value="jenkins_agent@testingbox.pw"> Company Management </option>
                    <option value="i_slava_i@yahoo.com"> Technical Support </option>
-                </select>`);
+                </select>");
     const fName = "J" + utils.getRandomInt() + "J";
     await page.locator('input[name="firstName"]').fill(fName);
     const lName = "S" + utils.getRandomInt() + "S"
