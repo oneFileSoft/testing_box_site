@@ -1364,13 +1364,49 @@ login_procedure('Add Item to the cart', async ({ authenticatedPage }) => {
     const valueFromLocalStorage = await profilePage.getSpecificTagFromBody('description');
     expect (nameOfAddedBook == valueFromLocalStorage).toBe(true) ;
 
-
     await profilePage.removeItem();
     await profilePage.checkCart_numberItems(0);
     await profilePage.logOutProfile();
     await expect(manageButton).toBeHidden();
 });
 
+   ****************************************************************************************************
+   ****************************************************************************************************
+   ****************************************************************************************************
+   ***************************************** just javaScript ******************************************
+   ****************************************************************************************************
+
+    function fetchData() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const data = "This text returned from fetchData() method after 2 sec";
+                resolve(data); // Simulate successful data fetch
+            }, 2000); // Simulating a delay of 2 seconds
+        });
+    }
+
+    async function fetchAndPrintCrypto() {
+        console.log("---------start method-----------");
+        const response = await fetchData();
+        console.log("Received from fetchData():", response);
+        console.log("---------end method-----------");
+    }
+    fetchAndPrintCrypto(); // usage of await
+    console.log('{{{{{{}}}}}}')
+    ===============================
+    output:
+    ---------start method-----------
+    {{{{{{}}}}}}
+    Received from fetchData(): This text returned from fetchData() method after 2 sec
+    ---------end method-----------
+
+
+         if I'll add -> await fetchAndPrintCrypto();
+    output:
+    ---------start method-----------
+    Received from fetchData(): This text returned from fetchData() method after 2 sec
+    ---------end method-----------
+    {{{{{{}}}}}}
    ****************************************************************************************************
    ****************************************************************************************************
    ****************************************************************************************************
