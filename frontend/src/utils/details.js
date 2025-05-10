@@ -1384,14 +1384,13 @@ login_procedure('Add Item to the cart', async ({ authenticatedPage }) => {
             }, 2000); // Simulating a delay of 2 seconds
         });
     }
-
     async function fetchAndPrintCrypto() {
         console.log("---------start method-----------");
         const response = await fetchData();
         console.log("Received from fetchData():", response);
         console.log("---------end method-----------");
     }
-    fetchAndPrintCrypto(); // usage of await
+    fetchAndPrintCrypto();       /////////////////// usage without await
     console.log('{{{{{{}}}}}}')
     ===============================
     output:
@@ -1400,13 +1399,66 @@ login_procedure('Add Item to the cart', async ({ authenticatedPage }) => {
     Received from fetchData(): This text returned from fetchData() method after 2 sec
     ---------end method-----------
 
-
-         if I'll add -> await fetchAndPrintCrypto();
+    await fetchAndPrintCrypto(); /////////////////// usage with await
     output:
     ---------start method-----------
     Received from fetchData(): This text returned from fetchData() method after 2 sec
     ---------end method-----------
     {{{{{{}}}}}}
+
+
+    import { randomBytes } from 'crypto';
+    function fetchDataCrypto() {
+        return new Promise((resolve, reject) => {
+            randomBytes(16, (err, buffer) => {
+                if (err) reject(err);
+                resolve("Hello, this is your data: " + buffer.toString('hex'));
+            });
+        });
+    }
+    console.log("******* ", await fetchDataCrypto());
+
+
+
+    console.log("----------------------------------------------------")
+    let jsn = '{"name": "Vaca", "age": 20,"job": "teacher"}';
+    let javaScritpObj = JSON.parse(jsn);
+    console.log("whole jsn text: " + jsn);
+    console.log("parsed values: " + javaScritpObj.name + " " + javaScritpObj.age + " " + javaScritpObj.job );
+    console.log("whole javaScritpObj: " + javaScritpObj);
+    console.log("----------------------------------------------------")
+
+    output: --------------------------------------------
+    whole jsn text: {"name": "Vaca", "age": 20,"job": "teacher"}
+    parsed values: Vaca 20 teacher
+    whole javaScritpObj: [object Object]
+    ----------------------------------------------------
+
+
+    function printUsers(data) {
+        let jsonObj;
+        if (typeof data === "string") { jsonObj = JSON.parse(data); }
+        else if (typeof data === "object" && data !== null) {  jsonObj = data; }
+        jsonObj.users.forEach(usr => {
+            console.log("--user-- : " + usr.name + " " + usr.age + " "+usr.job)
+        });
+        return jsonObj;
+    }
+    let rawJsonText = '{"users":[{"name": "Vaca", "age": 20,"job": "teacher"}, {"name": "Ola", "age": 10,"job": "kid"}]}';
+    let jsn = printUsers(rawJsonText);
+    console.log("new Users array after adding one more User");
+    const newUser =  { name:"Slava", age: 18, job: "living" }
+    jsn.users.push(newUser);
+    printUsers(jsn);
+
+    output:
+    --user-- : Vaca 20 teacher
+    --user-- : Ola 10 kid
+    new Users array after adding one more User
+    --user-- : Vaca 20 teacher
+    --user-- : Ola 10 kid
+    --user-- : Slava 18 living
+
    ****************************************************************************************************
    ****************************************************************************************************
    ****************************************************************************************************
