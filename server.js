@@ -67,35 +67,43 @@ app.use('/api', getRegrRecords);
 
 
 app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
-  const { format, emailTo, buildNumb } = req.body;
+  const { format, emailTo, buildNumb, subject } = req.body;
   const attachmentFile = req.file;
 
   if ((!format && format !== "0") || !emailTo || !buildNumb) {
-    return res.status(400).json({ success: false, message: 'All fields are required got format[' + format+'] emaiTo['+emailTo+'] buidNumb['+buidNumb+']'  });
+    return res.status(400).json({
+      success: false,
+      message: `All fields are required: format[${format}] emailTo[${emailTo}] buildNumb[${buildNumb}]`
+    });
   }
- ////// server233.web-hosting.com   mail.privateemail.com
+
   try {
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       host: 'mail.privateemail.com',
       port: 465,
       secure: true,
       service: 'namecheap',
-      auth: { user: 'test@testingbox.pw', pass: 'zdr6^$rfv' }
+      auth: {
+        user: 'test@testingbox.pw',
+        pass: 'zdr6^$rfv'
+      }
     });
+
     await transporter.verify();
-    let mailOptions = {
+
+    const mailOptions = {
       from: 'test@testingbox.pw',
       to: emailTo,
-      subject: `Build#${buildNumb} - RegressionReport`,
-      text: "Attached is the latest Playwright regression report.",
+      subject: subject || `Build#${buildNumb} - RegressionReport`,
+      text: 'Attached is the latest regression report.',
       attachments: []
     };
 
     if (format === "0" && attachmentFile) {
       mailOptions.attachments.push({
-        filename: `PlaywrightReport_Build${buildNumb}.html`,
+        filename: attachmentFile.originalname || `Report_Build${buildNumb}.html`,
         content: attachmentFile.buffer,
-        contentType: 'text/html'
+        contentType: attachmentFile.mimetype || 'text/html'
       });
     } else {
       mailOptions.text = req.body.message || mailOptions.text;
@@ -109,8 +117,11 @@ app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
       mailInfo: info
     });
   } catch (error) {
-    console.error("Error sending email: ", error);
-    return res.status(500).json({ success: false, message: 'Error: ' + error.message });
+    console.error("Error sending email:", error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error: ' + error.message
+    });
   }
 });
 // not sure why but this workd one, and the it stop
