@@ -96,6 +96,7 @@ app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
       to: emailTo,
       subject: subject || `Build#${buildNumb} - RegressionReport`,
       text: 'Attached is the latest regression report.',
+      date: new Date(), // Force mail header to current time
       attachments: []
     };
 
