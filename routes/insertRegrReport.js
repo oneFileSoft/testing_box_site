@@ -25,7 +25,7 @@ router.post('/insertRegrReport', async (req, res) => {
     const consolBuffer = Buffer.from(consol, 'base64');
     const jmeterBuffer = Buffer.from(jmeterreport, 'base64');
 
-    const insertQuery = `INSERT INTO regr (buildId, status, html, consol, jmeterBuffer) VALUES (?, ?, ?, ?)`;
+    const insertQuery = `INSERT INTO regr (buildId, status, html, consol, jmeterreport) VALUES (?, ?, ?, ?)`;
     const values = [buildId, status, htmlBuffer, consolBuffer, jmeterBuffer];
     const [result] = await pool.query(insertQuery, values);
 
