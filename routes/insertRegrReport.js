@@ -3,7 +3,7 @@ const pool = require('../config/db');
 const router = express.Router();
 
 router.post('/insertRegrReport', async (req, res) => {
-  const { buildId, status, html, consol } = req.body;
+  const { buildId, status, html, consol, jmeterreport } = req.body;
 
   // Basic validation
   if (!buildId || typeof status !== 'boolean' || !html || !consol) {
@@ -23,9 +23,10 @@ router.post('/insertRegrReport', async (req, res) => {
     // Decode Base64 into binary buffer (but still gzipped)
     const htmlBuffer = Buffer.from(html, 'base64');
     const consolBuffer = Buffer.from(consol, 'base64');
+    const jmeterBuffer = Buffer.from(jmeterreport, 'base64');
 
-    const insertQuery = `INSERT INTO regr (buildId, status, html, consol) VALUES (?, ?, ?, ?)`;
-    const values = [buildId, status, htmlBuffer, consolBuffer];
+    const insertQuery = `INSERT INTO regr (buildId, status, html, consol, jmeterBuffer) VALUES (?, ?, ?, ?)`;
+    const values = [buildId, status, htmlBuffer, consolBuffer, jmeterBuffer];
     const [result] = await pool.query(insertQuery, values);
 
     if (result.affectedRows === 1) {
