@@ -86,7 +86,10 @@ app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
       auth: {
         user: 'test@testingbox.pw',
         pass: 'zdr6^$rfv'
-      }
+      },
+        connectionTimeout: 5000, // 3 of then for speeding by forcing for short retry
+        greetingTimeout: 5000,
+        socketTimeout: 10000
     });
 
     await transporter.verify();
