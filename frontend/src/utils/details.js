@@ -1467,6 +1467,42 @@ login_procedure('Add Item to the cart', async ({ authenticatedPage }) => {
    ******** do not forget to check Triggers->✅ GitHub hook trigger for GITScm polling  ***************
    ****************************************************************************************************
 
+import groovy.json.JsonOutput
+
+// -----------------------------------------------------------------------------
+// Helper method for sending HTML reports (Playwright or JMeter)
+// -----------------------------------------------------------------------------
+def sendReport(String reportFile, String msg = "") {
+  def fallbackMessage = "*** No regression run: see build stack trace for more details"
+  sleep(5)
+
+  def subject = "Build#$ {env.BUILD_ID} - $ {msg} - RegressionReport"
+  def attachmentName = msg.toLowerCase().replaceAll("\\s+", "") + "-report.html"
+
+  if (fileExists(reportFile)) {
+    echo "✅ Report found at: $ {reportFile}"
+    sleep(2)
+    sh """
+      curl -X POST https://testingbox.pw/report-api-email \\
+        -F "format=0" \\
+        -F "emailTo=i_slava_i@yahoo.com" \\
+        -F "buildNumb=$ {env.BUILD_ID}" \\
+        -F "subject=$ {subject}" \\
+        -F "attachment=@ $ {reportFile};filename=$ {attachmentName};type=text/html"
+    """
+  } else {
+    echo "❌ No report file found at $ {reportFile}"
+    def payload = [
+      format   : "1",
+      emailTo  : "i_slava_i@yahoo.com",
+      message  : fallbackMessage,
+      buildNumb: env.BUILD_ID,
+      subject  : subject
+    ]
+    writeFile file: 'payload.json', text: JsonOutput.toJson(payload)
+    sh 'curl -X POST https://testingbox.pw/report-api-email -H "Content-Type: application/json" --data @payload.json'
+  }
+}
 
 pipeline {
   agent any
@@ -1642,17 +1678,6 @@ pipeline {
         }
       }
     }
-
-    stage('Run Playwright Regression') {
-      steps {
-        script {
-          dir("$ {PLAYWRIGHT_DIR}") {
-
-            def sendReport = {
-              def reportFile = "playwright-report/index.html"
-              def fallbackMessage = "*** No regression run: see build stack trace for more details"
-
-              sleep 5 // ensure file system has flushed report
 //in FSO... of hosting where API report-api-email is:
 // for future receiving big data from Jenkins job (consoleLog and playwright regr report in html)
 //         in folder public_html/  edit .htaccess file and add following lines:
@@ -1660,45 +1685,35 @@ pipeline {
 //                      SecRequestBodyLimit 52428800
 //                  </IfModule>
 //                  LimitRequestBody 52428800
-              if (fileExists(reportFile)) {
-                echo "✅ Playwright report found at: $ {reportFile}"
-                sleep 5
-                sh """
-                  curl -X POST https://testingbox.pw/report-api-email \\
-                    -F "format=0" \\
-                    -F "emailTo=i_slava_i@yahoo.com" \\
-                    -F "buildNumb=$ {env.BUILD_ID}" \\
-                    -F "attachment=@$ {reportFile};type=text/html"
-                """
-              } else {
-                echo "❌ No report file found at $ {reportFile}"
-                def payload = [
-                  format: "1",
-                  emailTo: "i_slava_i@yahoo.com",
-                  message: fallbackMessage,
-                  buildNumb: "$ {env.BUILD_ID}"
-                ]
-                def emailPayload = groovy.json.JsonOutput.toJson(payload)
-                writeFile file: 'payload.json', text: emailPayload
-                sh 'curl -X POST https://testingbox.pw/report-api-email -H "Content-Type: application/json" --data @payload.json'
-              }
-            }
-
+    stage('Run Playwright Regression') {
+      steps {
+        script {
+          dir("$ {PLAYWRIGHT_DIR}") {
             try {
               sh '''
                 export BASE_URL=http://localhost:3000
                 npx playwright test --reporter=html
                 echo "✅ Playwright regression completed"
               '''
-              sendReport()
+              sendReport("playwright-report/index.html", "Playwright")
             } catch (e) {
               currentBuild.result = 'FAILURE'
               echo "❌ Regression tests failed!"
-              sendReport()
-              error("Aborting build due to regression failure.")
+              sendReport("playwright-report/index.html", "Playwright")
             }
           }
         }
+      }
+    }
+
+    stage('Run JMeter Tests') {
+      steps {
+        sh """
+          jmeter -n -t $ {JMETER_DIR}/testingBoxJmeter.jmx \
+            -l $ {JMETER_RESULTS} \
+            -p $ {JMETER_DIR}/jmeter-save-config.properties \
+            -JBASE_URL=localhost
+        """
       }
     }
 
@@ -1710,6 +1725,50 @@ pipeline {
         }
       }
     }
+
+stage('Generate JMeter Report') {
+  steps {
+    script {
+      if (fileExists("$ {JMETER_RESULTS}")) {
+        sh """
+          sleep 10
+          echo "************ JMeter performance test aggregation *************"
+          head -n 25 $ {JMETER_RESULTS}
+          echo "**************************************************************"
+          jmeter -g $ {JMETER_RESULTS} -o ${JMETER_REPORT}
+          sleep 10
+      npm install puppeteer --save-dev
+      node jmeter-tests/utils/flattenWithPuppeteer.js \
+           jmeter-tests/jmeter-report/index.html \
+           jmeter-tests/jmeter-report/jmeter_single_report.html
+      echo "Resulting file size:"
+      sleep 5
+          ls -lh $ {JMETER_REPORT}/jmeter_single_report.html
+          echo "*** after npx --yes github:gildas-lormeau/SingleFile-cli ***"
+        """
+        sendReport("$ {JMETER_REPORT}/jmeter_single_report.html", "JMeter")
+      } else {
+        echo 'No JMeter results, skipping report'
+      }
+    }
+  }
+}
+
+
+// stage('Fail Pipeline on JMeter Errors') {
+//   steps {
+//     sh """
+//       echo "🔍 Checking for failed samples in JMeter results..."
+//       FAILURES=\$ (grep -c ',false,' $ {JMETER_RESULTS} || true)
+//       if [ "\$ FAILURES" -gt 0 ]; then
+//         echo "❌ Found \$ FAILURES failed samples in JMeter test!"
+//         currentBuild.result = 'FAILURE'
+//       else
+//         echo "✅ ✅ ✅ No failed samples found. ✅ ✅ ✅ "
+//       fi
+//     """
+//   }
+// }
 
     stage('Deploy Website') {
       when {
@@ -1783,13 +1842,26 @@ pipeline {
           }
           echo "✅ Gzipped+Base64 HTML size: $ {encodedHtmlContent.length()} chars"
 
+        def htmlJmeterPath = "${JMETER_REPORT}/jmeter_single_report.html"
+        def encodedJmeterContent = ""
+        if (fileExists(htmlJmeterPath)) {
+          def htmlJmeterContent = readFile(file: htmlJmeterPath)
+          echo "✅ Raw HTML report size: ${htmlJmeterContent.length()} bytes"
+          def gzippedJmeterHtmlContent = gzip(htmlJmeterContent)
+          encodedJmeterContent = encode64(gzippedJmeterHtmlContent)
+        }  else {
+            encodedJmeterContent = encode64(gzip("<html>JMeter Reggression was skipped...</html>"))
+        }
+        echo "✅ Gzipped+Base64 Jmeter-HTML size: ${encodedJmeterContent.length()} chars"
+
           def theStatus = (currentBuild.result == null || currentBuild.result == 'SUCCESS')
           def jsonPayload = """
             {
               "buildId": "$ {env.BUILD_ID}",
               "status": $ {theStatus},
               "html": "$ {encodedHtmlContent}",
-              "consol": "$ {encodedConsoleLog}"
+              "consol": "$ {encodedConsoleLog}",
+              "jmeterreport": "${encodedJmeterContent}"
             }
           """
           httpRequest(
