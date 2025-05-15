@@ -1468,44 +1468,6 @@ login_procedure('Add Item to the cart', async ({ authenticatedPage }) => {
    ****************************************************************************************************
 
 
-import groovy.json.JsonOutput
-
-// -----------------------------------------------------------------------------
-// Helper method for sending HTML reports (Playwright or JMeter)
-// -----------------------------------------------------------------------------
-def sendReport(String reportFile, String msg = "") {
-  def fallbackMessage = "*** No regression run: see build stack trace for more details"
-  sleep(5)
-
-  def subject = "Build#$ {env.BUILD_ID} - $ {msg} - RegressionReport"
-  def attachmentName = msg.toLowerCase().replaceAll("\\s+", "") + "-report.html"
-
-  if (fileExists(reportFile)) {
-    echo "✅ Report found at: $ {reportFile}"
-    sleep(2)
-    sh """
-      curl -X POST https://testingbox.pw/report-api-email \\
-        -F "format=0" \\
-        -F "emailTo=i_slava_i@yahoo.com" \\
-        -F "buildNumb=$ {env.BUILD_ID}" \\
-        -F "subject=$ {subject}" \\
-        -F "attachment=@$ {reportFile};filename=$ {attachmentName};type=text/html"
-    """
-  } else {
-    echo "❌ No report file found at $ {reportFile}"
-    def payload = [
-      format   : "1",
-      emailTo  : "i_slava_i@yahoo.com",
-      message  : fallbackMessage,
-      buildNumb: env.BUILD_ID,
-      subject  : subject
-    ]
-    writeFile file: 'payload.json', text: JsonOutput.toJson(payload)
-    sh 'curl -X POST https://testingbox.pw/report-api-email -H "Content-Type: application/json" --data @payload.json'
-  }
-}
-
-
 pipeline {
   agent any
 
@@ -1513,9 +1475,6 @@ pipeline {
     PLAYWRIGHT_DIR = 'playwright-tests'
     WEBSITE_DIR = 'website'
     PLAYWRIGHT_REPORT_DIR = "$ {PLAYWRIGHT_DIR}/playwright-report"
-    JMETER_DIR       = 'jmeter-tests'              // ← add this
-    JMETER_RESULTS   = "$ {JMETER_DIR}/results.jtl"
-    JMETER_REPORT    = "$ {JMETER_DIR}/jmeter-report"
   }
 
   stages {
@@ -1538,13 +1497,6 @@ pipeline {
                 url: 'https://github.com/oneFileSoft/testing_box_playwright.git',
                 branch: 'main'
             echo "*************** Playwright repository checked out successfully ***************"
-          }
-          dir("$ {JMETER_DIR}") {
-            deleteDir()
-            git credentialsId: 'd341b27a-4f01-4a48-aa84-d2cc2ce28cbc',
-                url: 'https://github.com/oneFileSoft/testing_box_jmeter.git',
-                branch: 'main'
-            echo "*************** JMeter repository checked out successfully ***************"
           }
         }
       }
@@ -1663,7 +1615,6 @@ pipeline {
                   echo "Starting..."
                 fi
               done
-
               if ! curl -s http://localhost:3000 > /dev/null; then
                 echo "XXXXX Server did NOT start, terminating: $SERVER_PID  XXXXX"
                 kill $SERVER_PID
@@ -1692,36 +1643,62 @@ pipeline {
       }
     }
 
-stage('Run Playwright Regression') {
-  steps {
-    script {
-      dir("$ {PLAYWRIGHT_DIR}") {
-        try {
-          sh '''
-            export BASE_URL=http://localhost:3000
-            npx playwright test --reporter=html
-            echo "✅ Playwright regression completed"
-          '''
-          sendReport("playwright-report/index.html", "Playwright")
-        } catch (e) {
-          currentBuild.result = 'FAILURE'
-          echo "❌ Playwright regression tests failed!"
-          sendReport("playwright-report/index.html", "Playwright") // still send the report even on failure
-          error("Aborting build due to regression failure.")
-        }
-      }
-    }
-  }
-}
-
-    stage('Run JMeter Tests') {
+    stage('Run Playwright Regression') {
       steps {
-        sh """
-          jmeter -n -t $ {JMETER_DIR}/testingBoxJmeter.jmx \
-            -l $ {JMETER_RESULTS} \
-            -p $ {JMETER_DIR}/jmeter-save-config.properties \
-            -JBASE_URL=localhost
-        """
+        script {
+          dir("$ {PLAYWRIGHT_DIR}") {
+
+            def sendReport = {
+              def reportFile = "playwright-report/index.html"
+              def fallbackMessage = "*** No regression run: see build stack trace for more details"
+
+              sleep 5 // ensure file system has flushed report
+//in FSO... of hosting where API report-api-email is:
+// for future receiving big data from Jenkins job (consoleLog and playwright regr report in html)
+//         in folder public_html/  edit .htaccess file and add following lines:
+//                   <IfModule mod_security.c>
+//                      SecRequestBodyLimit 52428800
+//                  </IfModule>
+//                  LimitRequestBody 52428800
+              if (fileExists(reportFile)) {
+                echo "✅ Playwright report found at: $ {reportFile}"
+                sleep 5
+                sh """
+                  curl -X POST https://testingbox.pw/report-api-email \\
+                    -F "format=0" \\
+                    -F "emailTo=i_slava_i@yahoo.com" \\
+                    -F "buildNumb=$ {env.BUILD_ID}" \\
+                    -F "attachment=@$ {reportFile};type=text/html"
+                """
+              } else {
+                echo "❌ No report file found at $ {reportFile}"
+                def payload = [
+                  format: "1",
+                  emailTo: "i_slava_i@yahoo.com",
+                  message: fallbackMessage,
+                  buildNumb: "$ {env.BUILD_ID}"
+                ]
+                def emailPayload = groovy.json.JsonOutput.toJson(payload)
+                writeFile file: 'payload.json', text: emailPayload
+                sh 'curl -X POST https://testingbox.pw/report-api-email -H "Content-Type: application/json" --data @payload.json'
+              }
+            }
+
+            try {
+              sh '''
+                export BASE_URL=http://localhost:3000
+                npx playwright test --reporter=html
+                echo "✅ Playwright regression completed"
+              '''
+              sendReport()
+            } catch (e) {
+              currentBuild.result = 'FAILURE'
+              echo "❌ Regression tests failed!"
+              sendReport()
+              error("Aborting build due to regression failure.")
+            }
+          }
+        }
       }
     }
 
@@ -1734,53 +1711,6 @@ stage('Run Playwright Regression') {
       }
     }
 
-stage('Generate JMeter Report') {
-  steps {
-    script {
-      if (fileExists("$ {JMETER_RESULTS}")) {
-        sh """
-          sleep 10
-          echo "************ JMeter performance test aggregation *************"
-          head -n 25 $ {JMETER_RESULTS}
-          echo "**************************************************************"
-          jmeter -g $ {JMETER_RESULTS} -o $ {JMETER_REPORT}
-          sleep 10
-      npm install puppeteer --save-dev
-      node jmeter-tests/utils/flattenWithPuppeteer.js \
-           jmeter-tests/jmeter-report/index.html \
-           jmeter-tests/jmeter-report/jmeter_single_report.html
-      echo "Resulting file size:"
-      sleep 5
-          ls -lh $ {JMETER_REPORT}/jmeter_single_report.html
-          echo "*** flattered jmeter_single_report.html been created ***"
-        """
-        sendReport("$ {JMETER_REPORT}/jmeter_single_report.html", "JMeter")
-      } else {
-        echo 'No JMeter results, skipping report'
-      }
-    }
-  }
-}
-
-// stage to fail regression based on single failure from performance tests....
-// stage('Fail Pipeline on JMeter Errors') {
-//   steps {
-//     sh """
-//       echo "🔍 Checking for failed samples in JMeter results..."
-//       FAILURES=\$(grep -c ',false,' $ {JMETER_RESULTS} || true)
-//       if [ "\$FAILURES" -gt 0 ]; then
-//         echo "❌ Found \$FAILURES failed samples in JMeter test!"
-//         currentBuild.result = 'FAILURE'
-//       else
-//         echo "✅ ✅ ✅ No failed samples found. ✅ ✅ ✅ "
-//       fi
-//     """
-//   }
-// }
-
-
-
-
     stage('Deploy Website') {
       when {
         expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
@@ -1790,8 +1720,7 @@ stage('Generate JMeter Report') {
         sshagent(credentials: ['814f276d-73a0-4fc7-b881-11ddd342b024']) {
           sh '''
             ssh -o StrictHostKeyChecking=no -p 21098 hogwqmidfzju@198.54.114.242 '
-              source ~/.bash_profile &&
-              deployMyBuild
+              source ~/.bash_profile && deployMyBuild
             '
           '''
           echo "******** New version of WebSite been deployed ********"
@@ -1801,105 +1730,84 @@ stage('Generate JMeter Report') {
     }
   }
 
+  post {
+    always {
+      script {
+        echo "Collecting console output for report API..."
 
-post {
-  always {
-    script {
-      echo "Collecting console output for report API..."
-      def gzip = { String input ->
-        def byteStream = new java.io.ByteArrayOutputStream()
-        def gzipStream = new java.util.zip.GZIPOutputStream(byteStream)
-        gzipStream.write(input.getBytes("UTF-8"))
-        gzipStream.close()
-        return byteStream.toByteArray()
-      }
-
-      def encode64 = { byte[] inputBytes ->
-        return inputBytes.encodeBase64().toString()
-      }
-
-      withCredentials([usernamePassword(credentialsId: 'credentialId_ForFetchingConsoleLog', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-        def consoleLog = sh(
-          script: "curl -s --user \"$USERNAME:$PASSWORD\" \"$ {env.BUILD_URL}consoleText\"",
-          returnStdout: true
-        ).trim()
-        echo "✅ Raw console log size: $ {consoleLog.length()} bytes"
-        def escapedLog = "Build# $ {env.BUILD_ID} " + consoleLog
-          .replace("\\", "\\\\")
-          .replace("\"", "\\\"")
-          .replace("\n", "\\n")
-          .replace("\r", "")
-          .replace("[Pipeline] }", "")
-          .replace("[Pipeline] // dir", "")
-          .replace("[Pipeline] // script", "")
-          .replace("[Pipeline] // stage", "")
-          .replace("[Pipeline] stage", "")
-          .replace("[Pipeline] script", "")
-          .replace("[Pipeline] {", "")
-          .replace("[Pipeline] dir", "")
-          .replace("[Pipeline] echo", "")
-        def gzippedConsoleLog = gzip(escapedLog)
-        def encodedConsoleLog = encode64(gzippedConsoleLog)
-        echo "✅ Gzipped+Base64 ConsoleLog size: $ {encodedConsoleLog.length()} chars"
-
-
-        def htmlReportPath = "$ {env.PLAYWRIGHT_REPORT_DIR}/index.html"
-        def encodedHtmlContent = ""
-        if (fileExists(htmlReportPath)) {
-          def htmlContent = readFile(file: htmlReportPath)
-          echo "✅ Raw HTML report size: $ {htmlContent.length()} bytes"
-          def gzippedHtmlContent = gzip(htmlContent)
-          encodedHtmlContent = encode64(gzippedHtmlContent)
-        }  else {
-            encodedHtmlContent = encode64(gzip("<html>Playwright Reggression was skipped...</html>"))
+        def gzip = { String input ->
+          def byteStream = new java.io.ByteArrayOutputStream()
+          def gzipStream = new java.util.zip.GZIPOutputStream(byteStream)
+          gzipStream.write(input.getBytes("UTF-8"))
+          gzipStream.close()
+          return byteStream.toByteArray()
         }
-        echo "✅ Gzipped+Base64 HTML size: $ {encodedHtmlContent.length()} chars"
 
-        def htmlJmeterPath = "$ {JMETER_REPORT}/jmeter_single_report.html"
-        def encodedJmeterContent = ""
-        if (fileExists(htmlJmeterPath)) {
-          def htmlJmeterContent = readFile(file: htmlJmeterPath)
-          echo "✅ Raw HTML report size: $ {htmlJmeterContent.length()} bytes"
-          def gzippedJmeterHtmlContent = gzip(htmlJmeterContent)
-          encodedJmeterContent = encode64(gzippedJmeterHtmlContent)
-        }  else {
-            encodedJmeterContent = encode64(gzip("<html>JMeter Reggression was skipped...</html>"))
+        def encode64 = { byte[] inputBytes ->
+          return inputBytes.encodeBase64().toString()
         }
-        echo "✅ Gzipped+Base64 Jmeter-HTML size: $ {encodedJmeterContent.length()} chars"
 
-      def theStatus = (currentBuild.result == null || currentBuild.result == 'SUCCESS')
-      def jsonPayload = """
+        withCredentials([usernamePassword(credentialsId: 'credentialId_ForFetchingConsoleLog', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          def consoleLog = sh(
+            script: "curl -s --user \"$ USERNAME:$ PASSWORD\" \"$ {env.BUILD_URL}consoleText\"",
+            returnStdout: true
+          ).trim()
+          echo "✅ Raw console log size: $ { consoleLog.length()} bytes"
+          def escapedLog = "Build# $ {env.BUILD_ID} " + consoleLog
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "")
+            .replace("[Pipeline] }", "")
+            .replace("[Pipeline] // dir", "")
+            .replace("[Pipeline] // script", "")
+            .replace("[Pipeline] // stage", "")
+            .replace("[Pipeline] stage", "")
+            .replace("[Pipeline] script", "")
+            .replace("[Pipeline] {", "")
+            .replace("[Pipeline] dir", "")
+            .replace("[Pipeline] echo", "")
+          def gzippedConsoleLog = gzip(escapedLog)
+          def encodedConsoleLog = encode64(gzippedConsoleLog)
+          echo "✅ Gzipped+Base64 ConsoleLog size: $ {encodedConsoleLog.length()} chars"
+
+          def htmlReportPath = "$ {env.PLAYWRIGHT_REPORT_DIR}/index.html"
+          def encodedHtmlContent = ""
+          if (fileExists(htmlReportPath)) {
+            def htmlContent = readFile(file: htmlReportPath)
+            echo "✅ Raw HTML report size: $ {htmlContent.length()} bytes"
+            def gzippedHtmlContent = gzip(htmlContent)
+            encodedHtmlContent = encode64(gzippedHtmlContent)
+          }  else {
+            encodedHtmlContent = encode64(gzip("<html>Regression was skipped...</html>"))
+          }
+          echo "✅ Gzipped+Base64 HTML size: $ {encodedHtmlContent.length()} chars"
+
+          def theStatus = (currentBuild.result == null || currentBuild.result == 'SUCCESS')
+          def jsonPayload = """
             {
               "buildId": "$ {env.BUILD_ID}",
               "status": $ {theStatus},
               "html": "$ {encodedHtmlContent}",
-              "consol": "$ {encodedConsoleLog}",
-              "jmeterreport": "$ {encodedJmeterContent}"
+              "consol": "$ {encodedConsoleLog}"
             }
-
           """
-      httpRequest(
-         httpMode: 'POST',
-         url: 'https://testingbox.pw/api/insertRegrReport',
-         contentType: 'APPLICATION_JSON',
-         requestBody: jsonPayload
-        )
-
-        echo "*************** Build report sent to API ***************"
+          httpRequest(
+            httpMode: 'POST',
+            url: 'https://testingbox.pw/api/insertRegrReport',
+            contentType: 'APPLICATION_JSON',
+            requestBody: jsonPayload
+          )
+          echo "*************** Build report sent to API ***************"
+        }
+        sh "pkill -f 'node server.js' || true"
+        sh "rm -rf $ {PLAYWRIGHT_DIR}/node_modules $ {WEBSITE_DIR}/node_modules"
+        sh "rm -rf $ {PLAYWRIGHT_REPORT_DIR}"
+        echo "*************** Cleaned up environment ***************"
       }
-
-      sh "pkill -f 'node server.js' || true"
-      sh "rm -rf $ {PLAYWRIGHT_DIR}/node_modules $ {WEBSITE_DIR}/node_modules"
-      sh "rm -rf $ {PLAYWRIGHT_REPORT_DIR}"
-      echo "*************** Cleaned up environment ***************"
+    }
   }
 }
-
-}
-
-
-}
-
 
   `
 ];

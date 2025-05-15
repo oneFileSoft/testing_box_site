@@ -129,14 +129,14 @@ export default function RegrReport() {
                         </div>
                       </div>
                       <div className="mt-1 space-x-3">
-                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'html'); }}>
-                          <span>Playwright</span> </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'html'); }}
+                            className="animated-underline"> <span>Playwright</span> </a>
                         &nbsp;
-                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'jmeterrecord'); }}>
-                          <span>JMeter</span> </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'jmeterrecord'); }}
+                            className="animated-underline"> <span>JMeter</span> </a>
                         &nbsp;
-                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'console'); }}>
-                            <span>Console</span> </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'console'); }}
+                            className="animated-underline"> <span>Console</span> </a>
                       </div>
                       <hr />
                     </div>
