@@ -140,18 +140,18 @@ export default function RegrReport() {
                         <a
                           href="#"
                           onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'html'); }}
-                          className="flex items-center gap-2 p-2 rounded cursor-pointer transition"
+                          className="hover:bg-gray-300"
                         > <span>Playwright</span>
                         </a>
                         &nbsp;
                         <a
                           href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'jmeterrecord'); }}
-                          className="flex items-center gap-2 p-2 rounded cursor-pointer transition"
+                          className="hover:bg-gray-300"
                         > <span>JMeter</span>
                         </a>
                         &nbsp;
                         <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'console'); }}
-                          className="flex items-center gap-2 p-2 rounded cursor-pointer transition"
+                          className="hover:bg-gray-300"
                         > <span>Console</span>
                         </a>
                       </div>
