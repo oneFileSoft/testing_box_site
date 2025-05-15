@@ -109,12 +109,7 @@ export default function RegrReport() {
             <td style={{ width: '20%', height: '90vh', verticalAlign: 'top', padding: '0' }}>
               <div style={{ height: '100%', maxHeight: 'calc(100vh - 16px)', overflowY: 'auto', padding: '16px' }}>
                 <h2 className="text-lg font-bold mb-4">Regression builds for:</h2>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={handleDateChange}
-                  className="mb-4 border px-2 py-1 w-full"
-                />
+                <input type="date" value={date} onChange={handleDateChange} className="mb-4 border px-2 py-1 w-full" />
                 <br />
                 {loading ? (
                   <p>Loading...</p>
@@ -140,18 +135,18 @@ export default function RegrReport() {
                         <a
                           href="#"
                           onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'html'); }}
-                          className="hover:bg-gray-300"
+                          className="hover:bg-blue-100"
                         > <span>Playwright</span>
                         </a>
                         &nbsp;
                         <a
                           href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'jmeterrecord'); }}
-                          className="hover:bg-gray-300"
+                          className="hover:bg-blue-100"
                         > <span>JMeter</span>
                         </a>
                         &nbsp;
                         <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'console'); }}
-                          className="hover:bg-gray-300"
+                          className="hover:bg-blue-100"
                         > <span>Console</span>
                         </a>
                       </div>
