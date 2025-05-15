@@ -1741,7 +1741,7 @@ pipeline {
 //    ]
 //  });
 //  const page = await browser.newPage();
-//  await page.goto(`file://$ {process.cwd()}/$ {inputPath}`, { waitUntil: 'networkidle0' });
+//  await page.goto(CurveSingleQuotefile://$ {process.cwd()}/$ {inputPath}CurveSingleQuote, { waitUntil: 'networkidle0' });
 //
 //  const html = await page.content();
 //  fs.writeFileSync(outputPath, html);
