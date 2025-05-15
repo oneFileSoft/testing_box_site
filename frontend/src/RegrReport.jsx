@@ -139,35 +139,20 @@ export default function RegrReport() {
                       <div className="mt-1 space-x-3">
                         <a
                           href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleSelect(rec.buildId, 'html');
-                          }}
+                          onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'html'); }}
                           className="flex items-center gap-2 p-2 rounded cursor-pointer transition"
-                        >
-                          <span className="font-semibold text-black">Playwright</span>
+                        > <span>Playwright</span>
                         </a>
                         &nbsp;
                         <a
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleSelect(rec.buildId, 'jmeterrecord');
-                          }}
+                          href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'jmeterrecord'); }}
                           className="flex items-center gap-2 p-2 rounded cursor-pointer transition"
-                        >
-                          <span className="font-semibold text-black">JMeter</span>
+                        > <span>JMeter</span>
                         </a>
                         &nbsp;
-                        <a
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleSelect(rec.buildId, 'console');
-                          }}
+                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'console'); }}
                           className="flex items-center gap-2 p-2 rounded cursor-pointer transition"
-                        >
-                          <span>Console</span>
+                        > <span>Console</span>
                         </a>
                       </div>
                       <hr />
