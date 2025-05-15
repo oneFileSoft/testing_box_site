@@ -1471,6 +1471,13 @@ import groovy.json.JsonOutput
 
 // -----------------------------------------------------------------------------
 // Helper method for sending HTML reports (Playwright or JMeter)
+//in FSO... of hosting where API report-api-email is:
+// for future receiving big data from Jenkins job (consoleLog and playwright regr report in html)
+//         in folder public_html/  edit .htaccess file and add following lines:
+//                   <IfModule mod_security.c>
+//                      SecRequestBodyLimit 52428800
+//                  </IfModule>
+//                  LimitRequestBody 52428800
 // -----------------------------------------------------------------------------
 def sendReport(String reportFile, String msg = "") {
   def fallbackMessage = "*** No regression run: see build stack trace for more details"
@@ -1678,13 +1685,7 @@ pipeline {
         }
       }
     }
-//in FSO... of hosting where API report-api-email is:
-// for future receiving big data from Jenkins job (consoleLog and playwright regr report in html)
-//         in folder public_html/  edit .htaccess file and add following lines:
-//                   <IfModule mod_security.c>
-//                      SecRequestBodyLimit 52428800
-//                  </IfModule>
-//                  LimitRequestBody 52428800
+
     stage('Run Playwright Regression') {
       steps {
         script {
@@ -1725,6 +1726,27 @@ pipeline {
         }
       }
     }
+
+// utils/flattenWithPuppeteer.js
+//const fs = require('fs');
+//const puppeteer = require('puppeteer');
+//
+//(async () => {
+//  const [,, inputPath, outputPath] = process.argv;
+//  const browser = await puppeteer.launch({
+//    headless: true,
+//    args: [
+//      '--no-sandbox',
+//      '--disable-setuid-sandbox'
+//    ]
+//  });
+//  const page = await browser.newPage();
+//  await page.goto(`file://$ {process.cwd()}/$ {inputPath}`, { waitUntil: 'networkidle0' });
+//
+//  const html = await page.content();
+//  fs.writeFileSync(outputPath, html);
+//  await browser.close();
+//})();
 
 stage('Generate JMeter Report') {
   steps {

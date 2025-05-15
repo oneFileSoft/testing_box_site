@@ -430,7 +430,7 @@ overflow-y: auto;
   left: 0;
   bottom: -2px;              /* tweak if you need the line a bit closer/farther from text */
   width: 0;                  /* start collapsed */
-  height: 2px;               /* thickness of underline */
+  height: 1px;               /* thickness of underline */
   background-color: currentColor;
   transition: width 0.3s ease;
 }
