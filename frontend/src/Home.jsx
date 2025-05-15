@@ -54,9 +54,9 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="footer" style={{ height: '3%', textAlign: "right"}}>
-        <a name="trustbadge" href="https://trustlock.co" ><img name="trustseal" alt="Trust Badges" style={{ border: 0 }} src="https://trustlock.co/wp-content/uploads/2019/01/satisisfaction-guaranteed-free-website-trust-badges-3.png"
-        width="50"/></a>
-        &nbsp;
+{/*         <a name="trustbadge" href="https://trustlock.co" ><img name="trustseal" alt="Trust Badges" style={{ border: 0 }} src="https://trustlock.co/wp-content/uploads/2019/01/satisisfaction-guaranteed-free-website-trust-badges-3.png" */}
+{/*         width="50"/></a> */}
+{/*         &nbsp; */}
 
         <a name="trustbadge" href="https://trustlock.co"> <img name="trustseal" alt="Trust Badges" style={{ border: 0 }} src="https://trustlock.co/wp-content/uploads/2019/01/satisisfaction-guaranteed-badge-icon.png" width="100" />
         </a>&nbsp;
