@@ -421,7 +421,7 @@ overflow-y: auto;
   position: relative;
   display: inline-block;    /* ensure pseudo-element is positioned correctly */
   text-decoration: none;     /* remove default underline */
-  color: color: #2563eb;            /* inherit --- keep whatever text/link color you already have */
+  color: #2563eb;            /* inherit --- keep whatever text/link color you already have */
 }
 
 .animated-underline::after {
