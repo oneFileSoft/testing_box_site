@@ -415,12 +415,13 @@ overflow-y: auto;
 .build-row:hover {
   background-color: #f0f0f0; /* light gray, adjust as needed */
 }
+
 /* animated underline on hover, left-to-right */
 .animated-underline {
   position: relative;
   display: inline-block;    /* ensure pseudo-element is positioned correctly */
   text-decoration: none;     /* remove default underline */
-  color: inherit;            /* keep whatever text/link color you already have */
+  color: color: #2563eb;            /* inherit --- keep whatever text/link color you already have */
 }
 
 .animated-underline::after {
