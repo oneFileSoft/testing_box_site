@@ -117,12 +117,9 @@ export default function RegrReport() {
                   <p>No builds for selected date</p>
                 ) : (
                   records.map((rec) => (
-                    <div
-                      key={rec.buildId}
-                      className={`p-2 my-2 build-row border rounded cursor-pointer hover:bg-gray-200 ${
-                        selected?.buildId === rec.buildId ? 'bg-blue-100' : ''
-                      }`}
-                    >
+                    <div key={rec.buildId}
+                      className={`p-2 my-2 build-row border rounded cursor-pointer hover:bg-gray-200
+                                  ${ selected?.buildId === rec.buildId ? 'bg-blue-100' : '' }`   } >
                       <div className="flex justify-between items-center">
                         <div className="text-sm font-medium">
                           <span className="font-semibold text-black">Build #{rec.buildId}</span>{' '}
@@ -132,23 +129,14 @@ export default function RegrReport() {
                         </div>
                       </div>
                       <div className="mt-1 space-x-3">
-                        <a
-                          href="#"
-                          onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'html'); }}
-                          className="hover:bg-blue-100"
-                        > <span>Playwright</span>
-                        </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'html'); }}>
+                          <span>Playwright</span> </a>
                         &nbsp;
-                        <a
-                          href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'jmeterrecord'); }}
-                          className="hover:bg-blue-100"
-                        > <span>JMeter</span>
-                        </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'jmeterrecord'); }}>
+                          <span>JMeter</span> </a>
                         &nbsp;
-                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'console'); }}
-                          className="hover:bg-blue-100"
-                        > <span>Console</span>
-                        </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(rec.buildId, 'console'); }}>
+                            <span>Console</span> </a>
                       </div>
                       <hr />
                     </div>
