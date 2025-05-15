@@ -1735,7 +1735,7 @@ stage('Generate JMeter Report') {
           echo "************ JMeter performance test aggregation *************"
           head -n 25 $ {JMETER_RESULTS}
           echo "**************************************************************"
-          jmeter -g $ {JMETER_RESULTS} -o ${JMETER_REPORT}
+          jmeter -g $ {JMETER_RESULTS} -o $ {JMETER_REPORT}
           sleep 10
       npm install puppeteer --save-dev
       node jmeter-tests/utils/flattenWithPuppeteer.js \
@@ -1842,17 +1842,17 @@ stage('Generate JMeter Report') {
           }
           echo "✅ Gzipped+Base64 HTML size: $ {encodedHtmlContent.length()} chars"
 
-        def htmlJmeterPath = "${JMETER_REPORT}/jmeter_single_report.html"
+        def htmlJmeterPath = "$ {JMETER_REPORT}/jmeter_single_report.html"
         def encodedJmeterContent = ""
         if (fileExists(htmlJmeterPath)) {
           def htmlJmeterContent = readFile(file: htmlJmeterPath)
-          echo "✅ Raw HTML report size: ${htmlJmeterContent.length()} bytes"
+          echo "✅ Raw HTML report size: $ {htmlJmeterContent.length()} bytes"
           def gzippedJmeterHtmlContent = gzip(htmlJmeterContent)
           encodedJmeterContent = encode64(gzippedJmeterHtmlContent)
         }  else {
             encodedJmeterContent = encode64(gzip("<html>JMeter Reggression was skipped...</html>"))
         }
-        echo "✅ Gzipped+Base64 Jmeter-HTML size: ${encodedJmeterContent.length()} chars"
+        echo "✅ Gzipped+Base64 Jmeter-HTML size: $ {encodedJmeterContent.length()} chars"
 
           def theStatus = (currentBuild.result == null || currentBuild.result == 'SUCCESS')
           def jsonPayload = """
@@ -1861,7 +1861,7 @@ stage('Generate JMeter Report') {
               "status": $ {theStatus},
               "html": "$ {encodedHtmlContent}",
               "consol": "$ {encodedConsoleLog}",
-              "jmeterreport": "${encodedJmeterContent}"
+              "jmeterreport": "$ {encodedJmeterContent}"
             }
           """
           httpRequest(
