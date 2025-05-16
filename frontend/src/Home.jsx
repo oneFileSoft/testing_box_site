@@ -18,7 +18,7 @@ export default function Home() {
   const currentLoc = location.pathname;
   const navigate = useNavigate();
 
-  const handleDoubleClick = () => { navigate("/"); window.location.reload(); }
+  const handleDoubleClick = () => { navigate("/"); navigate(location.pathname, { replace: true }); }
   const handleHomeClick = () => {
      navigate("/");
      // fetch fresh version.txt on every click
