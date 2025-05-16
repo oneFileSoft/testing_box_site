@@ -18,7 +18,8 @@ export default function Home() {
   const currentLoc = location.pathname;
   const navigate = useNavigate();
 
-  const handleHomeClick = () => {
+  const handleHomeClick = () => { navigate("/"); }
+  const handleDoubleClick = () => {
      navigate("/");
      window.location.reload();
      // fetch fresh version.txt on every click
@@ -40,7 +41,7 @@ export default function Home() {
       {/* Header */}
       <header className="header" >
         <div className="top-bar">
-          <img src="/img/home_9243286.png" alt="Home" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/" ? "dim-icon" : ""}`} onClick={handleHomeClick} />
+          <img src="/img/home_9243286.png" alt="Home" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/" ? "dim-icon" : ""}`} onClick={handleHomeClick} onDoubleClick={handleDoubleClick}/>
           {/*<a href="https://www.freepik.com/icon/house-chimney_9243286">Icon by UIcons</a>*/}
           <img src="/img/contactUs_16769119.png" alt="Contact" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/contact" ? "dim-icon" : ""}`} onClick={handleContactClick} />
           {/*<a href="https://www.freepik.com/icon/clip-mail_16769119#fromView=search&page=3&position=31&uuid=43f68ff2-180d-4ce0-9887-8f952acbaf88">Icon by UIcons</a> */}
