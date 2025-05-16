@@ -18,7 +18,6 @@ export default function Home() {
   const currentLoc = location.pathname;
   const navigate = useNavigate();
 
-//   const handleHomeClick = () => { navigate('/'); showToastSuccess("test");}
   const handleHomeClick = () => {
      navigate("/");
      // fetch fresh version.txt on every click
