@@ -20,6 +20,7 @@ export default function Home() {
 
   const handleHomeClick = () => {
      navigate("/");
+     window.location.reload();
      // fetch fresh version.txt on every click
      fetch(`/version.txt?ts=${Date.now()}`, { cache: 'no-store' })
        .then(res => res.text())

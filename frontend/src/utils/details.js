@@ -1758,15 +1758,12 @@ stage('Generate JMeter Report') {
           head -n 25 $ {JMETER_RESULTS}
           echo "**************************************************************"
           jmeter -g $ {JMETER_RESULTS} -o $ {JMETER_REPORT}
-          sleep 10
+          sleep 12
       npm install puppeteer --save-dev
       node jmeter-tests/utils/flattenWithPuppeteer.js \
            jmeter-tests/jmeter-report/index.html \
            jmeter-tests/jmeter-report/jmeter_single_report.html
-      echo "Resulting file size:"
-      sleep 5
-          ls -lh $ {JMETER_REPORT}/jmeter_single_report.html
-          echo "*** after npx --yes github:gildas-lormeau/SingleFile-cli ***"
+      echo "flatten jmeter-report/index.html to jmeter-report/jmeter_single_report.html"
         """
         sendReport("$ {JMETER_REPORT}/jmeter_single_report.html", "JMeter")
       } else {
@@ -1799,11 +1796,11 @@ stage('Generate JMeter Report') {
       steps {
         echo "Deploying website..."
         sshagent(credentials: ['814f276d-73a0-4fc7-b881-11ddd342b024']) {
-          sh '''
+          sh """
             ssh -o StrictHostKeyChecking=no -p 21098 hogwqmidfzju@198.54.114.242 '
-              source ~/.bash_profile && deployMyBuild
+              source ~/.bash_profile && deployMyBuild $ {env.BUILD_ID}
             '
-          '''
+          """
           echo "******** New version of WebSite been deployed ********"
           echo "✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅"
         }
