@@ -11,7 +11,7 @@ const loadDetails = () =>
   import(/* webpackChunkName: "details" */ "./utils/details");
 
 const steps = [
-  "Pulls both the Web and Test repositories onto the Jenkins agent host.",
+  "Pulls Web and both Test repositories onto the Jenkins agent host.",
   "Launches the Web application locally on the Jenkins environment.",
   "Executes regression tests from the Test repository against the deployed Web application.",
   "Sends the regression test report back to the developer.",
@@ -127,11 +127,12 @@ const AboutUs = () => {
         <div className="about-grid">
           <div className="about-card">
             <h3>Web site</h3>
-            <p>modern, responsive code of React.</p>
+            <p>modern, responsive code of React</p>
           </div>
           <div className="about-card">
             <h3>Regression</h3>
             <p>light and fast execution from Playwright</p>
+            <p>performance API tests from Jmeter</p>
           </div>
         </div>
       )}
