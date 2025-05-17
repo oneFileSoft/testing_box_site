@@ -1899,7 +1899,9 @@ stage('Generate JMeter Report') {
     }
   }
 }
-
+============================  loging to Jenkins =====================
+http://66.179.80.89:8080/job/push-test-deploy/
+UN: plakh!, PS: bhu8*&7ygv
   `
 ];
 export default details;

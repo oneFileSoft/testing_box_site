@@ -37,7 +37,7 @@ export default function SessionStorage() {
   };
 
   return (
-    <div className="user-container" style={{ padding: '2rem', fontFamily: 'Arial' }}>
+    <div className="session-container" style={{ padding: '2rem', fontFamily: 'Arial' }}>
       <h2>
         Please login using the following credentials:<br />
         Username: <strong>{generatedUsername}</strong>, Password: <strong>{generatedPassword}</strong>
@@ -47,7 +47,6 @@ export default function SessionStorage() {
         <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '1rem' }}>
           <input type="text" placeholder="Username" value={inputUsername} onChange={(e) => setInputUsername(e.target.value)} />
           <input type="password" placeholder="Password" value={inputPassword} onChange={(e) => setInputPassword(e.target.value)} />
-          <br />
           <button type="submit">Submit</button>
         </form>
       )}

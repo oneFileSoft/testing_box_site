@@ -7,14 +7,13 @@ import { showToastSuccess, showToastError } from './utils/toastUtils';
 
 export default function Home() {
   useEffect(() => {
-    document.title = "testing area 51"; // Set the title here
+    document.title = "testing area 51";
   }, []);
 
   useInactivityRedirect(60000, '/');
 
   const location = useLocation();
   const isHome = location.pathname !== "/";
-//   const isRegr  = location.pathname === "/regression-report";
   const currentLoc = location.pathname;
   const navigate = useNavigate();
 

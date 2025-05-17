@@ -334,6 +334,51 @@ html, body {
   object-fit: contain;  /* Ensure the icon fits within its box */
   margin-top: 1px;    /* 3px space between icons */
 }
+/************************* SessionStorage page  ********************************/
+.session-container {
+  background: lightgray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 20px; /* Added padding for inner spacing */
+  width: 100%;
+  max-width: 500px; /* Limits width on large screens */
+  margin: 120px auto 0 auto; /* Centered with top margin */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+.session-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.session-container input {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.session-container button {
+  padding: 10px;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.session-container button:hover {
+  background-color: #2563eb;
+}
 
 /********    regression page   ***********/
 .user-regr {
