@@ -47,6 +47,7 @@ export default function SessionStorage() {
         <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '1rem' }}>
           <input type="text" placeholder="Username" value={inputUsername} onChange={(e) => setInputUsername(e.target.value)} />
           <input type="password" placeholder="Password" value={inputPassword} onChange={(e) => setInputPassword(e.target.value)} />
+          <br />
           <button type="submit">Submit</button>
         </form>
       )}
