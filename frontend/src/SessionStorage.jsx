@@ -39,7 +39,7 @@ export default function SessionStorage() {
   return (
     <div className="session-container" style={{ padding: '2rem', fontFamily: 'Arial' }}>
       <h2>
-        Please login using the following credentials:<br />
+        SessionStorage tests:<br /><br />geLogin using the following credentials:<br />
         Username: <strong>{generatedUsername}</strong>, Password: <strong>{generatedPassword}</strong>
       </h2>
 
