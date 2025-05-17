@@ -184,7 +184,7 @@ const getStoredUsername = (index) => {
     };
 
     return (
-        <div className="user-container" style={{ overflowY: "auto", width: "100%" }}>
+        <div className="session-container" style={{ overflowY: "auto", width: "100%" }}>
             {!userId ? (
                 <>
                     <h2>Login or insert new User</h2>
