@@ -14,7 +14,7 @@ export default function Home() {
 
   const location = useLocation();
   const isHome = location.pathname !== "/";
-  const isRegr  = location.pathname === "/regression-report";
+//   const isRegr  = location.pathname === "/regression-report";
   const currentLoc = location.pathname;
   const navigate = useNavigate();
 
@@ -54,7 +54,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Body height: `${isRegr? '70%' : '30%'}` */}
       <main className={`main-content ${isHome ? "dim-background" : ""}`}   style={{ height: '97%' }}>
         <div className="content-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
           <div style={{ width: '90%', height: '100%', alignItems: 'center', justifyContent: 'center' }} class="min-h-0">
