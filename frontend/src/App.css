@@ -25,7 +25,6 @@ html, body {
   overflow-x: hidden;
   overflow-y: auto;
 }
-
  Home Page Container*/
 .home-container {
   display: flex;
@@ -349,14 +348,13 @@ html, body {
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  padding: 20px;
+  padding: 20px; /* Added padding for inner spacing */
   width: 100%;
-  max-width: 500px;
-  margin: 120px auto 0 auto;
+  max-width: 500px; /* Limits width on large screens */
+  margin: 120px auto 0 auto; /* Centered with top margin */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
-  min-height: 100vh; /* ✅ CRUCIAL */
-  box-sizing: border-box;
+  overflow-y: auto;
 }
 .session-container form {
   display: flex;
