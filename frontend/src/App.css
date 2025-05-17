@@ -214,6 +214,11 @@ html, body {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   text-align: left;
+    /* ADD THESE 👇 */
+    max-height: 60vh; /* limit height to allow scrolling */
+    overflow-y: auto; /* enable vertical scroll when needed */
+    overscroll-behavior: contain; /* prevents "scroll chaining" on mobile */
+    -webkit-overflow-scrolling: touch; /* smooth scrolling for iOS Safari */
 }
 .about-box.expanded {
   padding: 10px;
