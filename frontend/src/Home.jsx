@@ -75,7 +75,7 @@ export default function Home() {
         <div className="content-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
           <div style={{ width: '90%', height: '100%', alignItems: 'center', justifyContent: 'center' }} className="min-h-0">
             <Outlet />
-            {showCarousel && isHome && (
+            {showCarousel && !isHome && (
               <div style={{ marginTop: "30px" }}>
                 <ImageCarousel />
               </div>
