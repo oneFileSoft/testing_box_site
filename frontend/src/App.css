@@ -524,20 +524,20 @@ overflow-y: auto;
 /* Scrolling track */
 .carousel-track {
   display: flex;
-  animation: scroll 40s linear infinite;
+  animation: scroll 20s linear infinite;
   will-change: transform;
   overflow: visible; /* allow children to overflow */
 }
 
 /* Each image container */
 .carousel-image-container {
-  flex: 0 0 auto;
-  width: 280px;
-  margin-right: 16px;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;      /* no more letterboxing */
   transition: transform 0.3s ease-in-out;
-  position: relative;
-  overflow: visible;   /* important to let the image pop out */
-  z-index: 1;          /* baseline stacking */
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 /* Elevate on hover so it covers siblings */
@@ -563,7 +563,12 @@ overflow-y: auto;
 
 /* Pause scrolling when hovering over carousel */
 .carousel-wrapper:hover .carousel-track {
-  animation-play-state: paused;
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  padding: 0;             /* removed top/bottom bars */
+  background: transparent;/* hide any container background */
+  position: relative;
 }
 
 /* Auto-scroll keyframes */
