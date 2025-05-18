@@ -488,3 +488,53 @@ overflow-y: auto;
 .animated-underline:hover::after {
   width: 100%;               /* expand across text on hover */
 }
+
+
+
+/****************** carusel ****************************/
+.carousel-wrapper {
+  overflow: hidden;
+  width: 100%;
+  padding: 20px 0;
+  background: #f5f5f5;
+}
+
+.carousel-track {
+  display: flex;
+  animation: scroll 40s linear infinite;
+  will-change: transform;
+}
+
+.carousel-image-container {
+  flex: 0 0 auto;
+  width: 280px;
+  margin-right: 16px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.carousel-image-container img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  transition: transform 0.3s ease-in-out;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.carousel-image-container:hover img {
+  transform: scale(1.1);
+}
+
+.carousel-wrapper:hover .carousel-track {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
