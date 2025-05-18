@@ -500,9 +500,11 @@ overflow-y: auto;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   pointer-events: none;
-  margin-top: 80px;
+  margin-top: 100px;
   position: relative;         /* ensures stacking respects DOM flow */
   z-index: 1;
+  scroll-behavior: smooth;
+  overflow-y: auto;
 }
 .carousel-container.visible {
   opacity: 1;
