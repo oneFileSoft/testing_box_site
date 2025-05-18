@@ -492,7 +492,6 @@ overflow-y: auto;
 
 
 /****************** carusel ****************************/
-/****************** carousel wrapper ****************************/
 
 /* Fade-in/out */
 .carousel-container {
@@ -543,9 +542,9 @@ overflow-y: auto;
   cursor: pointer;
 }
 
-/* Zoom 15% on hover */
+/* Zoom 25% on hover */
 .carousel-image-container:hover img {
-  transform: scale(1.15);
+  transform: scale(2.15);
 }
 
 /* Pause the scroll animation when hovering over the carousel */

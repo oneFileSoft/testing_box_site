@@ -1,56 +1,58 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import useInactivityRedirect from "./utils/useInactivityRedirect";
+import useInactivityRedirect from './utils/useInactivityRedirect';
 import "./App.css";
 import { ToastContainer } from "react-toastify";
 import { showToastSuccess } from "./utils/toastUtils";
 import ImageCarousel from "./ImageCarousel";
 
 export default function Home() {
-  // 1️⃣ Page title
+  // set document title
   useEffect(() => {
     document.title = "testing area 51";
   }, []);
 
-  // 2️⃣ Redirect after 60s inactivity
+  // redirect after 60s inactivity
   useInactivityRedirect(60000, "/");
 
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
-  // 3️⃣ Carousel visibility state
+  // carousel visibility + ref
   const [showCarousel, setShowCarousel] = useState(false);
+  const carouselRef = useRef(null);
 
-  // 4️⃣ Inactivity logic: show after 5s, hide/reset on click or key
   useEffect(() => {
     let timer;
 
-    // Schedule the carousel to show in 5s
-    const scheduleShow = () => {
+    const resetTimer = (e) => {
+      // ignore pointer/key events inside the carousel container
+      if (carouselRef.current?.contains(e.target)) return;
+
       clearTimeout(timer);
-      timer = setTimeout(() => setShowCarousel(true), 5000);
-    };
-
-    // On user “activity” (click or key), hide and restart timer
-    const reset = () => {
       setShowCarousel(false);
-      scheduleShow();
+
+      timer = setTimeout(() => {
+        console.log("User inactive — showing carousel");
+        setShowCarousel(true);
+      }, 5000);
     };
 
-    scheduleShow(); // start on mount
+    window.addEventListener("pointermove", resetTimer);
+    window.addEventListener("keydown", resetTimer);
 
-    window.addEventListener("click", reset);
-    window.addEventListener("keydown", reset);
+    // kick off the first countdown
+    resetTimer({ target: document.body });
 
     return () => {
+      window.removeEventListener("pointermove", resetTimer);
+      window.removeEventListener("keydown", resetTimer);
       clearTimeout(timer);
-      window.removeEventListener("click", reset);
-      window.removeEventListener("keydown", reset);
     };
   }, []);
 
-  // 5️⃣ Navigation handlers
+  // navigation handlers
   const handleDoubleClick = () => {
     navigate("/");
     navigate(location.pathname, { replace: true });
@@ -79,7 +81,6 @@ export default function Home() {
       {/* Header */}
       <header className="header">
         <div className="top-bar">
-          {/* ... your icons ... */}
           <img
             src="/img/home_9243286.png"
             alt="Home"
@@ -89,7 +90,46 @@ export default function Home() {
             onClick={handleHomeClick}
             onDoubleClick={handleDoubleClick}
           />
-          {/* other icons omitted for brevity */}
+          <img
+            src="/img/contactUs_16769119.png"
+            alt="Contact"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/contact" ? "dim-icon" : ""
+            }`}
+            onClick={handleContactClick}
+          />
+          <img
+            src="/img/jenkins_5529124.png"
+            alt="About Jenkins"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/about_us" ? "dim-icon" : ""
+            }`}
+            onClick={handleJenkinsClick}
+          />
+          <img
+            src="/img/settings_16311406.png"
+            alt="User-DB"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/user" ? "dim-icon" : ""
+            }`}
+            onClick={handleDbClick}
+          />
+          <img
+            src="/img/privacy-icon.png"
+            alt="Storage"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/session_storage" ? "dim-icon" : ""
+            }`}
+            onClick={handleStorageClick}
+          />
+          <img
+            src="/img/seo-report_7605135.png"
+            alt="RegrReport"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/regression-report" ? "dim-icon" : ""
+            }`}
+            onClick={handleRegrClick}
+          />
         </div>
       </header>
 
@@ -118,9 +158,10 @@ export default function Home() {
           >
             <Outlet />
 
-            {/* 6️⃣ Carousel: always in the tree on “/”, but fade in/out */}
+            {/* carousel (always in tree on “/”) */}
             {isHome && (
               <div
+                ref={carouselRef}
                 className={`carousel-container ${
                   showCarousel ? "visible" : "hidden"
                 }`}
@@ -146,10 +187,12 @@ export default function Home() {
             width="100"
           />
         </a>
+        &nbsp;
       </footer>
     </div>
   );
 }
+
 
 
 
