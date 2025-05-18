@@ -492,6 +492,24 @@ overflow-y: auto;
 
 
 /****************** carusel ****************************/
+/****************** carousel ****************************/
+
+/* Fade-in / fade-out wrapper around the carousel */
+.carousel-container {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+.carousel-container.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.carousel-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Carousel viewport */
 .carousel-wrapper {
   overflow: hidden;
   width: 100%;
@@ -499,12 +517,14 @@ overflow-y: auto;
   background: #f5f5f5;
 }
 
+/* Scrolling track */
 .carousel-track {
   display: flex;
   animation: scroll 40s linear infinite;
   will-change: transform;
 }
 
+/* Each image container */
 .carousel-image-container {
   flex: 0 0 auto;
   width: 280px;
@@ -512,6 +532,7 @@ overflow-y: auto;
   transition: transform 0.3s ease-in-out;
 }
 
+/* The image itself */
 .carousel-image-container img {
   width: 100%;
   height: 200px;
@@ -522,19 +543,18 @@ overflow-y: auto;
   cursor: pointer;
 }
 
+/* Zoom 15% on hover */
 .carousel-image-container:hover img {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
+/* Pause scrolling when hovering anywhere in the carousel */
 .carousel-wrapper:hover .carousel-track {
   animation-play-state: paused;
 }
 
+/* Keyframes for auto-scroll */
 @keyframes scroll {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }

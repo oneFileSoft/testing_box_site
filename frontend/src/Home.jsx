@@ -1,98 +1,297 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import useInactivityRedirect from './utils/useInactivityRedirect';
-import './App.css';
+import useInactivityRedirect from "./utils/useInactivityRedirect";
+import "./App.css";
 import { ToastContainer } from "react-toastify";
-import { showToastSuccess } from './utils/toastUtils';
-import ImageCarousel from "./ImageCarousel"; // <-- ✅ Add this line
+import { showToastSuccess } from "./utils/toastUtils";
+import ImageCarousel from "./ImageCarousel";
 
 export default function Home() {
+  // set document title
   useEffect(() => {
     document.title = "testing area 51";
   }, []);
 
-  useInactivityRedirect(60000, '/');
+  // redirect after 60s inactivity
+  useInactivityRedirect(60000, "/");
 
   const location = useLocation();
-  const isHome = location.pathname !== "/";
-  const currentLoc = location.pathname;
   const navigate = useNavigate();
+  const isHome = location.pathname === "/";
 
   const [showCarousel, setShowCarousel] = useState(false);
+  const carouselRef = useRef(null);
 
   useEffect(() => {
     let timer;
+    const resetTimer = (e) => {
+      // ignore pointer/key events inside carousel
+      if (carouselRef.current?.contains(e.target)) return;
 
-    const resetTimer = () => {
       clearTimeout(timer);
       setShowCarousel(false);
+
       timer = setTimeout(() => {
+        console.log("User inactive — showing carousel");
         setShowCarousel(true);
-      }, 5000); // 5 seconds
+      }, 5000);
     };
 
-    window.addEventListener("mousemove", resetTimer);
+    window.addEventListener("pointermove", resetTimer);
     window.addEventListener("keydown", resetTimer);
 
-    resetTimer();
+    // start the first countdown
+    resetTimer({ target: document.body });
 
     return () => {
-      window.removeEventListener("mousemove", resetTimer);
+      window.removeEventListener("pointermove", resetTimer);
       window.removeEventListener("keydown", resetTimer);
       clearTimeout(timer);
     };
   }, []);
 
-  const handleDoubleClick = () => { navigate("/"); navigate(location.pathname, { replace: true }); }
+  // navigation handlers
+  const handleDoubleClick = () => {
+    navigate("/");
+    navigate(location.pathname, { replace: true });
+  };
   const handleHomeClick = () => {
     navigate("/");
-    fetch(`/version.txt?ts=${Date.now()}`, { cache: 'no-store' })
-      .then(res => res.text())
-      .then(txt => showToastSuccess(txt.trim()))
+    fetch(`/version.txt?ts=${Date.now()}`, { cache: "no-store" })
+      .then((res) => res.text())
+      .then((txt) => showToastSuccess(txt.trim()))
       .catch(() => {});
   };
-  const handleContactClick = () => navigate('/contact');
-  const handleJenkinsClick = () => navigate('/about_us');
-  const handleDbClick = () => { sessionStorage.clear(); navigate('/user'); }
-  const handleStorageClick = () => { sessionStorage.clear(); navigate('/session_storage'); }
-  const handleRegrClick = () => navigate('/regression-report');
+  const handleContactClick = () => navigate("/contact");
+  const handleJenkinsClick = () => navigate("/about_us");
+  const handleDbClick = () => {
+    sessionStorage.clear();
+    navigate("/user");
+  };
+  const handleStorageClick = () => {
+    sessionStorage.clear();
+    navigate("/session_storage");
+  };
+  const handleRegrClick = () => navigate("/regression-report");
 
   return (
     <div className="home-container">
-      {/* Header */}
       <header className="header">
         <div className="top-bar">
-          <img src="/img/home_9243286.png" alt="Home" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/" ? "dim-icon" : ""}`} onClick={handleHomeClick} onDoubleClick={handleDoubleClick}/>
-          <img src="/img/contactUs_16769119.png" alt="Contact" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/contact" ? "dim-icon" : ""}`} onClick={handleContactClick} />
-          <img src="/img/jenkins_5529124.png" alt="About Jenkins" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/about_us" ? "dim-icon" : ""}`} onClick={handleJenkinsClick} />
-          <img src="/img/settings_16311406.png" alt="User-DB" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/user" ? "dim-icon" : ""}`} onClick={handleDbClick} />
-          <img src="/img/privacy-icon.png" alt="Storage" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/session_storage" ? "dim-icon" : ""}`} onClick={handleStorageClick} />
-          <img src="/img/seo-report_7605135.png" alt="RegrReport" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/regression-report" ? "dim-icon" : ""}`} onClick={handleRegrClick} />
+          <img
+            src="/img/home_9243286.png"
+            alt="Home"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              isHome ? "dim-icon" : ""
+            }`}
+            onClick={handleHomeClick}
+            onDoubleClick={handleDoubleClick}
+          />
+          <img
+            src="/img/contactUs_16769119.png"
+            alt="Contact"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/contact" ? "dim-icon" : ""
+            }`}
+            onClick={handleContactClick}
+          />
+          <img
+            src="/img/jenkins_5529124.png"
+            alt="About Jenkins"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/about_us" ? "dim-icon" : ""
+            }`}
+            onClick={handleJenkinsClick}
+          />
+          <img
+            src="/img/settings_16311406.png"
+            alt="User-DB"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/user" ? "dim-icon" : ""
+            }`}
+            onClick={handleDbClick}
+          />
+          <img
+            src="/img/privacy-icon.png"
+            alt="Storage"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/session_storage" ? "dim-icon" : ""
+            }`}
+            onClick={handleStorageClick}
+          />
+          <img
+            src="/img/seo-report_7605135.png"
+            alt="RegrReport"
+            className={`bar-icon w-8 h-8 cursor-pointer ${
+              location.pathname === "/regression-report" ? "dim-icon" : ""
+            }`}
+            onClick={handleRegrClick}
+          />
         </div>
       </header>
 
-      <main className={`main-content ${isHome ? "dim-background" : ""}`} style={{ height: '97%' }}>
-        <div className="content-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
-          <div style={{ width: '90%', height: '100%', alignItems: 'center', justifyContent: 'center' }} className="min-h-0">
+      <main
+        className={`main-content ${isHome ? "dim-background" : ""}`}
+        style={{ height: "97%" }}
+      >
+        <div
+          className="content-container"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <div
+            className="min-h-0"
+            style={{
+              width: "90%",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Outlet />
-            {showCarousel && !isHome && (
-              <div style={{ marginTop: "30px" }}>
+
+            {/* always render, but toggle visibility */}
+            {isHome && (
+              <div
+                ref={carouselRef}
+                className={`carousel-container ${
+                  showCarousel ? "visible" : "hidden"
+                }`}
+              >
                 <ImageCarousel />
               </div>
             )}
           </div>
         </div>
+
         <ToastContainer />
       </main>
 
-      <footer className="footer" style={{ height: '3%', textAlign: "right"}}>
+      <footer className="footer" style={{ height: "3%", textAlign: "right" }}>
         <a name="trustbadge" href="https://trustlock.co">
-          <img name="trustseal" alt="Trust Badges" style={{ border: 0 }} src="https://trustlock.co/wp-content/uploads/2019/01/satisisfaction-guaranteed-badge-icon.png" width="100" />
-        </a>&nbsp;
+          <img
+            name="trustseal"
+            alt="Trust Badges"
+            style={{ border: 0 }}
+            src="https://trustlock.co/wp-content/uploads/2019/01/satisisfaction-guaranteed-badge-icon.png"
+            width="100"
+          />
+        </a>
+        &nbsp;
       </footer>
     </div>
   );
 }
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { Outlet, useNavigate, useLocation } from "react-router-dom";
+// import useInactivityRedirect from './utils/useInactivityRedirect';
+// import './App.css';
+// import { ToastContainer } from "react-toastify";
+// import { showToastSuccess } from './utils/toastUtils';
+// import ImageCarousel from "./ImageCarousel"; // <-- ✅ Add this line
+//
+// export default function Home() {
+//   useEffect(() => {
+//     document.title = "testing area 51";
+//   }, []);
+//
+//   useInactivityRedirect(60000, '/');
+//
+//   const location = useLocation();
+//   const isHome = location.pathname !== "/";
+//   const currentLoc = location.pathname;
+//   const navigate = useNavigate();
+//
+//   const [showCarousel, setShowCarousel] = useState(false);
+//
+//   useEffect(() => {
+//     let timer;
+//
+//     const resetTimer = () => {
+//       clearTimeout(timer);
+//       setShowCarousel(false);
+//       timer = setTimeout(() => {
+//         console.log("User inactive — showing carousel");
+//         setShowCarousel(true);
+//       }, 5000); // 5 seconds
+//     };
+//
+//     window.addEventListener("mousemove", resetTimer);
+//     window.addEventListener("keydown", resetTimer);
+//
+//     resetTimer();
+//
+//     return () => {
+//       window.removeEventListener("mousemove", resetTimer);
+//       window.removeEventListener("keydown", resetTimer);
+//       clearTimeout(timer);
+//     };
+//   }, []);
+//
+//   const handleDoubleClick = () => { navigate("/"); navigate(location.pathname, { replace: true }); }
+//   const handleHomeClick = () => {
+//     navigate("/");
+//     fetch(`/version.txt?ts=${Date.now()}`, { cache: 'no-store' })
+//       .then(res => res.text())
+//       .then(txt => showToastSuccess(txt.trim()))
+//       .catch(() => {});
+//   };
+//   const handleContactClick = () => navigate('/contact');
+//   const handleJenkinsClick = () => navigate('/about_us');
+//   const handleDbClick = () => { sessionStorage.clear(); navigate('/user'); }
+//   const handleStorageClick = () => { sessionStorage.clear(); navigate('/session_storage'); }
+//   const handleRegrClick = () => navigate('/regression-report');
+//
+//   return (
+//     <div className="home-container">
+//       {/* Header */}
+//       <header className="header">
+//         <div className="top-bar">
+//           <img src="/img/home_9243286.png" alt="Home" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/" ? "dim-icon" : ""}`} onClick={handleHomeClick} onDoubleClick={handleDoubleClick}/>
+//           <img src="/img/contactUs_16769119.png" alt="Contact" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/contact" ? "dim-icon" : ""}`} onClick={handleContactClick} />
+//           <img src="/img/jenkins_5529124.png" alt="About Jenkins" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/about_us" ? "dim-icon" : ""}`} onClick={handleJenkinsClick} />
+//           <img src="/img/settings_16311406.png" alt="User-DB" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/user" ? "dim-icon" : ""}`} onClick={handleDbClick} />
+//           <img src="/img/privacy-icon.png" alt="Storage" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/session_storage" ? "dim-icon" : ""}`} onClick={handleStorageClick} />
+//           <img src="/img/seo-report_7605135.png" alt="RegrReport" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/regression-report" ? "dim-icon" : ""}`} onClick={handleRegrClick} />
+//         </div>
+//       </header>
+//
+//       <main className={`main-content ${isHome ? "dim-background" : ""}`} style={{ height: '97%' }}>
+//         <div className="content-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
+//           <div style={{ width: '90%', height: '100%', alignItems: 'center', justifyContent: 'center' }} className="min-h-0">
+//             <Outlet />
+//             {showCarousel && !isHome && (
+//               <div style={{ marginTop: "30px" }}>
+//                 <ImageCarousel />
+//               </div>
+//             )}
+//           </div>
+//         </div>
+//         <ToastContainer />
+//       </main>
+//
+//       <footer className="footer" style={{ height: '3%', textAlign: "right"}}>
+//         <a name="trustbadge" href="https://trustlock.co">
+//           <img name="trustseal" alt="Trust Badges" style={{ border: 0 }} src="https://trustlock.co/wp-content/uploads/2019/01/satisisfaction-guaranteed-badge-icon.png" width="100" />
+//         </a>&nbsp;
+//       </footer>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
 
 // import React, { useEffect, useState } from "react";
 // import { Outlet, useNavigate, useLocation } from "react-router-dom";
