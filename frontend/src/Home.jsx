@@ -7,26 +7,23 @@ import { showToastSuccess } from "./utils/toastUtils";
 import ImageCarousel from "./ImageCarousel";
 
 export default function Home() {
-  // Set document title
   useEffect(() => {
     document.title = "testing area 51";
   }, []);
 
-  // Redirect after 60s inactivity
   useInactivityRedirect(60000, "/");
 
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
-  // Carousel visibility + ref
   const [showCarousel, setShowCarousel] = useState(false);
   const carouselRef = useRef(null);
 
   useEffect(() => {
     let timer;
+    let ignoreNextClick = false;
 
-    // Show carousel after 5s
     const scheduleShow = () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
@@ -35,25 +32,47 @@ export default function Home() {
       }, 5000);
     };
 
-    // Hide and restart on click or key (unless inside carousel)
     const reset = (e) => {
       if (carouselRef.current?.contains(e.target)) return;
+
+      if (ignoreNextClick) {
+        console.log("Ignoring first click after zoom exit");
+        ignoreNextClick = false;
+        return;
+      }
+
       setShowCarousel(false);
       scheduleShow();
     };
 
+    // Setup listeners
     scheduleShow();
     window.addEventListener("click", reset);
     window.addEventListener("keydown", reset);
+
+    // Setup image zoom-exit detection (mobile)
+    const zoomedImgs = document.querySelectorAll(".carousel-image-container img");
+    const handleZoomExit = () => {
+      if (window.innerWidth < 768) {
+        ignoreNextClick = true;
+      }
+    };
+    zoomedImgs.forEach((img) => {
+      img.addEventListener("touchstart", handleZoomExit);
+      img.addEventListener("click", handleZoomExit);
+    });
 
     return () => {
       clearTimeout(timer);
       window.removeEventListener("click", reset);
       window.removeEventListener("keydown", reset);
+      zoomedImgs.forEach((img) => {
+        img.removeEventListener("touchstart", handleZoomExit);
+        img.removeEventListener("click", handleZoomExit);
+      });
     };
   }, []);
 
-  // Navigation handlers
   const handleDoubleClick = () => {
     navigate("/");
     navigate(location.pathname, { replace: true });
@@ -85,9 +104,7 @@ export default function Home() {
           <img
             src="/img/home_9243286.png"
             alt="Home"
-            className={`bar-icon w-8 h-8 cursor-pointer ${
-              isHome ? "dim-icon" : ""
-            }`}
+            className={`bar-icon w-8 h-8 cursor-pointer ${isHome ? "dim-icon" : ""}`}
             onClick={handleHomeClick}
             onDoubleClick={handleDoubleClick}
           />
@@ -159,13 +176,10 @@ export default function Home() {
           >
             <Outlet />
 
-            {/* Carousel: always in tree on “/” but fade via CSS */}
             {isHome && (
               <div
                 ref={carouselRef}
-                className={`carousel-container ${
-                  showCarousel ? "visible" : "hidden"
-                }`}
+                className={`carousel-container ${showCarousel ? "visible" : "hidden"}`}
                 style={{ marginTop: "30px" }}
               >
                 <ImageCarousel />
@@ -194,105 +208,205 @@ export default function Home() {
   );
 }
 
-
-
-
-// import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState, useRef } from "react";
 // import { Outlet, useNavigate, useLocation } from "react-router-dom";
-// import useInactivityRedirect from './utils/useInactivityRedirect';
-// import './App.css';
+// import useInactivityRedirect from "./utils/useInactivityRedirect";
+// import "./App.css";
 // import { ToastContainer } from "react-toastify";
-// import { showToastSuccess } from './utils/toastUtils';
-// import ImageCarousel from "./ImageCarousel"; // <-- ✅ Add this line
+// import { showToastSuccess } from "./utils/toastUtils";
+// import ImageCarousel from "./ImageCarousel";
 //
 // export default function Home() {
+//   // Set document title
 //   useEffect(() => {
 //     document.title = "testing area 51";
 //   }, []);
 //
-//   useInactivityRedirect(60000, '/');
+//   // Redirect after 60s inactivity
+//   useInactivityRedirect(60000, "/");
 //
 //   const location = useLocation();
-//   const isHome = location.pathname !== "/";
-//   const currentLoc = location.pathname;
 //   const navigate = useNavigate();
+//   const isHome = location.pathname === "/";
 //
+//   // Carousel visibility + ref
 //   const [showCarousel, setShowCarousel] = useState(false);
+//   const carouselRef = useRef(null);
 //
 //   useEffect(() => {
 //     let timer;
 //
-//     const resetTimer = () => {
+//     // Show carousel after 5s
+//     const scheduleShow = () => {
 //       clearTimeout(timer);
-//       setShowCarousel(false);
 //       timer = setTimeout(() => {
 //         console.log("User inactive — showing carousel");
 //         setShowCarousel(true);
-//       }, 5000); // 5 seconds
+//       }, 5000);
 //     };
 //
-//     window.addEventListener("mousemove", resetTimer);
-//     window.addEventListener("keydown", resetTimer);
+//     // Hide and restart on click or key (unless inside carousel)
+//     const reset = (e) => {
+//       if (carouselRef.current?.contains(e.target)) return;
+//       setShowCarousel(false);
+//       scheduleShow();
+//     };
 //
-//     resetTimer();
+//     scheduleShow();
+//     window.addEventListener("click", reset);
+//     window.addEventListener("keydown", reset);
 //
 //     return () => {
-//       window.removeEventListener("mousemove", resetTimer);
-//       window.removeEventListener("keydown", resetTimer);
 //       clearTimeout(timer);
+//       window.removeEventListener("click", reset);
+//       window.removeEventListener("keydown", reset);
 //     };
 //   }, []);
 //
-//   const handleDoubleClick = () => { navigate("/"); navigate(location.pathname, { replace: true }); }
+//   // Navigation handlers
+//   const handleDoubleClick = () => {
+//     navigate("/");
+//     navigate(location.pathname, { replace: true });
+//   };
 //   const handleHomeClick = () => {
 //     navigate("/");
-//     fetch(`/version.txt?ts=${Date.now()}`, { cache: 'no-store' })
-//       .then(res => res.text())
-//       .then(txt => showToastSuccess(txt.trim()))
+//     fetch(`/version.txt?ts=${Date.now()}`, { cache: "no-store" })
+//       .then((res) => res.text())
+//       .then((txt) => showToastSuccess(txt.trim()))
 //       .catch(() => {});
 //   };
-//   const handleContactClick = () => navigate('/contact');
-//   const handleJenkinsClick = () => navigate('/about_us');
-//   const handleDbClick = () => { sessionStorage.clear(); navigate('/user'); }
-//   const handleStorageClick = () => { sessionStorage.clear(); navigate('/session_storage'); }
-//   const handleRegrClick = () => navigate('/regression-report');
+//   const handleContactClick = () => navigate("/contact");
+//   const handleJenkinsClick = () => navigate("/about_us");
+//   const handleDbClick = () => {
+//     sessionStorage.clear();
+//     navigate("/user");
+//   };
+//   const handleStorageClick = () => {
+//     sessionStorage.clear();
+//     navigate("/session_storage");
+//   };
+//   const handleRegrClick = () => navigate("/regression-report");
 //
 //   return (
 //     <div className="home-container">
 //       {/* Header */}
 //       <header className="header">
 //         <div className="top-bar">
-//           <img src="/img/home_9243286.png" alt="Home" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/" ? "dim-icon" : ""}`} onClick={handleHomeClick} onDoubleClick={handleDoubleClick}/>
-//           <img src="/img/contactUs_16769119.png" alt="Contact" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/contact" ? "dim-icon" : ""}`} onClick={handleContactClick} />
-//           <img src="/img/jenkins_5529124.png" alt="About Jenkins" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/about_us" ? "dim-icon" : ""}`} onClick={handleJenkinsClick} />
-//           <img src="/img/settings_16311406.png" alt="User-DB" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/user" ? "dim-icon" : ""}`} onClick={handleDbClick} />
-//           <img src="/img/privacy-icon.png" alt="Storage" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/session_storage" ? "dim-icon" : ""}`} onClick={handleStorageClick} />
-//           <img src="/img/seo-report_7605135.png" alt="RegrReport" className={`bar-icon w-8 h-8 cursor-pointer ${currentLoc === "/regression-report" ? "dim-icon" : ""}`} onClick={handleRegrClick} />
+//           <img
+//             src="/img/home_9243286.png"
+//             alt="Home"
+//             className={`bar-icon w-8 h-8 cursor-pointer ${
+//               isHome ? "dim-icon" : ""
+//             }`}
+//             onClick={handleHomeClick}
+//             onDoubleClick={handleDoubleClick}
+//           />
+//           <img
+//             src="/img/contactUs_16769119.png"
+//             alt="Contact"
+//             className={`bar-icon w-8 h-8 cursor-pointer ${
+//               location.pathname === "/contact" ? "dim-icon" : ""
+//             }`}
+//             onClick={handleContactClick}
+//           />
+//           <img
+//             src="/img/jenkins_5529124.png"
+//             alt="About Jenkins"
+//             className={`bar-icon w-8 h-8 cursor-pointer ${
+//               location.pathname === "/about_us" ? "dim-icon" : ""
+//             }`}
+//             onClick={handleJenkinsClick}
+//           />
+//           <img
+//             src="/img/settings_16311406.png"
+//             alt="User-DB"
+//             className={`bar-icon w-8 h-8 cursor-pointer ${
+//               location.pathname === "/user" ? "dim-icon" : ""
+//             }`}
+//             onClick={handleDbClick}
+//           />
+//           <img
+//             src="/img/privacy-icon.png"
+//             alt="Storage"
+//             className={`bar-icon w-8 h-8 cursor-pointer ${
+//               location.pathname === "/session_storage" ? "dim-icon" : ""
+//             }`}
+//             onClick={handleStorageClick}
+//           />
+//           <img
+//             src="/img/seo-report_7605135.png"
+//             alt="RegrReport"
+//             className={`bar-icon w-8 h-8 cursor-pointer ${
+//               location.pathname === "/regression-report" ? "dim-icon" : ""
+//             }`}
+//             onClick={handleRegrClick}
+//           />
 //         </div>
 //       </header>
 //
-//       <main className={`main-content ${isHome ? "dim-background" : ""}`} style={{ height: '97%' }}>
-//         <div className="content-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
-//           <div style={{ width: '90%', height: '100%', alignItems: 'center', justifyContent: 'center' }} className="min-h-0">
+//       {/* Main Content */}
+//       <main
+//         className={`main-content ${isHome ? "dim-background" : ""}`}
+//         style={{ height: "97%" }}
+//       >
+//         <div
+//           className="content-container"
+//           style={{
+//             display: "flex",
+//             flexDirection: "column",
+//             width: "100%",
+//             height: "100%",
+//           }}
+//         >
+//           <div
+//             className="min-h-0"
+//             style={{
+//               width: "90%",
+//               height: "100%",
+//               alignItems: "center",
+//               justifyContent: "center",
+//             }}
+//           >
 //             <Outlet />
-//             {showCarousel && !isHome && (
-//               <div style={{ marginTop: "30px" }}>
+//
+//             {/* Carousel: always in tree on “/” but fade via CSS */}
+//             {isHome && (
+//               <div
+//                 ref={carouselRef}
+//                 className={`carousel-container ${
+//                   showCarousel ? "visible" : "hidden"
+//                 }`}
+//                 style={{ marginTop: "30px" }}
+//               >
 //                 <ImageCarousel />
 //               </div>
 //             )}
 //           </div>
 //         </div>
+//
 //         <ToastContainer />
 //       </main>
 //
-//       <footer className="footer" style={{ height: '3%', textAlign: "right"}}>
+//       {/* Footer */}
+//       <footer className="footer" style={{ height: "3%", textAlign: "right" }}>
 //         <a name="trustbadge" href="https://trustlock.co">
-//           <img name="trustseal" alt="Trust Badges" style={{ border: 0 }} src="https://trustlock.co/wp-content/uploads/2019/01/satisisfaction-guaranteed-badge-icon.png" width="100" />
-//         </a>&nbsp;
+//           <img
+//             name="trustseal"
+//             alt="Trust Badges"
+//             style={{ border: 0 }}
+//             src="https://trustlock.co/wp-content/uploads/2019/01/satisisfaction-guaranteed-badge-icon.png"
+//             width="100"
+//           />
+//         </a>
+//         &nbsp;
 //       </footer>
 //     </div>
 //   );
 // }
+
+
+
+
 
 
 

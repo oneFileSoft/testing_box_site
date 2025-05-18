@@ -557,9 +557,9 @@ overflow-y: auto;
   cursor: pointer;
 }
 
-/* Zoom 50% on hover */
+/* Zoom 130% on hover */
 .carousel-image-container:hover img {
-  transform: scale(2.00);
+  transform: scale(2.30);
 }
 
 /* Pause scrolling when hovering over carousel */
