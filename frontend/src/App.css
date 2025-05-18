@@ -524,7 +524,7 @@ overflow-y: auto;
 /* Scrolling track */
 .carousel-track {
   display: flex;
-  animation: scroll 15s linear infinite;
+  animation: scroll 30s linear infinite;
   will-change: transform;
   overflow: visible; /* allow children to overflow */
   width: max-content;
