@@ -500,6 +500,7 @@ overflow-y: auto;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   pointer-events: none;
+  margin-top: 40px;
 }
 .carousel-container.visible {
   opacity: 1;
@@ -525,6 +526,7 @@ overflow-y: auto;
   display: flex;
   animation: scroll 40s linear infinite;
   will-change: transform;
+  overflow: visible; /* allow children to overflow */
 }
 
 /* Each image container */
@@ -533,8 +535,14 @@ overflow-y: auto;
   width: 280px;
   margin-right: 16px;
   transition: transform 0.3s ease-in-out;
-  position: relative; /* ensure higher stacking */
-  z-index: 1;
+  position: relative;
+  overflow: visible;   /* important to let the image pop out */
+  z-index: 1;          /* baseline stacking */
+}
+
+/* Elevate on hover so it covers siblings */
+.carousel-image-container:hover {
+  z-index: 10;
 }
 
 /* The image itself */
@@ -548,9 +556,9 @@ overflow-y: auto;
   cursor: pointer;
 }
 
-/* Zoom 25% on hover */
+/* Zoom 35% on hover */
 .carousel-image-container:hover img {
-  transform: scale(1.25);
+  transform: scale(1.35);
 }
 
 /* Pause scrolling when hovering over carousel */
