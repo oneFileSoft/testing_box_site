@@ -1,58 +1,59 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import useInactivityRedirect from './utils/useInactivityRedirect';
+import useInactivityRedirect from "./utils/useInactivityRedirect";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
 import { showToastSuccess } from "./utils/toastUtils";
 import ImageCarousel from "./ImageCarousel";
 
 export default function Home() {
-  // set document title
+  // Set document title
   useEffect(() => {
     document.title = "testing area 51";
   }, []);
 
-  // redirect after 60s inactivity
+  // Redirect after 60s inactivity
   useInactivityRedirect(60000, "/");
 
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
-  // carousel visibility + ref
+  // Carousel visibility + ref
   const [showCarousel, setShowCarousel] = useState(false);
   const carouselRef = useRef(null);
 
   useEffect(() => {
     let timer;
 
-    const resetTimer = (e) => {
-      // ignore pointer/key events inside the carousel container
-      if (carouselRef.current?.contains(e.target)) return;
-
+    // Show carousel after 5s
+    const scheduleShow = () => {
       clearTimeout(timer);
-      setShowCarousel(false);
-
       timer = setTimeout(() => {
         console.log("User inactive — showing carousel");
         setShowCarousel(true);
       }, 5000);
     };
 
-    window.addEventListener("pointermove", resetTimer);
-    window.addEventListener("keydown", resetTimer);
+    // Hide and restart on click or key (unless inside carousel)
+    const reset = (e) => {
+      if (carouselRef.current?.contains(e.target)) return;
+      setShowCarousel(false);
+      scheduleShow();
+    };
 
-    // kick off the first countdown
-    resetTimer({ target: document.body });
+    scheduleShow();
+    window.addEventListener("click", reset);
+    window.addEventListener("keydown", reset);
 
     return () => {
-      window.removeEventListener("pointermove", resetTimer);
-      window.removeEventListener("keydown", resetTimer);
       clearTimeout(timer);
+      window.removeEventListener("click", reset);
+      window.removeEventListener("keydown", reset);
     };
   }, []);
 
-  // navigation handlers
+  // Navigation handlers
   const handleDoubleClick = () => {
     navigate("/");
     navigate(location.pathname, { replace: true });
@@ -158,7 +159,7 @@ export default function Home() {
           >
             <Outlet />
 
-            {/* carousel (always in tree on “/”) */}
+            {/* Carousel: always in tree on “/” but fade via CSS */}
             {isHome && (
               <div
                 ref={carouselRef}
