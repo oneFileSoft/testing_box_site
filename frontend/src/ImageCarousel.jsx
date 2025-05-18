@@ -45,7 +45,6 @@ export default function ImageCarousel() {
             <img src={src} />
           </div>
         ))}
-
       </div>
 
     </div>
