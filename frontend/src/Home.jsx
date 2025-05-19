@@ -180,9 +180,10 @@ export default function Home() {
               <div
                 ref={carouselRef}
                 className={`carousel-container ${showCarousel ? "visible" : "hidden"}`}
-                style={{ marginTop: "30px" }}
               >
-                <ImageCarousel />
+                <div className="carousel-scroll-wrapper">
+                  <ImageCarousel />
+                </div>
               </div>
             )}
           </div>

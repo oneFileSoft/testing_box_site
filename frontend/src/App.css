@@ -500,22 +500,32 @@ overflow-y: auto;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   pointer-events: none;
-  margin-top: 140px;
-  position: relative;         /* ensures stacking respects DOM flow */
+  margin-top: 80px;
+  position: relative;
   z-index: 1;
-  scroll-behavior: smooth;
-  overflow-y: auto;
 }
+
 .carousel-container.visible {
   opacity: 1;
   pointer-events: auto;
 }
+
 .carousel-container.hidden {
   opacity: 0;
   pointer-events: none;
 }
 
-/* Viewport: hide horizontal overflow, allow vertical overflow */
+/* This wrapper scrolls internally if zoomed image overflows */
+.carousel-scroll-wrapper {
+  max-height: 500px; /* Adjust if needed */
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  scroll-behavior: smooth;
+  padding-right: 10px; /* avoid accidental cutoff */
+}
+
+/* Carousel viewport */
 .carousel-wrapper {
   overflow-x: hidden;
   overflow-y: visible;
@@ -530,7 +540,7 @@ overflow-y: auto;
   display: flex;
   animation: scroll 50s linear infinite;
   will-change: transform;
-  overflow: visible; /* allow children to overflow */
+  overflow: visible;
   width: max-content;
 }
 
@@ -541,11 +551,11 @@ overflow-y: auto;
   margin-right: 16px;
   transition: transform 0.3s ease-in-out;
   position: relative;
-  overflow: visible;   /* important to let the image pop out */
-  z-index: 1;          /* baseline stacking */
+  overflow: visible;
+  z-index: 1;
 }
 
-/* Elevate on hover so it covers siblings */
+/* Elevate above neighbors (but NOT over menu) */
 .carousel-image-container:hover {
   z-index: 10;
 }
@@ -559,21 +569,19 @@ overflow-y: auto;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  outline: 2px dashed red;
 }
 
-/* Zoom 130% on hover */
+/* Zoom logic */
 .carousel-image-container:hover img {
   transform: scale(2.5);
   position: relative;
 }
 
-/* Pause scrolling when hovering over carousel */
+/* Pause scroll on hover */
 .carousel-wrapper:hover .carousel-track {
   animation-play-state: paused;
 }
 
-/* Auto-scroll keyframes */
 @keyframes scroll {
   0%   { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
