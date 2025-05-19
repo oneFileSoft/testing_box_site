@@ -574,6 +574,7 @@ overflow-y: auto;
 /* Zoom logic */
 .carousel-image-container:hover img {
   transform: scale(2.5);
+  transform-origin: top center;  /* 👈 Force zoom to grow down, not up */
   position: relative;
 }
 
