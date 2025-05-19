@@ -32,7 +32,7 @@ const images = [
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525192/047_thiaga.png",
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525192/049_hqkdjm.png",
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525192/048_ckmk5x.png",
-  "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525192/050_ppcrrr.png"
+  "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747624802/050_ooj1gh.png"
 ];
 
 export default function ImageCarousel() {
