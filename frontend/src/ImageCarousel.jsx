@@ -44,6 +44,12 @@ export default function ImageCarousel() {
             <img src={src} />
           </div>
         ))}
+        {images.map((src, index) => (
+              <div className="carousel-image-container" key={`dup-${index}`}>
+                <img src={src} />
+              </div>
+            ))
+        }
       </div>
 
     </div>
