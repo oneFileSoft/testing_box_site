@@ -50,7 +50,7 @@ export default function ImageCarousel() {
             <img src={src} />
           </div>
         ))}
-        // fake, but efficient incrimenting for number of images
+        // CI / CD pipeline ->->->->->->->
         {images.map((src, index) => (
               <div className="carousel-image-container" key={`dup-${index}`}>
                 <img src={src} />
