@@ -23,8 +23,8 @@ const images = [
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525192/047_thiaga.png",
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525192/049_hqkdjm.png",
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525192/048_ckmk5x.png",
-  "https://res.cloudinary.com/dhytjj4rp/image/upload/v1748626399/carusel_vu4tds.png"
-  "https://res.cloudinary.com/dhytjj4rp/image/upload/v1748624857/Playwright_xsqq1g.png"//playwright
+  "https://res.cloudinary.com/dhytjj4rp/image/upload/v1748626399/carusel_vu4tds.png",
+  "https://res.cloudinary.com/dhytjj4rp/image/upload/v1748624857/Playwright_xsqq1g.png",//playwright
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525188/010_zxkoet.png",
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525188/011_oi5pem.png",
   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525188/012_uaqm1d.png",
@@ -50,6 +50,7 @@ export default function ImageCarousel() {
             <img src={src} />
           </div>
         ))}
+        // fake, but efficient incrimenting for number of images
         {images.map((src, index) => (
               <div className="carousel-image-container" key={`dup-${index}`}>
                 <img src={src} />
