@@ -15,50 +15,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// for visitor-counter:
-const fs = require("fs");
-const path = require("path");
-const ipMap = {}; // Runtime memory tracking
-const TIMEOUT_MS = 60 * 60 * 1000; // 1 hour
-if (!fs.existsSync(countFile)) fs.writeFileSync(countFile, "0");
-function getClientIp(req) {
-  return (
-    req.headers["x-forwarded-for"]?.split(",")[0] ||
-    req.connection?.remoteAddress ||
-    req.socket?.remoteAddress ||
-    "unknown"
-  );
-}
-
-// GET current count
-router.get("/api/visitor-count", (req, res) => {
-  const count = parseInt(fs.readFileSync(countFile, "utf8")) || 0;
-  res.json({ count });
-});
-
-// POST to maybe increment count
-router.post("/api/visitor-count", (req, res) => {
-  const ip = getClientIp(req);
-  const now = Date.now();
-
-  const lastVisit = ipMap[ip];
-  const shouldIncrement = !lastVisit || now - lastVisit > TIMEOUT_MS;
-
-  let count = parseInt(fs.readFileSync(countFile, "utf8")) || 0;
-
-  if (shouldIncrement) {
-    count += 1;
-    fs.writeFileSync(countFile, count.toString());
-    ipMap[ip] = now;
-    console.log(`New visit from ${ip}. Updated count: ${count}`);
-  } else {
-    console.log(`Repeat visit from ${ip} — no increment.`);
-  }
-
-  res.json({ count });
-});
-///////////////
-
 
 //following increase limit size for the incoming data, for example from Jenkins (consolLog and html-regr-result)
 app.use(express.json({ limit: '50mb' }));
@@ -102,6 +58,8 @@ app.use('/api', insertRegrReport);
 const getRegrRecords = require('./routes/getRegrRecords');
 app.use('/api', getRegrRecords);
 
+const visitorCounter = require('./routes/visitorCounter');
+app.use('/', visitorCounter);
 
 app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
   const { format, emailTo, buildNumb, subject } = req.body;
@@ -211,8 +169,6 @@ app.post('/send-email', async (req, res) => {
         });
   }
 });
-
-
 
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 

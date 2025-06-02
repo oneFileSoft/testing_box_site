@@ -18,7 +18,18 @@ export default function Home() {
   const isHome = location.pathname === "/";
 
   const [showCarousel, setShowCarousel] = useState(false);
+  const [visitorCount, setVisitorCount] = useState(null);
   const carouselRef = useRef(null);
+
+  useEffect(() => {
+    // Visitor counter effect (run once)
+    fetch("/api/visitor-count", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => setVisitorCount(data.count))
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     let timer;
@@ -45,12 +56,10 @@ export default function Home() {
       scheduleShow();
     };
 
-    // Setup listeners
     scheduleShow();
     window.addEventListener("click", reset);
     window.addEventListener("keydown", reset);
 
-    // Setup image zoom-exit detection (mobile)
     const zoomedImgs = document.querySelectorAll(".carousel-image-container img");
     const handleZoomExit = () => {
       if (window.innerWidth < 768) {
@@ -193,7 +202,19 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="footer" style={{ height: "3%", textAlign: "right" }}>
+      <footer
+        className="footer"
+        style={{
+          height: "3%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0 1rem",
+        }}
+      >
+        <div className="visitor-counter" style={{ fontSize: "0.85rem" }}>
+          {visitorCount !== null ? `Visitors: ${visitorCount}` : "Loading..."}
+        </div>
         <a name="trustbadge" href="https://trustlock.co">
           <img
             name="trustseal"
@@ -203,11 +224,11 @@ export default function Home() {
             width="100"
           />
         </a>
-        &nbsp;
       </footer>
     </div>
   );
 }
+
 
 // import React, { useEffect, useState, useRef } from "react";
 // import { Outlet, useNavigate, useLocation } from "react-router-dom";
