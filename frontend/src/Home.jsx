@@ -213,7 +213,7 @@ export default function Home() {
         }}
       >
         <div className="visitor-counter" style={{ fontSize: "0.85rem" }}>
-          {visitorCount !== null ? `Visitors: ${visitorCount}` : "Loading..."}
+          {visitorCount !== null ? `👁${visitorCount}` : "Loading..."}
         </div>
         <a name="trustbadge" href="https://trustlock.co">
           <img
