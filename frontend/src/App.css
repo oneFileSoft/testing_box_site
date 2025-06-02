@@ -518,7 +518,7 @@ overflow-y: auto;
 /* This wrapper scrolls internally if zoomed image overflows */
 .carousel-scroll-wrapper {
   max-height: 600px; /* Adjust if needed */
-  overflow-y: auto;
+  overflow: auto;
   overflow-x: hidden;
   position: relative;
   scroll-behavior: smooth;
