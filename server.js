@@ -6,7 +6,7 @@ const multer = require('multer');
 
 const upload = multer(); // memoryStorage is default
 const app = express();
-const port = process.env.PORT || 3000;;
+const port = process.env.PORT || 3000;
 
 const corsOptions = {
     origin: '*', // Allow all origins (for testing, replace in production)
@@ -14,6 +14,52 @@ const corsOptions = {
     allowedHeaders: ['Content-Type'],
 };
 app.use(cors(corsOptions));
+
+// for visitor-counter:
+const fs = require("fs");
+const path = require("path");
+const ipMap = {}; // Runtime memory tracking
+const TIMEOUT_MS = 60 * 60 * 1000; // 1 hour
+if (!fs.existsSync(countFile)) fs.writeFileSync(countFile, "0");
+function getClientIp(req) {
+  return (
+    req.headers["x-forwarded-for"]?.split(",")[0] ||
+    req.connection?.remoteAddress ||
+    req.socket?.remoteAddress ||
+    "unknown"
+  );
+}
+
+// GET current count
+router.get("/api/visitor-count", (req, res) => {
+  const count = parseInt(fs.readFileSync(countFile, "utf8")) || 0;
+  res.json({ count });
+});
+
+// POST to maybe increment count
+router.post("/api/visitor-count", (req, res) => {
+  const ip = getClientIp(req);
+  const now = Date.now();
+
+  const lastVisit = ipMap[ip];
+  const shouldIncrement = !lastVisit || now - lastVisit > TIMEOUT_MS;
+
+  let count = parseInt(fs.readFileSync(countFile, "utf8")) || 0;
+
+  if (shouldIncrement) {
+    count += 1;
+    fs.writeFileSync(countFile, count.toString());
+    ipMap[ip] = now;
+    console.log(`New visit from ${ip}. Updated count: ${count}`);
+  } else {
+    console.log(`Repeat visit from ${ip} — no increment.`);
+  }
+
+  res.json({ count });
+});
+///////////////
+
+
 //following increase limit size for the incoming data, for example from Jenkins (consolLog and html-regr-result)
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -55,15 +101,6 @@ app.use('/api', insertRegrReport);
 
 const getRegrRecords = require('./routes/getRegrRecords');
 app.use('/api', getRegrRecords);
-
-
-//    let mailOptions = {
-//      from: 'test@testingbox.pw',
-//      to: emailTo,
-//      subject: `Build#${buildNumb} - RegressionReport`,
-//      ...(format === 0 ? { html: message } : { text: message }),
-//    };
-
 
 
 app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
@@ -128,66 +165,6 @@ app.post('/report-api-email', upload.single('attachment'), async (req, res) => {
     });
   }
 });
-// not sure why but this workd one, and the it stop
-//app.post('/report-email', upload.single('attachment'), async (req, res) => {
-//  const { format, emailTo, buildNumb } = req.body;
-//  const attachmentFile = req.file;
-//
-//  if ((!format && format !== "0") || !emailTo || !buildNumb) {
-//    return res.status(400).json({
-//      success: false,
-//      message: `All fields are required got format[${format}] emailTo[${emailTo}] buildNumb[${buildNumb}]`
-//    });
-//  }
-//
-//  try {
-//    let transporter = nodemailer.createTransport({
-//      host: 'testingbox.pw',
-//      port: 465,
-//      secure: true,
-//      auth: {
-//        user: 'test@testingbox.pw',
-//        pass: 'zdr6^$rfv'
-//      }
-//    });
-//
-//    await transporter.verify();
-//
-//    let mailOptions = {
-//      from: 'test@testingbox.pw',
-//      to: emailTo,
-//      subject: `Build#${buildNumb} - RegressionReport`,
-//      text: "Attached is the latest Playwright regression report.",
-//      attachments: []
-//    };
-//
-//    if (format === "0" && attachmentFile) {
-//      mailOptions.attachments.push({
-//        filename: `PlaywrightReport_Build${buildNumb}.html`,
-//        content: attachmentFile.buffer,
-//        contentType: attachmentFile.mimetype
-//      });
-//    } else {
-//      mailOptions.text = req.body.message || mailOptions.text;
-//    }
-//
-//    const info = await transporter.sendMail(mailOptions);
-//    console.log('Email send result:', info);
-//
-//    return res.status(200).json({
-//      success: true,
-//      message: 'Email sent successfully',
-//      mailInfo: info
-//    });
-//
-//  } catch (error) {
-//    console.error("Error sending email: ", error);
-//    return res.status(500).json({ success: false, message: 'Error: ' + error.message });
-//  }
-//});
-
-
-
 
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
@@ -245,10 +222,6 @@ app.get(/^\/(?!api).*/, (req, res) => {
 });
 
 
-// Start the server
-//app.listen(port,  () => {
-//  console.log(`Server running at http://${host}:${port}`);
-//});
 const host = '0.0.0.0';
 app.listen(port, host, () => {
   console.log(`Server running at http://${host}:${port}`);

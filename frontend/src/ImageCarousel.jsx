@@ -56,7 +56,7 @@ const images = [
 //   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525189/013_ysu4nw.png",
 "https://i.ibb.co/My6fc84T/013.png",
 //   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1748624858/jmeter_vfstkf.png",//jmeter
-"https://i.ibb.co/kVDdS5ck/jmeter.png"
+"https://i.ibb.co/kVDdS5ck/jmeter.png",
 //   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525189/020_gfr02v.png",
 "https://i.ibb.co/844P8Bkc/020.png",
 //   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525189/021_wphypt.png",
