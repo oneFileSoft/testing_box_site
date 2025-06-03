@@ -69,6 +69,7 @@ const images = [
 "https://i.ibb.co/xS0BsLHp/022.png",
 //   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1748624857/Jenkins_ppfsb3.png",//jenkins
 "https://i.ibb.co/HpdfYRrQ/jenkins.png",
+"https://i.ibb.co/hFdbbS3y/039.png",
 //   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747525191/035_wctids.png",
 "https://i.ibb.co/wZf5Vp2R/035.png",
 //   "https://res.cloudinary.com/dhytjj4rp/image/upload/v1747599411/036_ve5egl.png",
