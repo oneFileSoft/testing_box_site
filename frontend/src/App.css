@@ -587,3 +587,108 @@ overflow-y: auto;
   0%   { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
 }
+
+/********* specific user ***********/
+/* SpecificUser.css */
+
+/* This wrapper centers the form both horizontally and gives a bit of top spacing */
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px; /* top/bottom: 40px; left/right: 16px */
+  background-color: #f5f7fa; /* subtle off-white background behind the form */
+  min-height: 100vh;        /* make sure it fills the screen height */
+  box-sizing: border-box;
+}
+
+/* The “white box” that looks like a standalone form */
+.form-container {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 600px;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header inside the form box */
+.form-heading {
+  margin: 0 0 16px 0;
+  font-size: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+/* Make the textarea fill most of the form container */
+.form-textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: 12px;
+  font-size: 1rem;
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+/* Row to hold both buttons, aligned to the right */
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Common button styles */
+.btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+/* “Cancel” is a light gray button */
+.btn-cancel {
+  background-color: #e0e0e0;
+  color: #333;
+}
+.btn-cancel:hover {
+  background-color: #d5d5d5;
+}
+
+/* “Save” is a blue button */
+.btn-save {
+  background-color: #2563eb; /* blue-600 */
+  color: #fff;
+}
+.btn-save:hover {
+  background-color: #1e4bb8; /* slightly darker blue */
+}
+
+/* Responsive adjustments (optional) */
+@media (max-width: 480px) {
+  .form-container {
+    padding: 16px;
+  }
+  .form-heading {
+    font-size: 1.25rem;
+  }
+  .btn {
+    flex: 1;            /* on mobile, let buttons stretch equally */
+    text-align: center;
+  }
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .button-row .btn {
+    margin-bottom: 8px;
+  }
+}
