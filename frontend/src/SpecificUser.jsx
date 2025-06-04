@@ -1,5 +1,3 @@
-// src/SpecificUser.jsx
-
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -102,7 +100,7 @@ export default function SpecificUser() {
   return (
     <div className="specific-user-page">
       <div className="form-card">
-        <h2 className="form-title">Specific User Details</h2>
+        <h2 className="form-title">Company Details</h2>
 
         {loading ? (
           <p style={{ textAlign: "center", margin: "24px 0" }}>Loading…</p>
@@ -121,40 +119,13 @@ export default function SpecificUser() {
             {/* Show Reload button only if a conflict occurred */}
             {showReload && (
               <div style={{ textAlign: "center", marginBottom: "12px" }}>
-                <button
-                  className="btn-reload"
-                  onClick={handleReload}
-                  disabled={loading}
-                  style={{
-                    padding: "8px 16px",
-                    fontSize: "1rem",
-                    backgroundColor: "#f59e0b", // amber-500
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Reload Latest
-                </button>
+                <button className="btn-reload" onClick={handleReload} disabled={loading} > Reload Latest </button>
               </div>
             )}
 
             <div className="form-actions">
-              <button
-                className="btn-cancel"
-                onClick={handleCancel}
-                disabled={saving}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn-save"
-                onClick={handleSave}
-                disabled={saving}
-              >
-                {saving ? "Saving…" : "Save"}
-              </button>
+              <button className="btn-cancel" onClick={handleCancel} disabled={saving} > Cancel </button>
+              <button className="btn-save" onClick={handleSave} disabled={saving} > {saving ? "Saving…" : "Save"} </button>
             </div>
           </>
         )}
