@@ -21,15 +21,24 @@ const AboutUs = () => {
   const [selectedStep, setSelectedStep] = useState(null);
   const [detailsData, setDetailsData] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
-
-  const storedUser = typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
-  const hashedSession = await hashPassword(storedUser.split(0, -2));
-  const isAuthorized =
-      "m+J/U9hM5FtnHGHpKZ44NL+ixZecXWyq0tUp+XScEowI3xA59Oq1cZoHFZqzM7Hl98xq1uXxtT4vY7yzL5nPEA=="
-      === hashedSession;
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    const handleBeforeUnload = () => { sessionStorage.removeItem("user"); };
+    const computeHash = async () => {
+      const storedUser = typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
+      if (storedUser) {
+        const hashedSession = await hashPassword(storedUser.slice(0, -2));
+        const isValid = hashedSession === "m+J/U9hM5FtnHGHpKZ44NL+ixZecXWyq0tUp+XScEowI3xA59Oq1cZoHFZqzM7Hl98xq1uXxtT4vY7yzL5nPEA==";
+        setIsAuthorized(isValid);
+      }
+    };
+
+    computeHash();
+
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem("user");
+    };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -51,16 +60,15 @@ const AboutUs = () => {
       }
     }
   };
-  const whichDetails = isAuthorized ? detailsData : simpleDetails;// Choose which array to read from
+
+  const whichDetails = isAuthorized ? detailsData : simpleDetails;
 
   return (
     <div className="about-container">
-      {/* Title Section */}
       <div className="about-hero">
         <h2 style={{ color: "black" }}>CI / CD workflow</h2>
       </div>
 
-      {/* Jenkins Controller Box */}
       <div className="about-box">
         <div className="controller-box">
           <h2>Jenkins controller</h2>
@@ -112,7 +120,6 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* Jenkins actions */}
       {selectedStep === null && (
         <div className="about-grid">
           <div className="about-card">
