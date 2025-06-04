@@ -1,15 +1,17 @@
+// src/SpecificUser.jsx
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./App.css";
+import "./App.css"; // Make sure this is imported last so it overrides global styles as needed
 
 export default function SpecificUser() {
   const navigate = useNavigate();
   const [textValue, setTextValue] = useState("");
 
   const handleSave = () => {
-    // TODO: add your “save” logic here
+    // TODO: Put your “save” logic here (e.g. API call)
     console.log("Saving text:", textValue);
-    navigate('/');
+    navigate('/'); // Go back to the previous screen (or change to any route you like)
   };
 
   const handleCancel = () => {
@@ -17,20 +19,20 @@ export default function SpecificUser() {
   };
 
   return (
-    <div className="form-wrapper">
-      <div className="form-container">
-        <h2 className="form-heading">Arbatrade info</h2>
+    <div className="specific-user-page">
+      <div className="form-card">
+        <h2 className="form-title">Specific User Details</h2>
 
         <textarea
-          className="form-textarea"
+          className="input-area"
           value={textValue}
           onChange={(e) => setTextValue(e.target.value)}
           placeholder="Enter your text here..."
         />
 
-        <div className="button-row">
-          <button className="btn btn-cancel" onClick={handleCancel}>Cancel</button>
-          <button className="btn btn-save" onClick={handleSave}>Save</button>
+        <div className="form-actions">
+          <button className="btn-cancel" onClick={handleCancel}> Cancel </button>
+          <button className="btn-save" onClick={handleSave}> Save </button>
         </div>
       </div>
     </div>

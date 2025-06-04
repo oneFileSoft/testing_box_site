@@ -589,106 +589,142 @@ overflow-y: auto;
 }
 
 /********* specific user ***********/
-/* SpecificUser.css */
+/* src/SpecificUser.css */
 
-/* This wrapper centers the form both horizontally and gives a bit of top spacing */
-.form-wrapper {
+/*
+  1) .specific-user-page simply makes sure the form-card is centered,
+     but does NOT override your site’s existing page background.
+     If your global layout already has a background color or image,
+     this wrapper will sit on top of it.
+*/
+.specific-user-page {
   display: flex;
   justify-content: center;
-  padding: 40px 16px; /* top/bottom: 40px; left/right: 16px */
-  background-color: #f5f7fa; /* subtle off-white background behind the form */
-  min-height: 100vh;        /* make sure it fills the screen height */
+  padding: 24px;           /* adjust top/bottom or left/right padding as needed */
   box-sizing: border-box;
+  width: 100%;
 }
 
-/* The “white box” that looks like a standalone form */
-.form-container {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  max-width: 600px;
-  width: 100%;
-  padding: 24px;
+/*
+  2) .form-card is the “white box” that contains the entire form.
+     It has a subtle shadow and rounded corners so it stands out,
+     but doesn’t fill the entire screen.
+*/
+.form-card {
+  background-color: #ffffff;             /* pure white */
+  border: 1px solid #e2e8f0;             /* very light gray border */
+  border-radius: 8px;                    /* gentle rounding on the corners */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* small drop-shadow for depth */
+  max-width: 600px;                      /* never exceed 600px wide */
+  width: 100%;                           /* fill 100% of its container on mobile */
+  padding: 24px;                         /* space inside the white box */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
 
-/* Header inside the form box */
-.form-heading {
-  margin: 0 0 16px 0;
-  font-size: 1.5rem;
+/*
+  3) .form-title styles the heading inside the white box.
+     It will be centered, with some bottom margin to separate from the textarea.
+*/
+.form-title {
+  margin: 0 0 16px 0;           /* no top margin, 16px bottom */
+  font-size: 1.5rem;            /* 24px if 1rem = 16px */
   text-align: center;
-  color: #333;
+  color: #1f2937;               /* dark gray/near-black text */
+  font-weight: 600;             /* slightly bolder than normal */
 }
 
-/* Make the textarea fill most of the form container */
-.form-textarea {
+/*
+  4) .input-area is the large textarea. It stretches fully horizontally,
+     has internal padding and a border, and is at least 300px tall.
+*/
+.input-area {
   width: 100%;
-  min-height: 300px;
-  padding: 12px;
-  font-size: 1rem;
-  line-height: 1.4;
-  border: 1px solid #ccc;
+  min-height: 300px;            /* give users plenty of vertical space by default */
+  padding: 12px;                /* space inside the textarea */
+  font-size: 1rem;              /* 16px text */
+  line-height: 1.5;
+  border: 1px solid #cbd5e1;    /* light gray border on the textarea */
   border-radius: 4px;
-  resize: vertical;
+  resize: vertical;             /* user can drag to make it taller, but not wider */
   box-sizing: border-box;
+  margin-bottom: 20px;          /* separate it from the buttons below */
+  background-color: #f9fafb;    /* very light off-white for readability */
+  color: #111827;               /* dark text for contrast */
 }
 
-/* Row to hold both buttons, aligned to the right */
-.button-row {
+/*
+  5) .form-actions is the container for the two buttons.
+     It pushes them to the right on desktop, but we’ll override on mobile.
+*/
+.form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 12px;                   /* 12px space between buttons */
 }
 
-/* Common button styles */
-.btn {
+/*
+  6) .btn-cancel and .btn-save share some common button styling
+     via a base “btn” class. Then we apply color variations.
+*/
+.btn-cancel,
+.btn-save {
   padding: 10px 20px;
-  border-radius: 4px;
   font-size: 1rem;
-  cursor: pointer;
+  border-radius: 4px;
   border: none;
+  cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
-/* “Cancel” is a light gray button */
+/*
+  7) .btn-cancel: light gray background, dark text
+*/
 .btn-cancel {
-  background-color: #e0e0e0;
-  color: #333;
+  background-color: #e5e7eb;   /* gray-200 */
+  color: #1f2937;              /* gray-800 */
 }
 .btn-cancel:hover {
-  background-color: #d5d5d5;
+  background-color: #d1d5db;   /* gray-300 on hover */
 }
 
-/* “Save” is a blue button */
+/*
+  8) .btn-save: bright blue background, white text
+     (adjust to match your brand’s primary color if needed)
+*/
 .btn-save {
-  background-color: #2563eb; /* blue-600 */
-  color: #fff;
+  background-color: #3b82f6;   /* blue-500 */
+  color: #ffffff;
 }
 .btn-save:hover {
-  background-color: #1e4bb8; /* slightly darker blue */
+  background-color: #2563eb;   /* blue-600 on hover */
 }
 
-/* Responsive adjustments (optional) */
+/*
+  9) Small-screen overrides: stack buttons vertically,
+     shrink padding/margins a bit so it looks good on phones.
+*/
 @media (max-width: 480px) {
-  .form-container {
-    padding: 16px;
+  .form-card {
+    padding: 16px;            /* slightly less padding on small screens */
   }
-  .form-heading {
-    font-size: 1.25rem;
+  .form-title {
+    font-size: 1.25rem;       /* make heading a bit smaller */
+    margin-bottom: 12px;
   }
-  .btn {
-    flex: 1;            /* on mobile, let buttons stretch equally */
+  .input-area {
+    min-height: 200px;        /* slightly shorter on very small screens */
+    margin-bottom: 16px;
+  }
+  .form-actions {
+    flex-direction: column;   /* stack “Cancel” above “Save” */
+    gap: 8px;                 /* smaller gap between buttons */
+  }
+  .btn-cancel,
+  .btn-save {
+    width: 100%;              /* each button fills 100% of form width */
     text-align: center;
-  }
-  .button-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .button-row .btn {
-    margin-bottom: 8px;
+    padding: 10px 0;          /* vertical padding only */
   }
 }
