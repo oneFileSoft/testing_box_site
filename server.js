@@ -24,6 +24,48 @@ app.get('/api/version-check', (req, res) => {
   res.json({ version: "1.2.3", time: new Date().toISOString() });
 });
 
+//////////// encrypt-decrypt ///////
+const Encr = require('./routes/Encr'); // ← your
+// POST /api/encrypt
+// Expects JSON body: { text: "plaintext", password: "somePassword" }
+app.post('/api/encrypt', (req, res) => {
+  const { text, password } = req.body || {};
+
+  if (typeof text !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ success: false, message: 'Missing text or password' });
+  }
+
+  try {
+    // Encrypt mode = true
+    const encr = new Encr(text, password, true);
+    const cipher = encr.encr();
+    return res.json({ success: true, result: cipher });
+  } catch (err) {
+    console.error('Encryption error:', err);
+    return res.status(500).json({ success: false, message: 'Encryption failed' });
+  }
+});
+
+// POST /api/decrypt
+// Expects JSON body: { text: "ciphertext", password: "somePassword" }
+app.post('/api/decrypt', (req, res) => {
+  const { text, password } = req.body || {};
+
+  if (typeof text !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ success: false, message: 'Missing text or password' });
+  }
+
+  try {
+    // Decrypt mode = false
+    const decr = new Encr(text, password, false);
+    const plain = decr.encr();
+    return res.json({ success: true, result: plain });
+  } catch (err) {
+    console.error('Decryption error:', err);
+    return res.status(500).json({ success: false, message: 'Decryption failed' });
+  }
+});
+
 
 const loginRoute = require('./routes/login');
 app.use('/', loginRoute);

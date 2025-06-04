@@ -79,9 +79,7 @@ const handleLogin = async () => {
             sessionStorage.setItem('user', `${username}__${response.data.userId}`);
             setUserId(response.data.userId);
             showToastSuccess(`Welcome, ${username}!`);
-            if (username === "arbatrade") {
-                navigate("/specific_user");
-                }
+            if (username.startsWith("arbatrade")) { navigate("/specific_user"); }
         } else {
             showToastError(response.data.message || "Login failed");
         }
