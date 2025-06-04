@@ -24,9 +24,10 @@ import Home from "./Home";
 import Contact from "./Contact";
 import AboutUs from "./AboutUs";
 import User from "./User";
-import UserDetails from "./UserDetails"
-import RegrReport from "./RegrReport"
-import SessionStorage from "./SessionStorage"
+import UserDetails from "./UserDetails";
+import RegrReport from "./RegrReport";
+import SessionStorage from "./SessionStorage";
+import SpecificUser from "./SpecificUser";
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="user_details" element={<UserDetails />} />
         <Route path="regression-report" element={<RegrReport />} />
         <Route path="session_storage" element={<SessionStorage />} />
+        <Route path="specific_user" element={<SpecificUser />} />
       </Route>
     </Routes>
   );
