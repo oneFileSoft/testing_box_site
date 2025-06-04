@@ -23,10 +23,10 @@ const AboutUs = () => {
   const [loadingDetails, setLoadingDetails] = useState(false);
 
   const storedUser = typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
-  const hashedSession = await hashPassword(storedUser.split(0, -2))
+  const hashedSession = await hashPassword(storedUser.split(0, -2));
   const isAuthorized =
       "m+J/U9hM5FtnHGHpKZ44NL+ixZecXWyq0tUp+XScEowI3xA59Oq1cZoHFZqzM7Hl98xq1uXxtT4vY7yzL5nPEA=="
-      === hashedSession;//"slava__49";
+      === hashedSession;
 
   useEffect(() => {
     const handleBeforeUnload = () => { sessionStorage.removeItem("user"); };
