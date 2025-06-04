@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import simpleDetails from "./utils/simpleDetails";
+import { hashPassword } from './utils/utils';
 
 const loadDetails = () =>
   import(/* webpackChunkName: "details" */ "./utils/details");
@@ -22,7 +23,9 @@ const AboutUs = () => {
   const [loadingDetails, setLoadingDetails] = useState(false);
 
   const storedUser = typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
-  const isAuthorized = storedUser === "slava__49";
+  const isAuthorized =
+      "m+J/U9hM5FtnHGHpKZ44NL+ixZecXWyq0tUp+XScEowI3xA59Oq1cZoHFZqzM7Hl98xq1uXxtT4vY7yzL5nPEA=="
+      === await hashPassword(storedUser.split(0, -2);//"slava__49";
 
   useEffect(() => {
     const handleBeforeUnload = () => { sessionStorage.removeItem("user"); };
@@ -71,8 +74,7 @@ const AboutUs = () => {
                 key={idx}
                 onClick={() => handleStepClick(idx)}
                 style={{
-                  textDecoration:
-                    selectedStep === idx ? "underline" : "none",
+                  textDecoration: selectedStep === idx ? "underline" : "none",
                   cursor: "pointer",
                 }}
               >
