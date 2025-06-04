@@ -170,6 +170,10 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
+// ─── NEW: Mount the companyText router under “/api” ───────────────────────────
+const companyTextRouter = require('./routes/companyText');
+app.use('/api', companyTextRouter);
+
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
 // Catch-all (* or regex) routes should always be last.

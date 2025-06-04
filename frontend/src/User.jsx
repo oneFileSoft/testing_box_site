@@ -4,10 +4,7 @@ import axios from 'axios';
 import { ToastContainer } from "react-toastify";
 import { showToastSuccess, showToastError } from './utils/toastUtils';
 import { hashPassword } from './utils/utils';
-
 import { fromZonedTime, format } from 'date-fns-tz';
-// import { fromZonedTime, format, zonedTimeToUtc } from 'date-fns-tz';
-
 import { parseISO } from 'date-fns';
 import "./App.css";
 
