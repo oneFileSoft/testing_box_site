@@ -19,7 +19,6 @@ export default function SpecificUser() {
       return storedUser ? storedUser.split('__')[index] : '';
   };
   const PASSPHRASE = getStoredUsername(0);
-  console.log("!!!!!!_1  " + PASSPHRASE);
 
   // ─── A reusable function to fetch latest text & version from server ───────
   const fetchCompanyText = useCallback(async () => {
@@ -37,16 +36,28 @@ export default function SpecificUser() {
         //         text: encrypted,
         //         password: PASSPHRASE,
         //       });
+              const txt = res.data.text;
+              console.log("!!!!!!_0  " + txt);
+              console.log("!!!!!!_1  " + PASSPHRASE);
               const resEnc = await axios.post("/api/encrypt", {
-                text: textValue,
+                text: txt,
                 password: PASSPHRASE,
               });
-          if (!resEnc.data.success) {
-                    console.log("!!!!!!_2  Encrypting failed!!!");
-
-                  return;
+              const encrVal = resEnc.data.result;
+              if (!resEnc.data.success) {
+                        console.log("!!!!!!_2  Encrypting failed!!!");
+              } else {
+                console.log("!!!!!!_3  " + encrVal);
+                const resDec = await axios.post("/api/decrypt", {
+                      text: encrVal,
+                      password: PASSPHRASE,
+                });
+                const decrVal = resDec.data.result;
+                if (!resDec.data.success) {
+                    console.log("!!!!!!_4  Dencrypting failed!!!");
                 }
-            console.log("!!!!!!_3  " + resEnc.data.result);
+                console.log("!!!!!!_5  " + decrVal);
+              }
 
         setTextValue(res.data.text);
         setFileVersion(res.data.version);
