@@ -31,10 +31,10 @@ export default function SpecificUser() {
       const res = await axios.get("/api/company-text");
       if (res.data.success) {
 
-//               const location = useLocation();
-//               const password = location.state?.password;
+              const location = useLocation();
+              const password = location.state?.password;
 //               const txt = res.data.text;
-//               console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+password);
+              console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+password);
 //               const resEnc = await axios.post("/api/encrypt", {
 //                 text: txt,
 //                 password: password,
