@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 
 export default function SpecificUser() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // ─── State Hooks ────────────────────────────────────────────────────────────
   const [textValue, setTextValue] = useState("");
@@ -31,7 +32,7 @@ export default function SpecificUser() {
       const res = await axios.get("/api/company-text");
       if (res.data.success) {
 
-              const location = useLocation();
+
               const password = location.state?.password;
 //               const txt = res.data.text;
               console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+password);
