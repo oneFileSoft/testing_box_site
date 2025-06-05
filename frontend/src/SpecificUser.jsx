@@ -34,27 +34,27 @@ export default function SpecificUser() {
 
 
               const password = location.state?.password;
-//               const txt = res.data.text;
+              const txt = res.data.text;
               console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+password);
-//               const resEnc = await axios.post("/api/encrypt", {
-//                 text: txt,
-//                 password: password,
-//               });
-//               const encrVal = resEnc.data.result;
-//               if (!resEnc.data.success) {
-//                         console.log("!!!!!!_2  Encrypting failed!!!");
-//               } else {
-//                 console.log("!!!!!!_3  " + encrVal);
-//                 const resDec = await axios.post("/api/decrypt", {
-//                       text: encrVal,
-//                       password: password,
-//                 });
-//                 const decrVal = resDec.data.result;
-//                 if (!resDec.data.success) {
-//                     console.log("!!!!!!_4  Dencrypting failed!!!");
-//                 }
-//                 console.log("!!!!!!_5  " + decrVal);
-//               }
+              const resEnc = await axios.post("/api/encrypt", {
+                text: txt,
+                password: password,
+              });
+              const encrVal = resEnc.data.result;
+              if (!resEnc.data.success) {
+                        console.log("!!!!!!_2  Encrypting failed!!!");
+              } else {
+                console.log("!!!!!!_3  " + encrVal);
+                const resDec = await axios.post("/api/decrypt", {
+                      text: encrVal,
+                      password: password,
+                });
+                const decrVal = resDec.data.result;
+                if (!resDec.data.success) {
+                    console.log("!!!!!!_4  Dencrypting failed!!!");
+                }
+                console.log("!!!!!!_5  " + decrVal);
+              }
 
         setTextValue(res.data.text);
         setFileVersion(res.data.version);
