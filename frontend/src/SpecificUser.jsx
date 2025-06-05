@@ -16,11 +16,6 @@ export default function SpecificUser() {
   const [error, setError] = useState(null);           // any error or conflict message
   const [showReload, setShowReload] = useState(false);// whether to show “Reload” button
 
-//   const getStoredUsername = (index) => {
-//       const storedUser = sessionStorage.getItem('user');
-//       return storedUser ? storedUser.split('__')[index] : '';
-//   };
-//   const PASSPHRASE = getStoredUsername(0);
 
   // ─── A reusable function to fetch latest text & version from server ───────
   const fetchCompanyText = useCallback(async () => {
@@ -31,32 +26,39 @@ export default function SpecificUser() {
     try {
       const res = await axios.get("/api/company-text");
       if (res.data.success) {
-
-
               const password = location.state?.password;
               const txt = res.data.text;
-              console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+password);
-              const resEnc = await axios.post("/api/encrypt", {
-                text: txt,
-                password: password,
+              const resDec = await axios.post("/api/decrypt", {
+                    text: encrVal,
+                    password: password,
               });
-              const encrVal = resEnc.data.result;
-              if (!resEnc.data.success) {
-                        console.log("!!!!!!_2  Encrypting failed!!!");
-              } else {
-                console.log("!!!!!!_3  " + encrVal);
-                const resDec = await axios.post("/api/decrypt", {
-                      text: encrVal,
-                      password: password,
-                });
-                const decrVal = resDec.data.result;
-                if (!resDec.data.success) {
-                    console.log("!!!!!!_4  Dencrypting failed!!!");
-                }
-                console.log("!!!!!!_5  " + decrVal);
+              if (!resDec.data.success) {
+                 setError("Failed to decrypt value from TextFile!");
+                 navigate('/');
               }
 
-        setTextValue(res.data.text);
+//               const resEnc = await axios.post("/api/encrypt", {
+//                 text: txt,
+//                 password: password,
+//               });
+//               const encrVal = resEnc.data.result;
+//               if (!resEnc.data.success) {
+//                   setError("Failed to decrypt value from TextFile!");
+//                   navigate('/');
+//               } else {
+//                 console.log("!!!!!!_3  " + encrVal);
+//                 const resDec = await axios.post("/api/decrypt", {
+//                       text: encrVal,
+//                       password: password,
+//                 });
+//                 const decrVal = resDec.data.result;
+//                 if (!resDec.data.success) {
+//                     console.log("!!!!!!_4  Dencrypting failed!!!");
+//                 }
+//                 console.log("!!!!!!_5  " + decrVal);
+//               }
+
+        setTextValue(resDec.data.result);//res.data.text);
         setFileVersion(res.data.version);
       } else {
         setError("Failed to load data from server.");
@@ -79,16 +81,24 @@ export default function SpecificUser() {
     setSaving(true);
     setError(null);
     setShowReload(false);
-
+    const password = location.state?.password;
+    const resEnc = await axios.post("/api/encrypt", {
+          text: textValue,
+          password: password,
+    });
     try {
+        const encrVal = resEnc.data.result;
+        if (!resEnc.data.success) {
+             setError("Failed to encrypt value from TextFile!");
+             navigate('/');
+        }
       const payload = {
-        text: textValue,
+        text: encrVal,
         clientVersion: fileVersion,
       };
 
       const res = await axios.post("/api/company-text", payload);
       if (res.data.success) {
-        // Successfully saved; navigate away
         setFileVersion(res.data.version);
         sessionStorage.clear();
         navigate("/");
