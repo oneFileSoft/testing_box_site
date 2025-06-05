@@ -14,6 +14,13 @@ export default function SpecificUser() {
   const [error, setError] = useState(null);           // any error or conflict message
   const [showReload, setShowReload] = useState(false);// whether to show “Reload” button
 
+  const getStoredUsername = (index) => {
+      const storedUser = sessionStorage.getItem('user');
+      return storedUser ? storedUser.split('__')[index] : '';
+  };
+  const PASSPHRASE = getStoredUsername(0);
+  console.log("!!!!!!_1  " + PASSPHRASE);
+
   // ─── A reusable function to fetch latest text & version from server ───────
   const fetchCompanyText = useCallback(async () => {
     setError(null);
@@ -23,6 +30,24 @@ export default function SpecificUser() {
     try {
       const res = await axios.get("/api/company-text");
       if (res.data.success) {
+        //       const encrypted = res.data.text;
+        //       const version = resGet.data.version;
+        //
+        //       const resDec = await axios.post("/api/ecrypt", {
+        //         text: encrypted,
+        //         password: PASSPHRASE,
+        //       });
+              const resEnc = await axios.post("/api/encrypt", {
+                text: textValue,
+                password: PASSPHRASE,
+              });
+          if (!resEnc.data.success) {
+                    console.log("!!!!!!_2  Encrypting failed!!!");
+
+                  return;
+                }
+            console.log("!!!!!!_3  " + resEnc.data.result);
+
         setTextValue(res.data.text);
         setFileVersion(res.data.version);
       } else {
