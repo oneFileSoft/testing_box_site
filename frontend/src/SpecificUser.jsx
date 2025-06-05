@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 
@@ -29,17 +30,11 @@ export default function SpecificUser() {
     try {
       const res = await axios.get("/api/company-text");
       if (res.data.success) {
-        //       const encrypted = res.data.text;
-        //       const version = resGet.data.version;
-        //
-        //       const resDec = await axios.post("/api/ecrypt", {
-        //         text: encrypted,
-        //         password: PASSPHRASE,
-        //       });
-              const location = useLocation();
-              const password = location.state?.password;
-              const txt = res.data.text;
-              console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+password);
+
+//               const location = useLocation();
+//               const password = location.state?.password;
+//               const txt = res.data.text;
+//               console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+password);
 //               const resEnc = await axios.post("/api/encrypt", {
 //                 text: txt,
 //                 password: password,
