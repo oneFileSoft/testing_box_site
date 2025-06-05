@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 
@@ -14,11 +14,11 @@ export default function SpecificUser() {
   const [error, setError] = useState(null);           // any error or conflict message
   const [showReload, setShowReload] = useState(false);// whether to show “Reload” button
 
-  const getStoredUsername = (index) => {
-      const storedUser = sessionStorage.getItem('user');
-      return storedUser ? storedUser.split('__')[index] : '';
-  };
-  const PASSPHRASE = getStoredUsername(0);
+//   const getStoredUsername = (index) => {
+//       const storedUser = sessionStorage.getItem('user');
+//       return storedUser ? storedUser.split('__')[index] : '';
+//   };
+//   const PASSPHRASE = getStoredUsername(0);
 
   // ─── A reusable function to fetch latest text & version from server ───────
   const fetchCompanyText = useCallback(async () => {
@@ -36,12 +36,13 @@ export default function SpecificUser() {
         //         text: encrypted,
         //         password: PASSPHRASE,
         //       });
+              const location = useLocation();
+              const password = location.state?.password;
               const txt = res.data.text;
-              console.log("!!!!!!_0  " + txt);
-              console.log("!!!!!!_1  " + PASSPHRASE);
+              console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+password);
               const resEnc = await axios.post("/api/encrypt", {
                 text: txt,
-                password: PASSPHRASE,
+                password: password,
               });
               const encrVal = resEnc.data.result;
               if (!resEnc.data.success) {
@@ -50,7 +51,7 @@ export default function SpecificUser() {
                 console.log("!!!!!!_3  " + encrVal);
                 const resDec = await axios.post("/api/decrypt", {
                       text: encrVal,
-                      password: PASSPHRASE,
+                      password: password,
                 });
                 const decrVal = resDec.data.result;
                 if (!resDec.data.success) {

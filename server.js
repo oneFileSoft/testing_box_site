@@ -36,9 +36,8 @@ app.post('/api/encrypt', (req, res) => {
   }
 
   try {
-    // Encrypt mode = true
     const encr = new Encr(text, password, true);
-    const cipher = encr.encr();
+    const cipher = encr.run();
     return res.json({ success: true, result: cipher });
   } catch (err) {
     console.error('Encryption error:', err);
@@ -58,7 +57,7 @@ app.post('/api/decrypt', (req, res) => {
   try {
     // Decrypt mode = false
     const decr = new Encr(text, password, false);
-    const plain = decr.encr();
+    const plain = decr.run();
     return res.json({ success: true, result: plain });
   } catch (err) {
     console.error('Decryption error:', err);
