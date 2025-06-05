@@ -29,7 +29,7 @@ export default function SpecificUser() {
               const password = location.state?.password;
               const txt = res.data.text;
               const resDec = await axios.post("/api/decrypt", {
-                    text: encrVal,
+                    text: txt,
                     password: password,
               });
               if (!resDec.data.success) {
