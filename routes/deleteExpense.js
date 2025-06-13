@@ -51,3 +51,8 @@ router.delete('/deleteExpense', async (req, res) => {
 });
 
 module.exports = router;
+
+
+//curl -L -X DELETE https://testingbox.pw/deleteExpense \
+//  -H "Content-Type: application/json" \
+//  -d '{"deleteAll": true}'
