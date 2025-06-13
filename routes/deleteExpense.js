@@ -3,11 +3,10 @@ const pool = require('../config/db');
 const router = express.Router();
 
 router.delete('/deleteExpense', async (req, res) => {
-    const { userId, expenseId, transDescr } = req.body;
-
+    const { userId, expenseId, transDescr, deleteAll } = req.body;
     // Validate input parameters
-    if (!userId) {
-        console.log("Validation failed: Missing userId");
+    if (!userId && !deleteAll) {
+        console.log("Validation failed: Missing userId or deleteAll");
         return res.status(400).json({ success: false, message: "userId is required" });
     }
 
@@ -30,8 +29,12 @@ router.delete('/deleteExpense', async (req, res) => {
           } else if (transDescr) {
             deleteQuery = "DELETE FROM expenses WHERE userId = ? AND transDescr = ?";
             params = [userId, transDescr];
+          } else if (deleteAll === true) {
+            // Hardcoded values: delete all for userId = 46 except 1 record
+            deleteQuery = "DELETE FROM expenses WHERE userId = 46 AND transDescr <> ?";
+            params = ['descriptions 1 for Test'];
           } else {
-            return res.status(400).json({
+              return res.status(400).json({
               success: false,
               message: "Either expenseId or transDescr must be provided"
             });

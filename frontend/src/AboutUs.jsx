@@ -118,7 +118,7 @@ const AboutUs = () => {
           </div>
           <div className="about-card">
             <h3>Regressions:</h3>
-            <p>Mobile and Desktop light and fast execution from Playwright</p>
+            <p>Mobile/Desktop light and fast Playwright run</p>
             <p>Performance API tests from Jmeter</p>
           </div>
         </div>
