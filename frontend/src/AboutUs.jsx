@@ -117,9 +117,9 @@ const AboutUs = () => {
             <p>modern, responsive code of React</p>
           </div>
           <div className="about-card">
-            <h3>Regression</h3>
-            <p>light and fast execution from Playwright</p>
-            <p>performance API tests from Jmeter</p>
+            <h3>Regressions:</h3>
+            <p>Mobile and Desktop light and fast execution from Playwright</p>
+            <p>Performance API tests from Jmeter</p>
           </div>
         </div>
       )}
