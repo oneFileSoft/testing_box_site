@@ -31,6 +31,7 @@ const images = [
 "https://i.ibb.co/My6fc84T/013.png",
 "https://i.ibb.co/YFCptyWY/bash-aliases.png",
 "https://i.ibb.co/PzY2TK3v/0113.png",
+"https://i.ibb.co/q3jzk00J/playwright-Cong.png",
 "https://i.ibb.co/kVDdS5ck/jmeter.png", ////////
 "https://i.ibb.co/844P8Bkc/020.png",
 "https://i.ibb.co/HDNtk3KT/021.png",

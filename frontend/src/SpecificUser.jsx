@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-// import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
+import { hashPassword } from './utils/utils';
 
 export default function SpecificUser() {
   const navigate = useNavigate();
@@ -15,7 +15,10 @@ export default function SpecificUser() {
   const [saving, setSaving] = useState(false);        // true while POST is in progress
   const [error, setError] = useState(null);           // any error or conflict message
   const [showReload, setShowReload] = useState(false);// whether to show “Reload” button
-
+  const storedUser = typeof window !== "undefined" ? sessionStorage.getItem("user") : "-";
+  const hashedUsername =  await hashPassword(storedUser.slice(0, 8));
+  console.log(hashedUsername)
+  const isAuthorized = hashedUsername === "hrrheherh";
 
   // ─── A reusable function to fetch latest text & version from server ───────
   const fetchCompanyText = useCallback(async () => {
