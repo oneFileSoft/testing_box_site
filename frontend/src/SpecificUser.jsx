@@ -22,7 +22,7 @@ export default function SpecificUser() {
 
   // ─── A reusable function to fetch latest text & version from server ───────
   const fetchCompanyText = useCallback(async () => {
-    if(!isAuthorized) { navigate('/');}
+    //if(!isAuthorized) { navigate('/');}
     setError(null);
     setShowReload(false);
     setLoading(true);
