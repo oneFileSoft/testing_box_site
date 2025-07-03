@@ -16,7 +16,7 @@ export default function SpecificUser() {
   const [error, setError] = useState(null);           // any error or conflict message
   const [showReload, setShowReload] = useState(false);// whether to show “Reload” button
   const storedUser = typeof window !== "undefined" ? sessionStorage.getItem("user") : "-";
-  const hashedUsername =  await hashPassword(storedUser.slice(0, 8));
+  const hashedUsername = hashPassword(storedUser.slice(0, 8));
   console.log(hashedUsername)
   const isAuthorized = hashedUsername === "hrrheherh";
 
