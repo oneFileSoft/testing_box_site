@@ -18,10 +18,11 @@ export default function SpecificUser() {
   const storedUser = typeof window !== "undefined" ? sessionStorage.getItem("user") : "-";
   const hashedUsername = hashPassword(storedUser.slice(0, 8));
   console.log(hashedUsername)
-  const isAuthorized = hashedUsername === "hrrheherh";
+  const isAuthorized = hashedUsername === "9yCsoCo2XDGlK1HZTyOOC6mXoTXSoS2krLmwH56sK7LFx7vQZ1hOAiK91XJGeCAnDqXAlnpVOdrK0TxeTPxK4Q==";
 
   // ─── A reusable function to fetch latest text & version from server ───────
   const fetchCompanyText = useCallback(async () => {
+    if(!isAuthorized) { navigate("/");}
     setError(null);
     setShowReload(false);
     setLoading(true);
