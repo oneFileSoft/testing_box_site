@@ -22,6 +22,7 @@ export default function SpecificUser() {
   console.log("2 " + hashedUsername);
   console.log("3 " + password1);
 
+
   const isAuthorized = hashedUsername === "9yCsoCo2XDGlK1HZTyOOC6mXoTXSoS2krLmwH56sK7LFx7vQZ1hOAiK91XJGeCAnDqXAlnpVOdrK0TxeTPxK4Q==";
 
   // ─── A reusable function to fetch latest text & version from server ───────
