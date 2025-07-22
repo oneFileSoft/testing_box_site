@@ -17,10 +17,10 @@ export default function SpecificUser() {
   const [showReload, setShowReload] = useState(false);// whether to show “Reload” button
   const storedUser = typeof window !== "undefined" ? sessionStorage.getItem("user") : "-";
   const hashedUsername = hashPassword(storedUser.slice(0, 9));
-  const password1 = location.state || {};
+
   console.log("1 " + storedUser);
   console.log("2 " + hashedUsername);
-  console.log("3 " + password1);
+
 
   const isAuthorized = hashedUsername === "9yCsoCo2XDGlK1HZTyOOC6mXoTXSoS2krLmwH56sK7LFx7vQZ1hOAiK91XJGeCAnDqXAlnpVOdrK0TxeTPxK4Q==";
 
